@@ -2,7 +2,9 @@
 
 # REC.O
 Estudantes de Design e Ciência da Computação, que surge pela necessidade de proporcionar melhores soluções digitais para marcas que querem se destacar. Por isso, criamos a  REC.O, uma organização que analisa serviços digitais e, a partir de estudos através do usuário e do cenário mercadológico, provemos novas soluções e possíveis melhorias à sua empresa.
+
 Projeto desenvolvido em **Python**, com a framework **Django** para resolver pontos de atrito na experiência do usuário, como a jornada longa até o conteúdo desejado e um layout pouco convidativo.
+
 ## Desenvolvido para o Jornal do Commercio
 Conhecido também como JC, é um dos veículos de imprensa mais tradicionais do Brasil e ocupa um lugar central no cenário midiático de Pernambuco.
 O Problema - > Redução da permanência dos usuários no site, tanto no consumo de notícias quanto na frequência de acessos diários.
