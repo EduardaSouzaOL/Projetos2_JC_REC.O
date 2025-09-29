@@ -7,6 +7,7 @@ Projeto desenvolvido em **Python**, com a framework **Django** para resolver pon
 
 ## Desenvolvido para o Jornal do Commercio
 Conhecido também como JC, é um dos veículos de imprensa mais tradicionais do Brasil e ocupa um lugar central no cenário midiático de Pernambuco.
+
 O Problema - > Redução da permanência dos usuários no site, tanto no consumo de notícias quanto na frequência de acessos diários.
 
 
