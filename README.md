@@ -1,4 +1,4 @@
-<img  src="https://github.com/user-attachments/assets/c56e4db1-e149-478c-aeab-9c5efd8c3229" width="900" height="900">
+<img  src="https://sites.google.com/cesar.school/rec-o/in%C3%ADcio?authuser=0" width="900" height="900">
 
 # REC.O
 Estudantes de Design e Ciência da Computação, que surge pela necessidade de proporcionar melhores soluções digitais para marcas que querem se destacar. Por isso, criamos a  REC.O, uma organização que analisa serviços digitais e, a partir de estudos através do usuário e do cenário mercadológico, provemos novas soluções e possíveis melhorias à sua empresa.
