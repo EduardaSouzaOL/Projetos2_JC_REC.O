@@ -1,4 +1,4 @@
-<img  src="https://sites.google.com/cesar.school/rec-o/in%C3%ADcio?authuser=0" width="900" height="900">
+<img  src="https://github.com/user-attachments/assets/fa630238-b742-4dc6-b764-6cab4d6ae9fa" width="900" height="900">
 
 # REC.O
 Estudantes de Design e Ciência da Computação, que surge pela necessidade de proporcionar melhores soluções digitais para marcas que querem se destacar. Por isso, criamos a  REC.O, uma organização que analisa serviços digitais e, a partir de estudos através do usuário e do cenário mercadológico, provemos novas soluções e possíveis melhorias à sua empresa.
@@ -11,7 +11,7 @@ Conhecido também como JC, é um dos veículos de imprensa mais tradicionais do 
 O Problema - > Redução da permanência dos usuários no site, tanto no consumo de notícias quanto na frequência de acessos diários.
 
 
-## <a href="https://sites.google.com/u/0/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/1BY84sYY-gRiNLTI7n8ExnVj45tD8bcuO/preview?authuser=0">Acesso ao site do Projeto</a>
+## <a href="[https://sites.google.com/u/0/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/1BY84sYY-gRiNLTI7n8ExnVj45tD8bcuO/preview?authuser=0](https://sites.google.com/cesar.school/rec-o/in%C3%ADcio?authuser=0)">Acesso ao site do Projeto</a>
 
 ## Equipe
 ### Ciência da Computação
