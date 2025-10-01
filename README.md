@@ -11,7 +11,9 @@ Conhecido também como JC, é um dos veículos de imprensa mais tradicionais do 
 O Problema - > Redução da permanência dos usuários no site, tanto no consumo de notícias quanto na frequência de acessos diários.
 
 
-## <a href="[https://sites.google.com/u/0/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/1BY84sYY-gRiNLTI7n8ExnVj45tD8bcuO/preview?authuser=0](https://sites.google.com/cesar.school/rec-o/in%C3%ADcio?authuser=0)">Acesso ao site do Projeto</a>
+## Acesso ao site do projeto
+ [Site REC.O](https://sites.google.com/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/19KdY7mc0QfeCC3Vyn48laGZW0uUeZV2J/edit)
+
 
 ## Equipe
 ### Ciência da Computação
