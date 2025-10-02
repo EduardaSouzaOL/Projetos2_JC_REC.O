@@ -13,6 +13,10 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Acesso ao site do projeto
  [Site REC.O](https://sites.google.com/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/19KdY7mc0QfeCC3Vyn48laGZW0uUeZV2J/edit)
+
+ ## Acesso ao documento com as histórias do usuário
+ [docs_historias](https://docs.google.com/document/d/1UjFnvbQb0mYV3OMqcwVpC0ICa4wXUk3drYJq9SrPcvE/edit?usp=sharing)
+ 
 <details>
   
 <summary><h2><strong>Semana 8</strong></h2></summary>
