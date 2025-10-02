@@ -16,10 +16,12 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 <details>
   
 <summary><h2><strong>Semana 8</strong></h2></summary>
+
 ## Readme do projeto
 [Read me](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
 ## Histórias do usuário
 [Historias do usuario](https://docs.google.com/document/d/1qoVBzpO4SknCVWL4Cpy6rXrgY6Yv4HgvyF5dHU6W7Mc/edit?tab=t.0)
+
 </details>
 
 ## Equipe
