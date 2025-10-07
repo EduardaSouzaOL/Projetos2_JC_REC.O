@@ -31,6 +31,21 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 </details>
 
+<details>
+  
+<summary><h2><strong>Semana 9</strong></h2></summary>
+
+## Readme do projeto
+[Read me](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Histórias do usuário
+[Historias do usuario](https://docs.google.com/document/d/1qoVBzpO4SknCVWL4Cpy6rXrgY6Yv4HgvyF5dHU6W7Mc/edit?tab=t.0)
+## Ultima versão de modelo de dados - JC
+[models.py](https://docs.google.com/document/d/1eSmwrPEf1FKEVPd2q_7RvG8ga6rGxcNnMXziCqjlOXk/edit?usp=sharing)
+## Acesso a admin
+<img  src="https://github.com/user-attachments/assets/b76f2410-fb73-4c55-a957-e9f657a4c4b7" width="800" height="800">
+
+</details>
+
 ## Equipe
 ### Ciência da Computação
 Bernardo Guimarães - bgnp@cesar.school <br>
