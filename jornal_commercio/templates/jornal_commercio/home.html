@@ -4,20 +4,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Homepage</title>
+    <title>Portal de Notícias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Header Superior */
+        .top-header {
+            background-color: #2c2c2c;
+            padding: 0.5rem 0;
+            border-top: 3px solid #0066cc;
+        }
+
+        .top-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .top-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .top-nav a:hover {
+            color: #0066cc;
+        }
+
+        .logo-container {
+            background-color: #ffffff;
+            padding: 0.5rem 2rem;
+            border-radius: 3px;
+        }
+
+        .logo-text {
+            font-size: 1rem;
+            color: #2c2c2c;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+            padding: 0.3rem;
+        }
+
+        .icon-btn:hover {
+            color: #0066cc;
+        }
+
+        /* Navegação Principal */
+        .main-nav {
+            background-color: #1a1a1a;
+            padding: 0;
+        }
+
+        .main-nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-menu {
+            display: flex;
+            list-style: none;
+            gap: 0;
+        }
+
+        .main-menu li {
+            flex: 1;
+        }
+
+        .main-menu a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-right: 1px solid #333;
+        }
+
+        .main-menu li:last-child a {
+            border-right: none;
+        }
+
+        .main-menu a:hover {
+            background-color: #0066cc;
+            color: #ffffff;
+        }
+
+        /* Menu Mobile */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .main-menu a {
+                padding: 1rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-nav {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .top-header-content {
+                padding: 0 1rem;
+            }
+
+            .main-nav-content {
+                padding: 0 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-menu {
+                display: none;
+                flex-direction: column;
+            }
+
+            .main-menu.active {
+                display: flex;
+            }
+
+            .main-menu li {
+                width: 100%;
+            }
+
+            .main-menu a {
+                border-right: none;
+                border-bottom: 1px solid #333;
+                text-align: left;
+            }
+
+            .header-icons {
+                gap: 1rem;
+            }
+
+            .icon-btn {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-nav {
+                display: none;
+            }
+
+            .logo-container {
+                padding: 0.4rem 1rem;
+            }
+
+            .logo-text {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Símbolos dos ícones usando caracteres Unicode */
+        .icon-refresh::before { content: "↻"; }
+        .icon-search::before { content: "🔍"; }
+        .icon-user::before { content: "👤"; }
+
+        /* Footer */
+        .footer {
+            background-color: #4a4a4a;
+            color: #ffffff;
+            padding: 2rem 0 1rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 3rem;
+            border-bottom: 1px solid #666;
+            padding-bottom: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-section:first-child {
+            flex-direction: row;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .newsletter-icon {
+            font-size: 3rem;
+            width: 80px;
+            height: 60px;
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .newsletter-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-section h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #0066cc;
+            text-decoration: underline;
+        }
+
+        .social-section {
+            align-items: flex-start;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 35px;
+            height: 35px;
+            background-color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #0066cc;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 0;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: #cccccc;
+        }
+
+        /* Footer Responsivo */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .footer-section:first-child {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .newsletter-icon {
+                width: 60px;
+                height: 45px;
+                font-size: 2rem;
+            }
+
+            .social-icons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <!-- Conteúdo do cabeçalho -->
+    <!-- Header Superior -->
+    <header class="top-header">
+        <div class="top-header-content">
+            <nav>
+                <ul class="top-nav">
+                    <li><a href="#edicao">EDIÇÃO DO DIA</a></li>
+                    <li><a href="#assuntos">ASSUNTOS ▾</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo-container">
+                <div class="logo-text">LOGO DO PORTAL</div>
+            </div>
+
+            <div class="header-icons">
+                <button class="icon-btn icon-refresh" aria-label="Atualizar"></button>
+                <button class="icon-btn icon-search" aria-label="Buscar"></button>
+                <button class="icon-btn icon-user" aria-label="Perfil"></button>
+            </div>
+        </div>
     </header>
-    
-    <main>
-        <!-- Conteúdo principal -->
+
+    <!-- Navegação Principal -->
+    <nav class="main-nav">
+        <div class="main-nav-content">
+            <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+            <ul class="main-menu" id="mainMenu">
+                <li><a href="#noticias-dia">NOTÍCIAS DO DIA</a></li>
+                <li><a href="#colunistas">COLUNISTAS</a></li>
+                <li><a href="#noticias-pe">NOTÍCIAS DE PE</a></li>
+                <li><a href="#comunidades">COMUNIDADES</a></li>
+                <li><a href="#recall">RECALL DA MARCA</a></li>
+                <li><a href="#anuncie">ANUNCIE AQUI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal (exemplo) -->
+    <main style="min-height: 400px; padding: 2rem; max-width: 1400px; margin: 0 auto;">
+        <h1>Bem-vindo ao Portal de Notícias</h1>
+        <p>Conteúdo principal do site...</p>
     </main>
-    
-    <footer>
-        <!-- Rodapé -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="newsletter-icon">✉</div>
+                <div class="newsletter-info">
+                    <h3>Newsletter</h3>
+                    <a href="#quem-somos">Quem somos nós</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>OUÇA AGORA</h3>
+                <a href="#radio">Rádio Jornal</a>
+                <a href="#tv">TV Jornal</a>
+            </div>
+
+            <div class="footer-section social-section">
+                <h3>SIGA O JC</h3>
+                <div class="social-icons">
+                    <a href="#youtube" class="social-icon" aria-label="YouTube">▶</a>
+                    <a href="#instagram" class="social-icon" aria-label="Instagram">📷</a>
+                    <a href="#twitter" class="social-icon" aria-label="Twitter">🐦</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Portal de Notícias. Todos os direitos reservados.</p>
+        </div>
     </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mainMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Fecha o menu ao clicar em um link (mobile)
+        document.querySelectorAll('.main-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('mainMenu').classList.remove('active');
+                }
+            });
+        });
+
+        // Fecha o menu ao redimensionar para desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('mainMenu').classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
