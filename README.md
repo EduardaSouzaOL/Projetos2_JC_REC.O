@@ -14,15 +14,18 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 ## Acesso ao site do projeto
  [Site REC.O](https://sites.google.com/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/19KdY7mc0QfeCC3Vyn48laGZW0uUeZV2J/edit)
 
- ## Acesso ao documento com as histórias do usuário
+## Acesso ao documento com as histórias do usuário
  [docs_historias](https://docs.google.com/document/d/1UjFnvbQb0mYV3OMqcwVpC0ICa4wXUk3drYJq9SrPcvE/edit?usp=sharing)
+
+## Acesso ao Relatório em par
+[Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
  
 <details>
   
 <summary><h2><strong>Semana 8</strong></h2></summary>
 
 ## Readme do projeto
-[Read me](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
 ## Histórias do usuário
 [Historias do usuario](https://docs.google.com/document/d/1qoVBzpO4SknCVWL4Cpy6rXrgY6Yv4HgvyF5dHU6W7Mc/edit?tab=t.0)
 ## Primeira parte do models.py - JC
@@ -36,7 +39,7 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 <summary><h2><strong>Semana 9</strong></h2></summary>
 
 ## Readme do projeto
-[Read me](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
 ## Histórias do usuário
 [Historias do usuario](https://docs.google.com/document/d/1qoVBzpO4SknCVWL4Cpy6rXrgY6Yv4HgvyF5dHU6W7Mc/edit?tab=t.0)
 ## Ultima versão de modelo de dados - JC
@@ -44,7 +47,27 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 ## Acesso a admin
 <img  src="https://github.com/user-attachments/assets/b76f2410-fb73-4c55-a957-e9f657a4c4b7" width="800" height="800">
 
+
 </details>
+
+</details>
+
+<details>
+  
+<summary><h2><strong>Semana 10</strong></h2></summary>
+
+## Readme do projeto
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Relatório em par
+[Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
+## Github/Bug tracker 
+
+## Screencast da história implementada
+
+
+</details>
+
+
 
 ## Equipe
 ### Ciência da Computação
