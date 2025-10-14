@@ -61,7 +61,7 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 ## Relatório em par
 [Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
 ## Github/Bug tracker 
-<img  src="(https://github.com/user-attachments/assets/c3d87edf-2995-49e8-8449-504e81addb8b)" width="800" height="800">
+<img  src="https://github.com/user-attachments/assets/5acb7130-898b-40ae-862a-56fa4c8dde4a" width="800" height="800">
 
 </details>
 
