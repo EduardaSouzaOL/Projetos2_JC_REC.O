@@ -5,6 +5,681 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal de Notícias</title>
+    
+    <style>
+        /* Estilos Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Header Superior */
+        .top-header {
+            background-color: #2c2c2c;
+            padding: 0.5rem 0;
+            border-top: 3px solid #0066cc;
+        }
+
+        .top-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .top-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .top-nav a:hover {
+            color: #333;
+        }
+
+        .logo-container {
+            background-color: #ffffff;
+            padding: 0.5rem 2rem;
+            border-radius: 3px;
+        }
+
+        .logo-text {
+            font-size: 1rem;
+            color: #2c2c2c;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+            padding: 0.3rem;
+        }
+
+        .icon-btn:hover {
+            color: #333;
+        }
+
+        /* Navegação Principal */
+        .main-nav {
+            background-color: #1a1a1a;
+            padding: 0;
+        }
+
+        .main-nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .main-menu {
+            display: flex;
+            list-style: none;
+            gap: 0;
+        }
+
+        .main-menu li {
+            flex: 1;
+        }
+
+        .main-menu a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-right: 1px solid #333;
+        }
+
+        .main-menu li:last-child a {
+            border-right: none;
+        }
+
+        .main-menu a:hover {
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        /* Menu Mobile */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-menu a {
+                padding: 1rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-nav {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .top-header-content {
+                padding: 0 1rem;
+            }
+
+            .main-nav-content {
+                padding: 0 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-menu {
+                display: none;
+                flex-direction: column;
+            }
+
+            .main-menu.active {
+                display: flex;
+            }
+
+            .main-menu li {
+                width: 100%;
+            }
+
+            .main-menu a {
+                border-right: none;
+                border-bottom: 1px solid #333;
+                text-align: left;
+            }
+
+            .header-icons {
+                gap: 1rem;
+            }
+
+            .icon-btn {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-nav {
+                display: none;
+            }
+
+            .logo-container {
+                padding: 0.4rem 1rem;
+            }
+
+            .logo-text {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Símbolos dos ícones usando caracteres Unicode */
+        .icon-refresh::before { content: "↻"; }
+        .icon-search::before { content: "🔍"; }
+        .icon-user::before { content: "👤"; }
+
+        /* Footer */
+        .footer {
+            background-color: #4a4a4a;
+            color: #ffffff;
+            padding: 2rem 0 1rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 3rem;
+            border-bottom: 1px solid #666;
+            padding-bottom: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-section:first-child {
+            flex-direction: row;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .newsletter-icon {
+            font-size: 3rem;
+            width: 80px;
+            height: 60px;
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .newsletter-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-section h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #0066cc;
+            text-decoration: underline;
+        }
+
+        .social-section {
+            align-items: flex-start;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 35px;
+            height: 35px;
+            background-color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 0;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: #cccccc;
+        }
+
+        /* Footer Responsivo */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .footer-section:first-child {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .newsletter-icon {
+                width: 60px;
+                height: 45px;
+                font-size: 2rem;
+            }
+
+            .social-icons {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Alterações 13/10/2025 */
+
+        /* Container Principal de Conteúdo */
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c2c2c;
+            margin-bottom: 2rem; /* Aumentei o espaçamento inferior */
+            border-bottom: 3px solid #0066cc;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        /* NOVO: Container do Grid de Notícias - Define 3 colunas responsivas */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .news-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px); /* p ter o efeito "levantar" ao passar o mouse */
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px; /* Altura padrão para simular a imagem */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-content {
+            padding: 1.2rem;
+            display: flex; 
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card-category {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+
+        .card-title a {
+            color: #2c2c2c;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .card-title a:hover {
+            color: #333;
+        }
+
+        .card-excerpt {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 1rem;
+            flex-grow: 1; 
+        }
+
+        .card-date {
+            font-size: 0.75rem;
+            color: #888;
+            border-top: 1px solid #eee;
+            padding-top: 0.5rem;
+        }
+
+        /* Estilo para a Notícia Destaque */
+        .highlight-card {
+            border: 3px solid #333;
+        }
+
+        /* SEÇÃO DA NEWSLETTER  */
+        .newsletter-section {
+            background-color: #333; 
+            color: #ffffff;
+            padding: 3rem 0;
+            text-align: center;
+            margin-bottom: 0; 
+        }
+
+        .newsletter-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .newsletter-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .newsletter-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0e0;
+        }
+
+        .newsletter-form {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .newsletter-form input[type="email"] {
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            width: 60%;
+            max-width: 400px;
+            transition: box-shadow 0.3s ease;
+        }
+        .newsletter-form input[type="email"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5); 
+        }
+
+        .subscribe-btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0066cc; /* Invertendo as cores para destaque no botão */
+            background-color: #ffffff; 
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+        }
+
+        .subscribe-btn:hover {
+            background-color: #e0e0e0;
+            color: #4a4a4a;
+            transform: translateY(-1px);
+        }
+
+        /* Responsividade das novas seções (AJUSTADA) */
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+                text-align: left; 
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .newsletter-form input[type="email"],
+            .subscribe-btn {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .newsletter-form input[type="email"] {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'jornal_commercio/css/home_style.css' %}">
+</head>
+<body>
+<header class="top-header">
+    <div class="top-header-content">
+        <nav>
+            <ul class="top-nav">
+                <li><a href="#edicao">EDIÇÃO DO DIA</a></li>
+                <li><a href="#assuntos">ASSUNTOS ▾</a></li>
+            </ul>
+        </nav>
+
+        <div class="logo-container">
+            <div class="logo-text">LOGO DO PORTAL</div>
+        </div>
+
+        <div class="header-icons">
+            <button class="icon-btn icon-refresh" aria-label="Atualizar"></button>
+            <button class="icon-btn icon-search" aria-label="Buscar"></button>
+            <button class="icon-btn icon-user" aria-label="Perfil"></button>
+        </div>
+    </div>
+</header>
+
+<nav class="main-nav">
+    <div class="main-nav-content">
+        <button class="mobile-menu-btn" aria-label="Abrir Menu">☰</button>
+        <ul class="main-menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#politica">Política</a></li>
+            <li><a href="#economia">Economia</a></li>
+            <li><a href="#esportes">Esportes</a></li>
+            <li><a href="#cultura">Cultura</a></li>
+            <li><a href="#tecnologia">Tecnologia</a></li>
+            <li><a href="#opiniao">Opinião</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="main-content">
+    <section class="news-grid-container">
+        <h2 class="section-title">Últimas Notícias e Análises</h2>
+        
+        <div class="news-grid">
+            <article class="news-card highlight-card">
+                <div class="card-image" style="background-color: #333;"></div> 
+                <div class="card-content">
+                    <p class="card-category">Economia | Destaque</p>
+                    <h3 class="card-title"><a href="#">Análise Exclusiva: O Impacto da Taxa Selic na Fidelização de Clientes</a></h3>
+                    <p class="card-excerpt">Nossos especialistas detalham como as recentes decisões do Banco Central afetam o poder de compra e as estratégias de retenção do JC.</p>
+                    <p class="card-date">Há 2 horas</p>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div class="card-image" style="background-color: #333;"></div> 
+                <div class="card-content">
+                    <p class="card-category">Tecnologia</p>
+                    <h3 class="card-title"><a href="#">Tendências de UX/UI: Por Que a Homepage de Baixa Fidelidade é um Trunfo?</a></h3>
+                    <p class="card-excerpt">A importância de protótipos rápidos e de baixa fidelidade para validar conceitos e acelerar a satisfação do usuário. O caso Rec.O.</p>
+                    <p class="card-date">Ontem</p>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <div class="card-image" style="background-color: #333;"></div> 
+                <div class="card-content">
+                    <p class="card-category">Negócios</p>
+                    <h3 class="card-title"><a href="#">Fidelidade 3.0: Como o JC Planeja Reengajar Sua Base de Assinantes</a></h3>
+                    <p class="card-excerpt">Entrevista com a diretoria sobre as novas metas de retenção e as ferramentas digitais que serão implementadas no próximo trimestre.</p>
+                    <p class="card-date">Há 5 horas</p>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+<section class="newsletter-section">
+    <div class="newsletter-content">
+        <h3>Receba o <strong>Melhor</strong> do Conteúdo em seu E-mail!</h3>
+        <p>Assine nossa newsletter para receber as notícias mais relevantes, análises exclusivas e dicas de fidelização do JC.</p>
+        <form class="newsletter-form">
+            <input type="email" placeholder="Seu melhor e-mail" required>
+            <button type="submit" class="subscribe-btn">Inscrever-se</button>
+        </form>
+    </div>
+</section>
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <div class="newsletter-icon">✉️</div>
+            <div class="newsletter-info">
+                <h3>NEWSLETTER DO PORTAL</h3>
+                <p>Receba as notícias direto no seu e-mail.</p>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <h3>Navegação</h3>
+            <a href="#politica">Política</a>
+            <a href="#economia">Economia</a>
+            <a href="#esportes">Esportes</a>
+            <a href="#tecnologia">Tecnologia</a>
+        </div>
+
+        <div class="footer-section">
+            <h3>Institucional</h3>
+            <a href="#quem-somos">Quem Somos</a>
+            <a href="#anuncie">Anuncie</a>
+            <a href="#fale-conosco">Fale Conosco</a>
+            <a href="#termos">Termos de Uso</a>
+        </div>
+
+        <div class="footer-section social-section">
+            <h3>Siga-nos</h3>
+            <div class="social-icons">
+                <a href="#" class="social-icon" aria-label="Facebook">F</a>
+                <a href="#" class="social-icon" aria-label="Twitter">X</a>
+                <a href="#" class="social-icon" aria-label="Instagram">I</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>©️ 2024 Portal de Notícias | Projeto Rec.O - Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+<script>
+    // Script básico para o menu mobile (se necessário)
+    document.querySelector('.mobile-menu-btn').addEventListener('click', () => {
+        document.querySelector('.main-menu').classList.toggle('active');
+    });
+</script>
+
+</body>
+</html>
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Notícias</title>
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/home_style.css' %}">
 </head>
 <body>
@@ -107,4 +782,4 @@
         });
     </script>
 </body>
-</html>
+</html> {% endcomment %}
