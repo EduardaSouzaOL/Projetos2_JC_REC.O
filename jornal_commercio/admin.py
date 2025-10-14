@@ -1,8 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Usuario, Noticia
-
-admin.site.register(Usuario)
+from .models import Noticia
 
 admin.site.register(Noticia)

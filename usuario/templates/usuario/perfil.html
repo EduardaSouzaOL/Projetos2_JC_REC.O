@@ -1,0 +1,40 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Meu Projeto</a>
+        <div class="collapse navbar-collapse">
+            <div class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'perfil' %}">Perfil</a>
+                    
+                    <form id="logout-form" method="POST" action="{% url 'logout' %}" style="display: contents;">
+                        {% csrf_token %}
+                        <a class="nav-item nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Sair</a>
+                    </form>
+
+                {% else %}
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-item nav-link" href="{% url 'registrar' %}">Registrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+  <div class="content-section">
+    <div class="media">
+      <div class="media-body">
+        <h2 class="account-heading">{{ user.username }}</h2>
+        <p class="text-secondary">{{ user.email }}</p>
+      </div>
+    </div>
+    <p><strong>Nome:</strong> {{ user.first_name }}</p>
+    <p><strong>Sobrenome:</strong> {{ user.last_name }}</p>
+    
+    <p><strong>Telefone:</strong> {% if user.perfil.telefone == None or user.perfil.telefone == ""%}
+      Nenhum registrado
+    {% else %}
+      {{ user.perfil.telefone }}
+    {% endif %}
+    </p>
+  </div>
+{% endblock content %}

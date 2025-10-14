@@ -1,0 +1,243 @@
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Notícias</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Header Superior -->
+    <header class="top-header">
+        <div class="top-header-content">
+            <nav>
+                <ul class="top-nav">
+                    <li><a href="#edicao">EDIÇÃO DO DIA</a></li>
+                    <li><a href="#assuntos">ASSUNTOS ▾</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo-container">
+                <div class="logo-text">LOGO DO PORTAL</div>
+            </div>
+
+            <div class="header-icons">
+                <button class="icon-btn icon-refresh" aria-label="Atualizar"></button>
+                <button class="icon-btn icon-search" aria-label="Buscar"></button>
+                <button class="icon-btn icon-user" aria-label="Perfil"></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação Principal -->
+    <nav class="main-nav">
+        <div class="main-nav-content">
+            <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+            <ul class="main-menu" id="mainMenu">
+                <li><a href="#noticias-dia">NOTÍCIAS DO DIA</a></li>
+                <li><a href="#colunistas">COLUNISTAS</a></li>
+                <li><a href="#noticias-pe">NOTÍCIAS DE PE</a></li>
+                <li><a href="#comunidades">COMUNIDADES</a></li>
+                <li><a href="#recall">RECALL DA MARCA</a></li>
+                <li><a href="#anuncie">ANUNCIE AQUI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal (exemplo) -->
+    <main style="min-height: 400px; padding: 2rem; max-width: 1400px; margin: 0 auto;">
+        <h1>Bem-vindo ao Portal de Notícias</h1>
+        <p>Conteúdo principal do site...</p>
+    </main>
+    
+    <div class="container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="newsletter-icon">✉</div>
+                <div class="newsletter-info">
+                    <h3>Newsletter</h3>
+                    <a href="#quem-somos">Quem somos nós</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>OUÇA AGORA</h3>
+                <a href="#radio">Rádio Jornal</a>
+                <a href="#tv">TV Jornal</a>
+            </div>
+
+            <div class="footer-section social-section">
+                <h3>SIGA O JC</h3>
+                <div class="social-icons">
+                    <a href="#youtube" class="social-icon" aria-label="YouTube">▶</a>
+                    <a href="#instagram" class="social-icon" aria-label="Instagram">📷</a>
+                    <a href="#twitter" class="social-icon" aria-label="Twitter">🐦</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Portal de Notícias. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mainMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Fecha o menu ao clicar em um link (mobile)
+        document.querySelectorAll('.main-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('mainMenu').classList.remove('active');
+                }
+            });
+        });
+
+        // Fecha o menu ao redimensionar para desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('mainMenu').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html> {% endcomment %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Notícias</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <header class="top-header">
+        <div class="top-header-content">
+            <nav>
+                <ul class="top-nav">
+                    <li><a href="#edicao">EDIÇÃO DO DIA</a></li>
+                    <li><a href="#assuntos">ASSUNTOS ▾</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo-container">
+                <div class="logo-text">LOGO DO PORTAL</div>
+            </div>
+
+            <div class="header-icons">
+                <button class="icon-btn icon-refresh" aria-label="Atualizar"></button>
+                <button class="icon-btn icon-search" aria-label="Buscar"></button>
+                {% if user.is_authenticated %}
+                    <a class="icon-btn icon-user" href="{% url 'perfil' %}" aria-label="Perfil"></a>
+                {% else %}
+                    <a class="icon-btn icon-user" href="{% url 'login' %}" aria-label="Perfil"></a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="main-nav-content">
+            <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+            <ul class="main-menu" id="mainMenu">
+                <li><a href="#noticias-dia">NOTÍCIAS DO DIA</a></li>
+                <li><a href="#colunistas">COLUNISTAS</a></li>
+                <li><a href="#noticias-pe">NOTÍCIAS DE PE</a></li>
+                <li><a href="#comunidades">COMUNIDADES</a></li>
+                <li><a href="#recall">RECALL DA MARCA</a></li>
+                <li><a href="#anuncie">ANUNCIE AQUI</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="newsletter-icon">✉</div>
+                <div class="newsletter-info">
+                    <h3>Newsletter</h3>
+                    <a href="#quem-somos">Quem somos nós</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>OUÇA AGORA</h3>
+                <a href="#radio">Rádio Jornal</a>
+                <a href="#tv">TV Jornal</a>
+            </div>
+
+            <div class="footer-section social-section">
+                <h3>SIGA O JC</h3>
+                <div class="social-icons">
+                    <a href="#youtube" class="social-icon" aria-label="YouTube">▶</a>
+                    <a href="#instagram" class="social-icon" aria-label="Instagram">📷</a>
+                    <a href="#twitter" class="social-icon" aria-label="Twitter">🐦</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Portal de Notícias. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mainMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Fecha o menu ao clicar em um link (mobile)
+        document.querySelectorAll('.main-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('mainMenu').classList.remove('active');
+                }
+            });
+        });
+
+        // Fecha o menu ao redimensionar para desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('mainMenu').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
