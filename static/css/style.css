@@ -1,4 +1,4 @@
-/* Estilos Gerais 
+/* Estilos Gerais */
 * {
     margin: 0;
     padding: 0;
@@ -10,7 +10,7 @@ body {
     background-color: #f5f5f5;
 }
 
-/* Header Superior 
+/* Header Superior */
 .top-header {
     background-color: #2c2c2c;
     padding: 0.5rem 0;
@@ -77,7 +77,7 @@ body {
     color: #0066cc;
 }
 
-/* Navegação Principal 
+/* Navegação Principal */
 .main-nav {
     background-color: #1a1a1a;
     padding: 0;
@@ -122,7 +122,7 @@ body {
     color: #ffffff;
 }
 
-/* Menu Mobile 
+/* Menu Mobile */
 .mobile-menu-btn {
     display: none;
     background: none;
@@ -133,7 +133,7 @@ body {
     padding: 0.5rem;
 }
 
-/* Responsividade 
+/* Responsividade */
 @media (max-width: 1024px) {
     .main-menu a {
         padding: 1rem 1rem;
@@ -201,12 +201,12 @@ body {
     }
 }
 
-/* Símbolos dos ícones usando caracteres Unicode 
+/* Símbolos dos ícones usando caracteres Unicode */
 .icon-refresh::before { content: "↻"; }
 .icon-search::before { content: "🔍"; }
 .icon-user::before { content: "👤"; }
 
-/* Footer 
+/* Footer */
 .footer {
     background-color: #4a4a4a;
     color: #ffffff;
@@ -313,7 +313,7 @@ body {
     color: #cccccc;
 }
 
-/* Footer Responsivo 
+/* Footer Responsivo */
 @media (max-width: 768px) {
     .footer-content {
         flex-direction: column;
@@ -334,5 +334,5 @@ body {
     .social-icons {
         flex-wrap: wrap;
     }
-} */
+} 
 
