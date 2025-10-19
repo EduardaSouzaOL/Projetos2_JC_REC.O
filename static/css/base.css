@@ -1,0 +1,146 @@
+/* static/css/base.css */
+
+/* --- RESET E ESTILOS GLOBAIS --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #212121;
+    color: #333;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* --- CABEÇALHO SUPERIOR --- */
+.top-header {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 10px 0;
+    border-top: 4px solid #0056b3;
+}
+
+.top-nav-left ul {
+    display: flex;
+    gap: 25px;
+}
+
+.top-nav-left a {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.logo-container img {
+    display: block;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-icons img {
+    width: 24px;
+    height: 24px;
+}
+
+/* --- NAVEGAÇÃO PRINCIPAL --- */
+.main-nav {
+    background-color: #D9232D;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.main-nav .container {
+    padding: 0; /* Remove padding for full-width items */
+}
+
+.main-nav ul {
+    display: flex;
+    width: 100%;
+}
+
+.main-nav li {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.main-nav a {
+    display: block;
+    padding: 15px 10px;
+    transition: background-color 0.2s ease;
+}
+
+.main-nav a:hover {
+    background-color: #b81e27;
+}
+
+.btn-anuncie {
+    background-color: #b81e27;
+}
+
+/* --- RODAPÉ --- */
+.site-footer {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 50px 0;
+    margin-top: 50px;
+}
+
+.site-footer .container {
+    align-items: flex-start;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.footer-logo {
+    margin-bottom: 10px;
+}
+
+.footer-column h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.footer-column a {
+    font-size: 14px;
+    color: #e0e0e0;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    font-weight: bold;
+    font-size: 18px;
+}

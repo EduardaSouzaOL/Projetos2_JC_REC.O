@@ -124,7 +124,7 @@
 
 
 
- {% load static %}
+{% comment %}{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -241,6 +241,86 @@
             }
         });
     </script>
+</body>
+</html>  {% endcomment %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Jornal do Commercio{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="container">
+            <nav class="top-nav-left">
+                <ul>
+                    <li><a href="#">EDIÇÃO DO DIA</a></li>
+                    <li><a href="#">ASSUNTOS ▾</a></li>
+                </ul>
+            </nav>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="https://via.placeholder.com/80x35/DB242D/FFFFFF?text=JC" alt="Logo JC">
+                </a>
+            </div>
+            <div class="header-icons">
+                <a href="#" aria-label="Notificações"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/appointment-reminders.png" alt="Notificações"/></a>
+                <a href="#" aria-label="Buscar"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/search--v1.png" alt="Buscar"/></a>
+                <a href="#" aria-label="Perfil de Usuário"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/user-male-circle.png" alt="Usuário"/></a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="container">
+            <ul>
+                <li><a href="#">NOTÍCIAS DO DIA</a></li>
+                <li><a href="#">COLUNISTAS</a></li>
+                <li><a href="#">NOTÍCIAS DE PE</a></li>
+                <li><a href="#">COMUNIDADES</a></li>
+                <li><a href="#">RECALL DA MARCA</a></li>
+                <li><a href="#" class="btn-anuncie">ANUNCIE AQUI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-column">
+                <img src="https://via.placeholder.com/100x40/DB242D/FFFFFF?text=JC" alt="Logo JC Rodapé" class="footer-logo">
+                <a href="#">Newsletter</a>
+                <a href="#">Quem somos nós</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="footer-column">
+                <h4>OUÇA AGORA</h4>
+                <a href="#">Rádio Jornal</a>
+                <a href="#">TV Jornal</a>
+            </div>
+            <div class="footer-column">
+                <h4>SIGA O JC</h4>
+                <div class="social-icons">
+                     <a href="#" aria-label="YouTube">Y</a>
+                     <a href="#" aria-label="Instagram">I</a>
+                     <a href="#" aria-label="X/Twitter">X</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>
 
