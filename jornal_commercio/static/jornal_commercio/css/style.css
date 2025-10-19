@@ -36,16 +36,16 @@ ul {
 
 /* --- CABEÇALHO SUPERIOR (FUNDO ESCURO) --- */
 .top-header {
-    background-color: #333333;
+    background-color: #000000;
     color: #ffffff;
-    padding: 10px 0;
+    padding: 15px 0;
     position: relative;
     z-index: 20;
     
 }
 
 .top-nav-left ul { display: flex; gap: 25px; }
-.top-nav-left a { font-size: 14px; font-weight: 500; }
+.top-nav-left a { font-size: 14px; font-weight: 500;  margin-left:15px; padding:15px 10px;}
 
 .logo-container {
     position: absolute;
@@ -212,7 +212,7 @@ ul {
 
 /* --- RODAPÉ (FUNDO ESCURO) --- */
 .site-footer {
-    background-color: #333333;
+    background-color: #000000;
     color: #ffffff;
     padding: 50px 0;
     margin-top: 25px;
