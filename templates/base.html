@@ -122,7 +122,9 @@
 </body>
 </html> {% endcomment %}
 
-{% load static %}
+
+
+{% comment %} {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -239,5 +241,110 @@
             }
         });
     </script>
+</body>
+</html> {% endcomment %}
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Portal de Notícias{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <header class="top-header">
+        <div class="top-header-content">
+            <div class="logo-container">
+                <a href="{% url 'homepage' %}"> <img src="{% static 'images/logo-jc.png' %}" alt="Logo do Portal" class="logo-img">
+                </a>
+            </div>
+
+            <nav>
+                <ul class="top-nav">
+                    <li><a href="#edicao">EDIÇÃO DO DIA</a></li>
+                    <li><a href="#assuntos">ASSUNTOS ▾</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-icons">
+                <button class="icon-btn icon-notification" aria-label="Notificações"></button>
+                <button class="icon-btn icon-search" aria-label="Buscar"></button>
+                {% if user.is_authenticated %}
+                    <a class="icon-btn icon-user" href="{% url 'perfil' %}" aria-label="Perfil"></a>
+                {% else %}
+                    <a class="icon-btn icon-user" href="{% url 'login' %}" aria-label="Perfil"></a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="main-nav-content">
+            <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+            <ul class="main-menu" id="mainMenu">
+                <li><a href="#noticias-dia">NOTÍCIAS DO DIA</a></li>
+                <li><a href="#colunistas">COLUNISTAS</a></li>
+                <li><a href="#noticias-pe">NOTÍCIAS DE PE</a></li>
+                <li><a href="#comunidades">COMUNIDADES</a></li>
+                <li><a href="#recall">RECALL DA MARCA</a></li>
+                <li><a href="#anuncie" class="announce-btn">ANUNCIE AQUI</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    {% block content %}
+    {% endblock content %}
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-logo-section">
+                <img src="{% static 'images/logo-jc.png' %}" alt="Logo do Portal" class="footer-logo">
+                <a href="#">Newsletter</a>
+                <a href="#">Quem somos nós</a>
+                <a href="#">FAQ</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>OUÇA AGORA</h3>
+                <a href="#radio">Rádio Jornal</a>
+                <a href="#tv">TV Jornal</a>
+            </div>
+
+            <div class="footer-section social-section">
+                <h3>SIGA O JC</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon" aria-label="YouTube">Y</a>
+                    <a href="#" class="social-icon" aria-label="Instagram">I</a>
+                    <a href="#" class="social-icon" aria-label="Twitter/X">X</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mainMenu');
+            menu.classList.toggle('active');
+        }
+
+        document.querySelectorAll('.main-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('mainMenu').classList.remove('active');
+                }
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('mainMenu').classList.remove('active');
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>
