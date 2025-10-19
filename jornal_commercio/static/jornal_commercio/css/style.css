@@ -1,4 +1,4 @@
-/* static/jornal_commercio/css/style.css */
+/* static/jornal_commercio/css/style.css - VERSÃO FINAL E CORRETA */
 
 /* --- RESET E ESTILOS GLOBAIS --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
@@ -9,9 +9,10 @@
     box-sizing: border-box;
 }
 
+
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #212121; /* Fundo cinza escuro da página toda */
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
     color: #333;
 }
 
@@ -33,95 +34,55 @@ ul {
     list-style: none;
 }
 
-/* --- CABEÇALHO SUPERIOR --- */
+/* --- CABEÇALHO SUPERIOR (FUNDO ESCURO) --- */
 .top-header {
     background-color: #333333;
     color: #ffffff;
     padding: 10px 0;
-    /* BORDA AZUL SUTIL NO TOPO - REMOVA SE NÃO QUISER */
-    /* border-top: 4px solid #0056b3; */
+    position: relative;
+    z-index: 20;
+    
 }
 
-.top-nav-left ul {
-    display: flex;
-    gap: 25px;
-}
-
-.top-nav-left a {
-    font-size: 14px;
-    font-weight: 500;
-}
+.top-nav-left ul { display: flex; gap: 25px; }
+.top-nav-left a { font-size: 14px; font-weight: 500; }
 
 .logo-container {
-    /* Centraliza o logo no espaço disponível */
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
 }
+.logo-container img { display: block; }
+.header-icons { display: flex; align-items: center; gap: 25px; }
+.header-icons img { width: 24px; height: 24px; }
 
-.logo-container img {
-    display: block;
-}
 
-.header-icons {
-    display: flex;
-    align-items: center;
-    gap: 25px; /* Aumenta o espaçamento */
-}
-
-.header-icons img {
-    width: 24px;
-    height: 24px;
-    filter: invert(1); /* Garante que os ícones fiquem brancos */
-}
-
-/* --- NAVEGAÇÃO PRINCIPAL --- */
 .main-nav {
     background-color: #D9232D;
     color: #ffffff;
     font-weight: 700;
     font-size: 14px;
 }
+.main-nav .container { padding: 0; }
+.main-nav ul { display: flex; width: 100%; }
+.main-nav li { text-align: center; flex-grow: 1; }
+.main-nav a { display: block; padding: 15px 10px; transition: background-color 0.2s ease; }
+.main-nav a:hover { background-color: #b81e27; }
+.btn-anuncie { background-color: #b81e27; }
 
-.main-nav .container {
-    padding: 0;
-}
 
-.main-nav ul {
-    display: flex;
-    width: 100%;
-}
-
-.main-nav li {
-    text-align: center;
-    flex-grow: 1;
-}
-
-.main-nav a {
-    display: block;
-    padding: 15px 10px;
-    transition: background-color 0.2s ease;
-}
-
-.main-nav a:hover {
-    background-color: #b81e27;
-}
-
-.btn-anuncie {
-    background-color: #b81e27;
-}
-
-/* --- ESTILOS DA HOMEPAGE --- */
-
-/* SEÇÃO HERO - AGORA COM FUNDO ESCURO */
 .hero-section {
-    background-color: #333333; /* Fundo cinza escuro */
-    padding: 60px 0;
+    background-color: #333333;
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    min-height: 500px;
 }
 
 .hero-section .container {
     align-items: center;
-    gap: 40px;
+    gap: 60px;
+    width: 100%;
 }
 
 .hero-text {
@@ -130,7 +91,7 @@ ul {
 
 .hero-text h1 {
     font-size: 42px;
-    font-weight: 300; /* Fonte mais fina, como no protótipo */
+    font-weight: 300;
     color: #ffffff;
     margin-bottom: 20px;
     line-height: 1.2;
@@ -138,91 +99,98 @@ ul {
 
 .hero-text p {
     font-size: 16px;
-    color: #dcdcdc; /* Cinza mais claro */
+    color: #dcdcdc;
     margin-bottom: 20px;
 }
 
-/* FORMULÁRIO ESTILIZADO */
+.hero-image {
+    flex: 1;
+    align-self: stretch;
+    display: flex;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
 .newsletter-form-wrapper {
     position: relative;
 }
 
 .newsletter-form-wrapper::before {
-    content: '✉'; /* Ícone de envelope */
+    content: '✉';
     position: absolute;
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
     color: #888;
     font-size: 20px;
+    z-index: 2;
 }
 
 .newsletter-form {
+    position: relative;
     display: flex;
+    align-items: center;
 }
 
 .newsletter-form input {
-    flex-grow: 1;
+    width: 100%;
     border: 1px solid #888;
     background-color: transparent;
     color: #ffffff;
-    border-radius: 50px; /* Bordas arredondadas */
-    padding: 15px 15px 15px 45px; /* Espaço para o ícone */
+    border-radius: 50px;
+    padding: 15px 140px 15px 45px;
     font-size: 16px;
     outline: none;
 }
 
 .newsletter-form button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
     background-color: #D9232D;
     color: #ffffff;
     border: none;
-    padding: 0 40px;
+    padding: 10px 35px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    border-radius: 50px; /* Bordas arredondadas */
-    margin-left: -40px; /* Faz o botão sobrepor a caixa de texto */
+    border-radius: 50px;
+    margin-left: 0;
 }
 
-.hero-image {
-    flex: 1;
-}
 
-.hero-image img {
-    max-width: 100%;
-    display: block;
-}
-
-/* CONTEÚDO PRINCIPAL COM FUNDO BRANCO */
 .page-wrapper {
     background-color: #ffffff;
     max-width: 1140px;
     margin: 25px auto;
     padding: 40px;
 }
-
-.highlights-section .container {
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-/* TÍTULO "DESTAQUES" ESTILIZADO */
+.highlights-section .container { flex-direction: column; align-items: flex-start; }
 .highlights-section h2 {
     font-size: 20px;
-    font-weight: 500; /* Menos negrito */
-    border-bottom: 2px solid #D9232D; /* Linha mais fina */
+    font-weight: 500;
+    border-bottom: 2px solid #D9232D;
     padding-bottom: 10px;
     display: inline-block;
     margin-bottom: 30px;
 }
 
-/* --- RESTANTE DOS ESTILOS (JÁ ESTAVAM CORRETOS) --- */
-.main-highlight {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
-    width: 100%;
+.highlights-section .category-tag {
+    display: inline-block; 
+    border-bottom: 2px solid #D9232D; 
+    padding-bottom: 8px;   
+    margin-bottom: 10px; 
 }
+
+/* --- ESTILOS DOS CARDS DE NOTÍCIA --- */
+.main-highlight { display: flex; gap: 30px; margin-bottom: 30px; width: 100%; }
 .main-highlight-image { flex: 1.5; }
 .main-highlight-image img { width: 100%; display: block; }
 .main-highlight-text { flex: 1; }
@@ -232,12 +200,17 @@ ul {
 .main-highlight-text p { font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 20px; }
 .related-link { font-size: 14px; color: #555; font-weight: 500; }
 .secondary-highlights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
-.news-card img { width: 100%; margin-bottom: 10px; }
+.news-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
 .news-card .category-tag { font-size: 12px; }
 .news-card h4 { font-size: 16px; font-weight: 700; line-height: 1.4; }
 .news-card h4 a:hover { color: #D9232D; }
 
-/* --- RODAPÉ --- */
+/* --- RODAPÉ (FUNDO ESCURO) --- */
 .site-footer {
     background-color: #333333;
     color: #ffffff;
@@ -249,5 +222,17 @@ ul {
 .footer-logo { margin-bottom: 10px; }
 .footer-column h4 { font-size: 16px; margin-bottom: 10px; font-weight: 700; }
 .footer-column a { font-size: 14px; color: #e0e0e0; }
-.social-icons { display: flex; gap: 15px; }
-.social-icons a { font-weight: bold; font-size: 18px; }
+.social-icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+}
+.social-icons a img {
+    display: block;
+    height: 20px;
+    width: auto;
+}
