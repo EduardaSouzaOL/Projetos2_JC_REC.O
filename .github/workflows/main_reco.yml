@@ -22,23 +22,18 @@ jobs:
 
       # Instala as dependências do Django (ajuste o nome da pasta se necessário)
       - name: Install dependencies
-        run: pip install -r reco/requirements.txt
+        run: pip install -r requirements.txt
 
       # Remove arquivos que não devem ir para produção
       - name: Cleaning testing files
         run: |
-          cd reco/
           rm -f db.sqlite3
           rm -f .env
-          cd ..
 
       # Cria o arquivo zip do projeto para envio
       - name: Zip artifact for deployment
         run: |
-          cd reco/
-          zip release.zip ./* -r
-          cd ..
-          mv reco/release.zip .
+         zip -r release.zip . -x ".git/*" -x ".github/*"
 
       # Envia o artefato zipado para o job de deploy
       - name: Upload artifact for deployment jobs
