@@ -1,0 +1,253 @@
+/* static/jornal_commercio/css/style.css */
+
+/* --- RESET E ESTILOS GLOBAIS --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #212121; /* Fundo cinza escuro da página toda */
+    color: #333;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* --- CABEÇALHO SUPERIOR --- */
+.top-header {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 10px 0;
+    /* BORDA AZUL SUTIL NO TOPO - REMOVA SE NÃO QUISER */
+    /* border-top: 4px solid #0056b3; */
+}
+
+.top-nav-left ul {
+    display: flex;
+    gap: 25px;
+}
+
+.top-nav-left a {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.logo-container {
+    /* Centraliza o logo no espaço disponível */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-container img {
+    display: block;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Aumenta o espaçamento */
+}
+
+.header-icons img {
+    width: 24px;
+    height: 24px;
+    filter: invert(1); /* Garante que os ícones fiquem brancos */
+}
+
+/* --- NAVEGAÇÃO PRINCIPAL --- */
+.main-nav {
+    background-color: #D9232D;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.main-nav .container {
+    padding: 0;
+}
+
+.main-nav ul {
+    display: flex;
+    width: 100%;
+}
+
+.main-nav li {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.main-nav a {
+    display: block;
+    padding: 15px 10px;
+    transition: background-color 0.2s ease;
+}
+
+.main-nav a:hover {
+    background-color: #b81e27;
+}
+
+.btn-anuncie {
+    background-color: #b81e27;
+}
+
+/* --- ESTILOS DA HOMEPAGE --- */
+
+/* SEÇÃO HERO - AGORA COM FUNDO ESCURO */
+.hero-section {
+    background-color: #333333; /* Fundo cinza escuro */
+    padding: 60px 0;
+}
+
+.hero-section .container {
+    align-items: center;
+    gap: 40px;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-text h1 {
+    font-size: 42px;
+    font-weight: 300; /* Fonte mais fina, como no protótipo */
+    color: #ffffff;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero-text p {
+    font-size: 16px;
+    color: #dcdcdc; /* Cinza mais claro */
+    margin-bottom: 20px;
+}
+
+/* FORMULÁRIO ESTILIZADO */
+.newsletter-form-wrapper {
+    position: relative;
+}
+
+.newsletter-form-wrapper::before {
+    content: '✉'; /* Ícone de envelope */
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 20px;
+}
+
+.newsletter-form {
+    display: flex;
+}
+
+.newsletter-form input {
+    flex-grow: 1;
+    border: 1px solid #888;
+    background-color: transparent;
+    color: #ffffff;
+    border-radius: 50px; /* Bordas arredondadas */
+    padding: 15px 15px 15px 45px; /* Espaço para o ícone */
+    font-size: 16px;
+    outline: none;
+}
+
+.newsletter-form button {
+    background-color: #D9232D;
+    color: #ffffff;
+    border: none;
+    padding: 0 40px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 50px; /* Bordas arredondadas */
+    margin-left: -40px; /* Faz o botão sobrepor a caixa de texto */
+}
+
+.hero-image {
+    flex: 1;
+}
+
+.hero-image img {
+    max-width: 100%;
+    display: block;
+}
+
+/* CONTEÚDO PRINCIPAL COM FUNDO BRANCO */
+.page-wrapper {
+    background-color: #ffffff;
+    max-width: 1140px;
+    margin: 25px auto;
+    padding: 40px;
+}
+
+.highlights-section .container {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* TÍTULO "DESTAQUES" ESTILIZADO */
+.highlights-section h2 {
+    font-size: 20px;
+    font-weight: 500; /* Menos negrito */
+    border-bottom: 2px solid #D9232D; /* Linha mais fina */
+    padding-bottom: 10px;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+/* --- RESTANTE DOS ESTILOS (JÁ ESTAVAM CORRETOS) --- */
+.main-highlight {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+.main-highlight-image { flex: 1.5; }
+.main-highlight-image img { width: 100%; display: block; }
+.main-highlight-text { flex: 1; }
+.category-tag { color: #555; font-size: 14px; font-weight: 700; display: block; margin-bottom: 10px; }
+.main-highlight-text h3 { font-size: 28px; font-weight: 700; line-height: 1.3; margin-bottom: 15px; }
+.main-highlight-text h3 a:hover { color: #D9232D; }
+.main-highlight-text p { font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 20px; }
+.related-link { font-size: 14px; color: #555; font-weight: 500; }
+.secondary-highlights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
+.news-card img { width: 100%; margin-bottom: 10px; }
+.news-card .category-tag { font-size: 12px; }
+.news-card h4 { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.news-card h4 a:hover { color: #D9232D; }
+
+/* --- RODAPÉ --- */
+.site-footer {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 50px 0;
+    margin-top: 25px;
+}
+.site-footer .container { align-items: flex-start; }
+.footer-column { display: flex; flex-direction: column; gap: 15px; }
+.footer-logo { margin-bottom: 10px; }
+.footer-column h4 { font-size: 16px; margin-bottom: 10px; font-weight: 700; }
+.footer-column a { font-size: 14px; color: #e0e0e0; }
+.social-icons { display: flex; gap: 15px; }
+.social-icons a { font-weight: bold; font-size: 18px; }
