@@ -10,8 +10,9 @@ class Perfil(models.Model):
     def __str__(self):
         return f'Perfil de {self.usuario.username}'
 
+# Em usuario/models.py
+
 @receiver(post_save, sender=User)
 def criar_ou_atualizar_perfil_usuario(sender, instance, created, **kwargs):
     if created:
         Perfil.objects.create(usuario=instance)
-    instance.perfil.save()
