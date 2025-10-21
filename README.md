@@ -65,6 +65,17 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 </details>
 
+<summary><h2><strong>Semana 11s</strong></h2></summary>
+
+## Readme do projeto
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Relatório em par
+[Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
+## Github/Bug tracker 
+<img  src="https://github.com/user-attachments/assets/5acb7130-898b-40ae-862a-56fa4c8dde4a" width="800" height="800">
+
+</details>
+
 
 
 ## Equipe
