@@ -1,0 +1,76 @@
+name: Build and deploy Python app to Azure Web App - RECO
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python version
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Instala as dependências do Django (ajuste o nome da pasta se necessário)
+      - name: Install dependencies
+        run: pip install -r reco/requirements.txt
+
+      # Remove arquivos que não devem ir para produção
+      - name: Cleaning testing files
+        run: |
+          cd reco/
+          rm -f db.sqlite3
+          rm -f .env
+          cd ..
+
+      # Cria o arquivo zip do projeto para envio
+      - name: Zip artifact for deployment
+        run: |
+          cd reco/
+          zip release.zip ./* -r
+          cd ..
+          mv reco/release.zip .
+
+      # Envia o artefato zipado para o job de deploy
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-app
+          path: release.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: python-app
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7543C5705FB54319BC992DA3022662C1 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DCABE8B8F983409C9A69DB16465A6E89 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_52C29D4403DD4F76942F1423A4DBE3B7 }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
+        with:
+          app-name: 'RECO'
+          slot-name: 'Production'
+          package: release.zip
