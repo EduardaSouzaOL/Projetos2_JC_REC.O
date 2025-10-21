@@ -7,12 +7,9 @@
     <title>{% block title %}Jornal do Commercio{% endblock %}</title>
     
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/style.css' %}">
-    
     {% block styles %}{% endblock %}
 </head>
-<body>
-
-   <header class="top-header">
+<body> <header class="top-header">
     <div class="container">
         <nav class="top-nav-left">
             <ul>
@@ -26,15 +23,17 @@
             </a>
         </div>
         <div class="header-icons">
-        <a href="#" aria-label="Notificações">
+        
+        <a href="#" id="open-feedback-btn" aria-label="Notificações">
             <img src="{% static 'jornal_commercio/images/notification.png' %}" alt="Notificações">
         </a>
+        
         <a href="#" aria-label="Buscar">
             <img src="{% static 'jornal_commercio/images/search.png' %}" alt="Buscar">
         </a>
         <a href="#" aria-label="Perfil de Usuário">
             <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
-        </a>    
+        </a>     
     </div>
     </div>
     </header>
@@ -74,18 +73,19 @@
                 <h4>SIGA O JC</h4>
                 <div class="social-icons">
                      <a href="https://www.youtube.com/c/TVJCPE/videos" aria-label="YouTube">
-                        <img src="{% static 'jornal_commercio/images/youtube.png' %}" alt="Buscar">
+                         <img src="{% static 'jornal_commercio/images/youtube.png' %}" alt="Buscar">
                      </a>
                      <a href="https://www.instagram.com/jc_pe/?hl=pt" aria-label="Instagram">
-                        <img src="{% static 'jornal_commercio/images/instagram.png' %}" alt="Buscar">
+                         <img src="{% static 'jornal_commercio/images/instagram.png' %}" alt="Buscar">
                      </a>
                      <a href="https://x.com/jc_pe" aria-label="X/Twitter">
-                        <img src="{% static 'jornal_commercio/images/twitter.png' %}" alt="Buscar">
+                         <img src="{% static 'jornal_commercio/images/twitter.png' %}" alt="Buscar">
                      </a>
                 </div>
             </div>
         </div>
     </footer>
+
 
 </body>
 </html>

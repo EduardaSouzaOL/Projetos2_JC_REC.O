@@ -1,4 +1,4 @@
-/* static/jornal_commercio/css/style.css - VERSÃO FINAL E CORRETA */
+/* static/jornal_commercio/css/style.css */
 
 /* --- RESET E ESTILOS GLOBAIS --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
@@ -235,4 +235,119 @@ ul {
     display: block;
     height: 20px;
     width: auto;
+}
+
+/* ✅ MUDANÇA AQUI: O bloco de CSS #open-feedback-btn foi REMOVIDO */
+
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.6); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    color: #333; 
+    margin: 10% auto; 
+    padding: 25px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+    animation: slide-down 0.3s ease-out;
+}
+
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+.close-modal {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#feedback-form .form-group {
+    margin-bottom: 15px;
+}
+
+#feedback-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+
+#feedback-form input[type="text"],
+#feedback-form input[type="email"],
+#feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; 
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+#feedback-form button {
+    background-color: #c00; 
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#feedback-form button:hover {
+    background-color: #a00;
+}
+
+
+.form-error {
+    color: #c00; 
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+
+#feedback-success-message {
+    color: #006400; 
+    background-color: #f0fff0;
+    border: 1px solid #006400;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 15px;
 }

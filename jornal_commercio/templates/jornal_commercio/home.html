@@ -36,7 +36,7 @@
                     <span class="category-tag">GAZA</span>
                     <h3><a href="#">Acordo entre Israel e Hamas: o que acontece após a libertação dos últimos reféns? Entenda</a></h3>
                     <p>Hamas libertou os 20 reféns restantes em Gaza na segunda-feira, 13, dando início a uma troca por prisioneiros palestinos detidos em Israel.</p>
-                    <a href="#" class="related-link">Hamas liberta 20 reféns e americano após mais de 700 dias de cativeiro em Gaza</a>
+                    <a href="#" class="related-link">Hamas liberta 20 reféns e americano após mais de 70 dias de cativeiro em Gaza</a>
                 </div>
             </div>
 
@@ -65,4 +65,39 @@
         </div>
     </section>
 </div>
+
+<div id="feedback-modal" class="modal">
+    
+    <div class="modal-content">
+        <span class="close-modal">&times;</span> <h3>Deixe seu Feedback</h3>
+        <p>Encontrou um bug? Tem alguma sugestão? Nos avise!</p>
+        
+        <div id="feedback-success-message" style="display:none;">
+            </div>
+
+        <form id="feedback-form" method="POST" action="{% url 'salvar_feedback' %}">
+            
+            {% csrf_token %} <div class="form-group">
+                <label for="{{ form_feedback.nome.id_for_label }}">{{ form_feedback.nome.label }}:</label>
+                {{ form_feedback.nome }}
+                <div id="error-nome" class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form_feedback.email.id_for_label }}">{{ form_feedback.email.label }}:</label>
+                {{ form_feedback.email }}
+                <div id="error-email" class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form_feedback.mensagem.id_for_label }}">{{ form_feedback.mensagem.label }}:</label>
+                {{ form_feedback.mensagem }}
+                <div id="error-mensagem" class="form-error"></div>
+            </div>
+
+            <button type="submit" id="feedback-submit-btn">Enviar</button>
+        </form>
+    </div>
+</div>
+
 {% endblock content %}
