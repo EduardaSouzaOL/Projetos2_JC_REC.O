@@ -3,10 +3,13 @@
 from pathlib import Path
 import os
 import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 # --- Chaves e Configurações de Ambiente ---
 # A SECRET_KEY é lida da variável de ambiente no Render.
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -14,8 +17,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # DEBUG é False em produção, a menos que a variável de ambiente DEBUG seja 'True'.
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# Adicione a URL do seu site do Render aqui.
-ALLOWED_HOSTS = ['projetos2-jc-rec-o.onrender.com']
+
+if DEBUG:
+    # Se estiver em desenvolvimento (DEBUG=True), permita o localhost
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+else:
+    # Se estiver em produção (DEBUG=False), use a URL do Render
+    ALLOWED_HOSTS = ['projetos2-jc-rec-o.onrender.com']
 
 
 # --- Application definition ---
