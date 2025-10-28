@@ -1,4 +1,5 @@
 # projeto/settings.py
+from dotenv import load_dotenv
 
 from pathlib import Path
 import os
@@ -7,6 +8,7 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 # --- Chaves e Configurações de Ambiente ---
 # A SECRET_KEY é lida da variável de ambiente no Render.
 SECRET_KEY = os.environ.get('SECRET_KEY')
