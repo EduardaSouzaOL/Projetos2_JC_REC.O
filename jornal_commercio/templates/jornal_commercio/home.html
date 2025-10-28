@@ -28,40 +28,46 @@
     <section class="highlights-section">
         <div class="container">
             <h2>DESTAQUES</h2>
+
+            {% if destaque_principal %}
             <div class="main-highlight">
                 <div class="main-highlight-image">
-                    <a href="#"><img src="{% static 'jornal_commercio/images/gaza-main.png' %}" alt="Cena de conflito em Gaza"></a>
+                    <a href="#"> 
+                        {% if destaque_principal.imagem_principal %}
+                            <img src="{{ destaque_principal.imagem_principal.url }}" alt="{{ destaque_principal.titulo }}">
+                        {% else %}
+                            <img src="{% static 'jornal_commercio/images/gaza-main.png' %}" alt="Imagem padrão">
+                        {% endif %}
+                    </a>
                 </div>
                 <div class="main-highlight-text">
-                    <span class="category-tag">GAZA</span>
-                    <h3><a href="#">Acordo entre Israel e Hamas: o que acontece após a libertação dos últimos reféns? Entenda</a></h3>
-                    <p>Hamas libertou os 20 reféns restantes em Gaza na segunda-feira, 13, dando início a uma troca por prisioneiros palestinos detidos em Israel.</p>
-                    <a href="#" class="related-link">Hamas liberta 20 reféns e americano após mais de 700 dias de cativeiro em Gaza</a>
-                </div>
+                    <span class="category-tag">{{ destaque_principal.get_categoria_display }}</span>
+                    <h3><a href="#">{{ destaque_principal.titulo }}</a></h3>
+                    <p>{{ destaque_principal.resumo }}</p>
+                    </div>
             </div>
+            {% else %}
+                <p>Nenhuma notícia de destaque encontrada.</p>
+            {% endif %}
 
+            {% if destaques_secundarios %}
             <div class="secondary-highlights">
-                 <article class="news-card">
-                    <a href="#"><img src="{% static 'jornal_commercio/images/cnh.png' %}" alt="CNH"></a>
-                    <span class="category-tag">SEGURANÇA VIÁRIA</span>
-                    <h4><a href="#">CNH sem autoescolas: Governo detalha regras para tirar a habilitação no Brasil. Proposta está sob consulta</a></h4>
-                </article>
+
+                {% for noticia in destaques_secundarios %}
                 <article class="news-card">
-                    <a href="#"><img src="{% static 'jornal_commercio/images/sindrome.png' %}" alt="Cadeira de rodas"></a>
-                    <span class="category-tag">DESCASO</span>
-                    <h4><a href="#">Alunos com deficiência expõem problemas de acessibilidade no Centro de Ciências da Saúde da UFPE</a></h4>
+                    <a href="#"> {% if noticia.imagem_principal %}
+                            <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
+                        {% else %}
+                            <img src="{% static 'jornal_commercio/images/cnh.png' %}" alt="Imagem padrão">
+                        {% endif %}
+                    </a>
+                    <span class="category-tag">{{ noticia.get_categoria_display }}</span>
+                    <h4><a href="#">{{ noticia.titulo }}</a></h4>
                 </article>
-                <article class="news-card">
-                    <a href="#"><img src="{% static 'jornal_commercio/images/educacao.png' %}" alt="Raquel Lyra discursando"></a>
-                    <span class="category-tag">CRECHES</span>
-                    <h4><a href="#">Em discurso no Senado, Raquel Lyra critica governos anteriores sobre educação infantil</a></h4>
-                </article>
-                <article class="news-card">
-                    <a href="#"><img src="{% static 'jornal_commercio/images/alerta.png' %}" alt="Máquina de cartão"></a>
-                    <span class="category-tag">ALERTA</span>
-                    <h4><a href="#">Polícia orienta como se proteger de novo golpe contra pacientes de hospitais do Recife</a></h4>
-                </article>
+                {% endfor %}
+
             </div>
+            {% endif %}
         </div>
     </section>
 </div>
