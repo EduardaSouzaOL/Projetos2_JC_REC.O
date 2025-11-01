@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Noticia
+from .models import Feedback
 
 @admin.register(Noticia)
 class NoticiaAdmin(admin.ModelAdmin):
