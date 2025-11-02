@@ -25,9 +25,9 @@
             </a>
         </div>
         <div class="header-icons">
-            <a href="#" id="open-feedback-btn" aria-label="Feedback"> 
+            <button id="open-feedback-modal" class="header-icon-btn" aria-label="Enviar Feedback">
                 <img src="{% static 'jornal_commercio/images/notification.png' %}" alt="Notificações">
-            </a>
+            </button>
             <a href="#" aria-label="Buscar">
                 <img src="{% static 'jornal_commercio/images/search.png' %}" alt="Buscar">
             </a>
@@ -107,8 +107,6 @@
             </div>
         </div>
     </footer>
-    <script src="{% static 'jornal_commercio/js/script.js' %}"></script>
-
 
     <div id="feedback-modal-overlay" class="modal-overlay">
         <div class="modal-content">
@@ -131,7 +129,6 @@
             </form>
         </div>
     </div>
-
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
