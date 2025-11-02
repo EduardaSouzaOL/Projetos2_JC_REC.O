@@ -1,0 +1,117 @@
+/* Em jornal_commercio/static/jornal_commercio/css/detalhe_style.css */
+
+.detalhe-container {
+    width: 90%;
+    max-width: 900px; /* Largura máxima para leitura */
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 1. Tag de Categoria (NOVO) */
+.detalhe-categoria {
+    display: inline-block;
+    background-color: #004a9c; /* Azul padrão do JC */
+    color: #ffffff;
+    padding: 5px 12px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+/* 2. Título (Atualizado) */
+.detalhe-titulo {
+    font-size: 2.8em;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+/* 3. Resumo (NOVO ESTILO) */
+.detalhe-resumo {
+    font-size: 1.5em; /* Tamanho de subtítulo */
+    font-weight: 300; /* Fonte mais leve */
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+/* 3. Meta: Autor e Data (NOVO) */
+.detalhe-meta {
+    font-size: 0.95em;
+    color: #555; /* Cinza para meta-dados */
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee; /* Linha sutil de separação */
+}
+
+.detalhe-meta .detalhe-autor {
+    color: #333;
+}
+
+.detalhe-meta .detalhe-data {
+    margin-left: 15px;
+    font-style: italic;
+}
+
+/* 4. Imagem Principal (Como antes) */
+.detalhe-imagem-principal {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+/* 5. Conteúdo (Como antes) */
+.detalhe-conteudo {
+    font-size: 1.1em;
+    color: #333;
+    line-height: 1.7; /* Espaçamento confortável para leitura */
+    text-align: justify;
+    margin-bottom: 40px;
+}
+
+/* 6. Imagens Secundárias (NOVO) */
+.detalhe-imagem-secundaria {
+    width: 80%; /* Um pouco menor que a principal */
+    display: block;
+    margin: 25px auto; /* Centralizada e com espaço */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* 7. Botão Voltar (Como antes) */
+.btn-voltar {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #004a9c;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-voltar:hover {
+    background-color: #003366;
+}
+
+/* 8. Seção de Comentários (Como antes) */
+.comentarios-secao {
+    margin-top: 50px;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+}
+
+.comentarios-secao h3 {
+    font-size: 1.8em;
+    color: #222;
+    margin-bottom: 20px;
+}

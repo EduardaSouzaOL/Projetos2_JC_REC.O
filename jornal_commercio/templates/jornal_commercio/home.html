@@ -11,12 +11,6 @@
             <h1>O essencial para o seu dia, em poucos minutos.</h1>
             <p>Receba as principais notícias de Pernambuco, do Brasil e do mundo para você se informar de forma rápida e precisa.</p>
             <p>É gratuito, todo dia.</p>
-            {% comment %} <div class="newsletter-form-wrapper">
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Cadastre seu e-mail">
-                    <button type="submit">Leia já!</button>
-                </form>
-            </div> {% endcomment %}
             <div class="newsletter-form-wrapper">
                 <form class="newsletter-form" method="GET" action="{% url 'newsletter' %}">
                     <input type="email" placeholder="Cadastre seu e-mail" name="email">
@@ -38,17 +32,20 @@
             {% if destaque_principal %}
             <div class="main-highlight">
                 <div class="main-highlight-image">
-                    <a href="#"> 
+                    
+                    <a href="{% url 'detalhe_noticia' slug=destaque_principal.slug %}"> 
                         {% if destaque_principal.imagem_principal %}
-                            <img src="{{ destaque_principal.imagem_principal.url }}" alt="{{ destaque_principal.titulo }}">
+                        <img src="{{ destaque_principal.imagem_principal.url }}" alt="{{ destaque_principal.titulo }}">
                         {% else %}
-                            <img src="{% static 'jornal_commercio/images/gaza-main.png' %}" alt="Imagem padrão">
+                        <img src="{% static 'jornal_commercio/images/gaza-main.png' %}" alt="Imagem padrão">
                         {% endif %}
                     </a>
+
                 </div>
                 <div class="main-highlight-text">
                     <span class="category-tag">{{ destaque_principal.get_categoria_display }}</span>
-                    <h3><a href="#">{{ destaque_principal.titulo }}</a></h3>
+                    
+                    <h3><a href="{% url 'detalhe_noticia' slug=destaque_principal.slug %}">{{ destaque_principal.titulo }}</a></h3>
                     <p>{{ destaque_principal.resumo }}</p>
                     </div>
             </div>
@@ -61,14 +58,19 @@
 
                 {% for noticia in destaques_secundarios %}
                 <article class="news-card">
-                    <a href="#"> {% if noticia.imagem_principal %}
+
+                    <a href="{% url 'detalhe_noticia' slug=noticia.slug %}"> 
+                        {% if noticia.imagem_principal %}
                             <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
                         {% else %}
                             <img src="{% static 'jornal_commercio/images/cnh.png' %}" alt="Imagem padrão">
                         {% endif %}
                     </a>
+
                     <span class="category-tag">{{ noticia.get_categoria_display }}</span>
-                    <h4><a href="#">{{ noticia.titulo }}</a></h4>
+                    
+                    <h4><a href="{% url 'detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
+
                 </article>
                 {% endfor %}
 

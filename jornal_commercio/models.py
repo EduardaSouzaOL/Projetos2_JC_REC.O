@@ -89,8 +89,16 @@ class Noticia(models.Model):
         # Gerar slug automaticamente a partir do título se não existir
         if not self.slug:
             self.slug = slugify(self.titulo)
-            # (Em produção, seria necessário um loop para garantir unicidade, ex: slug-2)
-        super().save(*args, **kwargs)
+            # Garante que o slug seja único, adicionando um número se necessário
+            original_slug = self.slug
+            queryset = Noticia.objects.all().filter(slug__iexact=self.slug).exists()
+            count = 1
+            while queryset:
+                self.slug = f"{original_slug}-{count}"
+                count += 1
+                queryset = Noticia.objects.all().filter(slug__iexact=self.slug).exists()
+                
+        super(Noticia, self).save(*args, **kwargs)
 
 
 class Feedback(models.Model):
