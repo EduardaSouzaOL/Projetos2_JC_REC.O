@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .forms import FeedbackForm
 import json
@@ -23,6 +23,18 @@ def home(request):
     
     return render(request, "jornal_commercio/home.html", context)
 
+def detalhe_noticia(request, slug):
+    """
+    Busca uma notícia específica pelo seu SLUG e a exibe na página de detalhe.
+    """
+    # Busca pelo campo 'slug' em vez de 'pk' (Primary Key)
+    noticia = get_object_or_404(Noticia, slug=slug)
+    
+    context = {
+        'noticia': noticia
+    }
+    
+    return render(request, 'jornal_commercio/detalhe_noticia.html', context)
 
 def salvar_feedback(request):
     if request.method == 'POST':
