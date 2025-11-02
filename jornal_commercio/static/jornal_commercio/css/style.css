@@ -237,117 +237,115 @@ ul {
     width: auto;
 }
 
-/* ✅ MUDANÇA AQUI: O bloco de CSS #open-feedback-btn foi REMOVIDO */
+.header-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle; /* Alinha com os outros ícones */
+}
 
+/* === CSS PARA O MODAL DE FEEDBACK === */
 
-.modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1000; 
-    left: 0;
+/* O fundo escuro (overlay) */
+.modal-overlay {
+    display: none; /* Escondido por padrão */
+    position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; 
-    background-color: rgba(0,0,0,0.6); 
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
 }
 
+/* A caixa do modal */
 .modal-content {
-    background-color: #fefefe;
-    color: #333; 
-    margin: 10% auto; 
-    padding: 25px;
-    border: 1px solid #888;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 8px;
     width: 90%;
     max-width: 500px;
-    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     position: relative;
-    animation: slide-down 0.3s ease-out;
 }
 
-
-@keyframes slide-down {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-
-.close-modal {
-    color: #aaa;
+/* O botão de fechar (X) */
+.modal-close {
     position: absolute;
     top: 10px;
-    right: 20px;
+    right: 15px;
     font-size: 28px;
     font-weight: bold;
-    line-height: 1;
-}
-
-.close-modal:hover,
-.close-modal:focus {
-    color: black;
-    text-decoration: none;
+    color: #888;
     cursor: pointer;
+    border: none;
+    background: none;
+}
+.modal-close:hover {
+    color: #000;
 }
 
-#feedback-form .form-group {
-    margin-bottom: 15px;
+/* Título do modal */
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
 }
 
-#feedback-form label {
+/* Estilizando o formulário dentro do modal */
+#modal-feedback-form label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
+    font-weight: 600;
+    color: #444;
 }
 
-
-#feedback-form input[type="text"],
-#feedback-form input[type="email"],
-#feedback-form textarea {
+#modal-feedback-form input[type="email"],
+#modal-feedback-form textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-bottom: 15px;
     box-sizing: border-box; 
-    font-family: inherit;
-    font-size: 1rem;
 }
 
-#feedback-form button {
-    background-color: #c00; 
+#modal-feedback-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+#modal-feedback-form button {
+    background-color: #D90000; /* Vermelho do seu site */
     color: white;
     padding: 12px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
 }
 
-#feedback-form button:hover {
-    background-color: #a00;
+#modal-feedback-form button:hover {
+    background-color: #b00000;
 }
 
-
-.form-error {
-    color: #c00; 
-    font-size: 0.9em;
-    margin-top: 5px;
-}
-
-
-#feedback-success-message {
-    color: #006400; 
-    background-color: #f0fff0;
-    border: 1px solid #006400;
+/* Classes para feedback de sucesso/erro */
+.form-message {
+    display: none;
+    padding: 10px;
+    margin-top: 10px;
     border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
-    padding: 15px;
-    margin-bottom: 15px;
+}
+.form-message.success {
+    background: #e6f7d9;
+    color: #2a5700;
+}
+.form-message.error {
+    background: #fdecea;
+    color: #a30000;
 }
