@@ -11,46 +11,33 @@
 
 <div class="login-container">
     
-    <div class="login-card registration-card"> 
+    <div class="login-card registration-card">
         
         <img src="{% static 'usuario/images/logo_jc1.png' %}" alt="Logo JCPE" class="login-logo">
         
         <h2 class="registration-title">Crie sua conta</h2>
-        <p class="registration-subtitle">Preencha seus dados pessoais</p>
         
         <div class="step-indicator">
-            <div class="step active"></div>
-            <div class="step"></div>
-            <div class="step"></div>
-            <div class="step"></div>
+            <div class="step active"></div> <div class="step active"></div> <div class="step active"></div> <div class="step"></div>
             <div class="step"></div>
         </div>
 
         <form method="post" class="login-form registration-form">
             {% csrf_token %}
-            
             {{ form.non_field_errors }}
 
-            {% for field in form %}
-            <p>
-                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                {{ field }} 
-                {{ field.errors }}
-            </p>
-            {% endfor %}
-            
+            <div class="radio-form-group">
+                <label>{{ form.frequencia.label }}</label>
+                {{ form.frequencia.errors }}
+                <div class="radio-options">
+                    {{ form.frequencia }}
+                </div>
+            </div>
+
             <button type="submit" class="btn-login-submit">
                 Próximo <span class="arrow-right">→</span>
             </button>
             
         </form>
         
-        <p class="register-prompt">
-            Já tem uma conta? <a href="{% url 'login' %}">Faça o Login</a>
-        </p>
-        
     </div> </div> {% endblock content %}
-
-
-{% block scripts %}
-{% endblock scripts %}

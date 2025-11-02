@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'usuario/css/login_style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-fullscreen-bg"></div>
+
+<div class="login-container">
+
+    <div class="login-card registration-card">
+
+        <img src="{% static 'usuario/images/logo_jc1.png' %}" alt="Logo JCPE" class="login-logo">
+
+        <h2 class="registration-title">Crie sua conta</h2>
+
+        <div class="step-indicator">
+            <div class="step active"></div> <div class="step active"></div> <div class="step"></div> <div class="step"></div> <div class="step"></div> </div>
+
+        <form method="post" class="login-form registration-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <p>
+                <label for="{{ form.senha.id_for_label }}">{{ form.senha.label }}:</label>
+                {{ form.senha }} 
+                {{ form.senha.errors }}
+            </p>
+            <p>
+                <label for="{{ form.confirme_a_senha.id_for_label }}">{{ form.confirme_a_senha.label }}:</label>
+                {{ form.confirme_a_senha }} 
+                {{ form.confirme_a_senha.errors }}
+            </p>
+
+            <ul class="password-rules">
+                <li>Mínimo de 8 caracteres</li>
+                <li>Incluir pelo menos uma letra maiúscula</li>
+                <li>Incluir pelo menos um número</li>
+                <li>Incluir pelo menos um símbolo</li>
+            </ul>
+
+            <div class="separator"></div>
+
+            <div class="radio-form-group">
+                <label>{{ form.frequencia.label }}</label>
+                {{ form.frequencia.errors }}
+                <div class="radio-options">
+                    {{ form.frequencia }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login-submit">
+                Próximo <span class="arrow-right">→</span>
+            </button>
+
+        </form>
+
+    </div> </div> {% endblock content %}
