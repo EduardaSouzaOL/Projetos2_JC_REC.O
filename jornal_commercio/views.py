@@ -35,3 +35,6 @@ def salvar_feedback(request):
             return JsonResponse({'success': False, 'errors': errors})
     
     return JsonResponse({'success': False, 'message': 'Método inválido.'}, status=405)
+
+def newsletter(request):
+    return render(request, "jornal_commercio/newsletter.html")

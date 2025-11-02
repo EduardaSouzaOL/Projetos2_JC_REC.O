@@ -11,9 +11,15 @@
             <h1>O essencial para o seu dia, em poucos minutos.</h1>
             <p>Receba as principais notícias de Pernambuco, do Brasil e do mundo para você se informar de forma rápida e precisa.</p>
             <p>É gratuito, todo dia.</p>
-            <div class="newsletter-form-wrapper">
+            {% comment %} <div class="newsletter-form-wrapper">
                 <form class="newsletter-form">
                     <input type="email" placeholder="Cadastre seu e-mail">
+                    <button type="submit">Leia já!</button>
+                </form>
+            </div> {% endcomment %}
+            <div class="newsletter-form-wrapper">
+                <form class="newsletter-form" method="GET" action="{% url 'newsletter' %}">
+                    <input type="email" placeholder="Cadastre seu e-mail" name="email">
                     <button type="submit">Leia já!</button>
                 </form>
             </div>
