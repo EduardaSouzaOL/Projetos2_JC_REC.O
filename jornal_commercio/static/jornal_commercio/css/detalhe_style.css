@@ -6,69 +6,95 @@
     margin: 30px auto;
     padding: 25px;
     background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-radius: 8px;
-    font-family: 'Arial', sans-serif;
 }
 
-/* 1. Tag de Categoria (NOVO) */
+/* 1. Tag de Categoria (MODIFICADO) 
+   - Remove o fundo azul e aplica a cor vermelha do protótipo.
+*/
 .detalhe-categoria {
     display: inline-block;
-    background-color: #004a9c; /* Azul padrão do JC */
-    color: #ffffff;
-    padding: 5px 12px;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: 4px;
-    margin-bottom: 15px;
+    background-color: transparent; /* Remove o fundo azul */
+    color: #D9232D; /* Cor vermelha (do protótipo e do seu style.css) */
+    padding: 0; /* Remove o padding desnecessário */
+    font-size: 1.1em;
+    font-weight: 700; /* Bold */
+    margin-bottom: 10px;
 }
 
-/* 2. Título (Atualizado) */
+/* NOVO: Adiciona o " | NOTÍCIA" via CSS, como no protótipo */
+.detalhe-categoria::after {
+    content: " | NOTÍCIA";
+    color: #555; /* Cor cinza para o texto secundário */
+    font-weight: 500; /* Peso normal */
+}
+
+/* 2. Título (MODIFICADO) 
+   - Adiciona a borda inferior grossa do protótipo.
+*/
 .detalhe-titulo {
     font-size: 2.8em;
-    font-weight: bold;
+    font-weight: 600; /* Garantido como bold */
     color: #222;
-    margin-bottom: 15px;
+    text-decoration: underline;
+    margin-bottom: 20px;
     line-height: 1.2;
+    padding-bottom: 15px; /* Espaço entre o texto e a borda */
 }
 
-/* 3. Resumo (NOVO ESTILO) */
+/* 3. Resumo (MODIFICADO) 
+   - Adiciona a barra vertical vermelha do protótipo.
+*/
 .detalhe-resumo {
-    font-size: 1.5em; /* Tamanho de subtítulo */
-    font-weight: 300; /* Fonte mais leve */
+    font-size: 1.4em; /* Tamanho de subtítulo */
+    font-weight: 400; /* Peso regular (o 300 'light' era muito fino) */
     color: #555;
     margin-bottom: 25px;
-    line-height: 1.4;
+    line-height: 1.5;
+    border-left: 3px solid #D9232D; /* Barra vertical vermelha */
+    padding-left: 15px; /* Espaço entre a barra e o texto */
 }
 
-/* 3. Meta: Autor e Data (NOVO) */
+/* 4. Meta: Autor e Data (MODIFICADO) 
+   - Remove a borda inferior e o itálico da data.
+   - Coloca a data abaixo do autor.
+*/
 .detalhe-meta {
-    font-size: 0.95em;
+    font-size: 1.1em;
     color: #555; /* Cinza para meta-dados */
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee; /* Linha sutil de separação */
+    margin-bottom: 30px; /* Mais espaço antes da imagem principal */
+    padding-bottom: 0;
+    border-bottom: none; /* Remove a linha sutil de separação */
 }
 
 .detalhe-meta .detalhe-autor {
     color: #333;
+    font-weight: 600;
+}
+
+/* NOVO: Estiliza o nome do autor (tag <strong>) em vermelho */
+.detalhe-meta .detalhe-autor strong {
+    color: #D9232D;
+    font-weight: 700;
 }
 
 .detalhe-meta .detalhe-data {
-    margin-left: 15px;
-    font-style: italic;
+    margin-left: 0; /* Remove o espaçamento lateral */
+    font-style: normal; /* Remove o itálico */
+    color: #333;
+    font-weight: 600;
+    display: block; /* Faz a data quebrar para a linha de baixo */
+    margin-top: 5px; /* Pequeno espaço do autor */
 }
 
-/* 4. Imagem Principal (Como antes) */
+/* 5. Imagem Principal (Como antes) */
 .detalhe-imagem-principal {
     width: 100%;
     height: auto;
-    border-radius: 8px;
     margin-bottom: 25px;
+    padding-inline: 0.5em;
 }
 
-/* 5. Conteúdo (Como antes) */
+/* 6. Conteúdo (Como antes) */
 .detalhe-conteudo {
     font-size: 1.1em;
     color: #333;
@@ -77,7 +103,7 @@
     margin-bottom: 40px;
 }
 
-/* 6. Imagens Secundárias (NOVO) */
+/* 7. Imagens Secundárias (Como antes) */
 .detalhe-imagem-secundaria {
     width: 80%; /* Um pouco menor que a principal */
     display: block;
@@ -86,24 +112,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-/* 7. Botão Voltar (Como antes) */
-.btn-voltar {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #004a9c;
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.btn-voltar:hover {
-    background-color: #003366;
-}
-
-/* 8. Seção de Comentários (Como antes) */
+/* 9. Seção de Comentários (Como antes) */
 .comentarios-secao {
     margin-top: 50px;
     border-top: 2px solid #eee;
