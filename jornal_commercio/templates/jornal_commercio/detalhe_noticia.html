@@ -1,4 +1,4 @@
-{% extends 'jornal_commercio/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block styles %}
@@ -41,10 +41,10 @@
         <img src="{{ noticia.imagem_secundaria_2.url }}" alt="Imagem secundária" class="detalhe-imagem-secundaria">
     {% endif %}
     
-    <div class="comentarios-secao">
+    {% comment %} <div class="comentarios-secao">
         <h3>Comentários</h3>
         <p>(A seção de comentários ainda está em desenvolvimento.)</p>
-    </div>
+    </div> {% endcomment %}
     
 </div>
 {% endblock %}
