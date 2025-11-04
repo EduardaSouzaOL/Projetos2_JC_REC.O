@@ -40,7 +40,35 @@
     {% if noticia.imagem_secundaria_2 %}
         <img src="{{ noticia.imagem_secundaria_2.url }}" alt="Imagem secundária" class="detalhe-imagem-secundaria">
     {% endif %}
-    
+
+    <section class="relacionadas">
+        <div class="container">
+            <h2>NOTÍCIAS RELACIONADAS</h2>
+            {% if noticias_relacionadas %}
+            <div class="listagem_relacionadas">
+
+                {% for noticia in noticias_relacionadas %}
+                <article class="news-card">
+
+                    <a href="{% url 'detalhe_noticia' slug=noticia.slug %}"> 
+                        {% if noticia.imagem_principal %}
+                            <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
+                        {% else %}
+                            <img src="{% static 'jornal_commercio/images/cnh.png' %}" alt="Imagem padrão">
+                        {% endif %}
+                    </a>
+
+                    <span class="category-tag">{{ noticia.get_categoria_display }}</span>
+                            
+                    <h4><a href="{% url 'detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
+
+                </article>
+                {% endfor %}
+
+            </div>
+            {% endif %}
+        </div>
+    </section>
     {% comment %} <div class="comentarios-secao">
         <h3>Comentários</h3>
         <p>(A seção de comentários ainda está em desenvolvimento.)</p>

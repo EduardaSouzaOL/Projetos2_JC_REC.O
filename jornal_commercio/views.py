@@ -29,9 +29,14 @@ def detalhe_noticia(request, slug):
     """
     # Busca pelo campo 'slug' em vez de 'pk' (Primary Key)
     noticia = get_object_or_404(Noticia, slug=slug)
+
+    todas_noticias = Noticia.objects.all()
+    noticias_relacionadas = todas_noticias[1:4]
+
     
     context = {
-        'noticia': noticia
+        'noticia': noticia,
+        'noticias_relacionadas': noticias_relacionadas,
     }
     
     return render(request, 'jornal_commercio/detalhe_noticia.html', context)
