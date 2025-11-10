@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ comunidade.nome }} - Comunidade{% endblock %}
+
+{% block content %}
+
+<div class="container-principal-comunidade-detalhe" style="background-color: #fff; max-width: 1400px; margin: auto;">
+
+    <header class="comunidade-banner" style="position: relative; color: white;">
+        {% if comunidade.imagem_banner %}
+            <img src="{{ comunidade.imagem_banner.url }}" alt="Banner da Comunidade {{ comunidade.nome }}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
+        {% else %}
+            <div style="width: 100%; height: 300px; background-color: #555; border-radius: 8px;"></div>
+        {% endif %}
+        
+        <div class="banner-info" style="position: absolute; bottom: 20px; left: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
+            <span style="background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">Comunidade Assinada</span>
+            <h1 style="margin: 10px 0;">{{ comunidade.nome }}</h1>
+            <p style="margin: 0;">
+                Autor: <strong>{{ comunidade.criador.username }}</strong>
+                &nbsp; | &nbsp; 
+                Desde {{ comunidade.data_criacao|date:"d M Y" }}
+                &nbsp; | &nbsp; 
+                {{ comunidade.membros.count }} Membros
+            </p>
+        </div>
+    </header>
+
+    <main class="comunidade-layout-grid" style="display: grid; grid-template-columns: 250px 1fr 250px; gap: 2rem; padding: 2rem; background-color: #f0f2f5;">
+
+        <aside class="coluna-esquerda">
+            
+            <div class="widget" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1.5rem;">
+                <h4 style="margin-top: 0;">10 Destaques</h4>
+                <ul style="list-style: none; padding: 0;">
+                    {% for destaque in destaques %}
+                        <li style="border-bottom: 1px solid #eee; padding: 0.5rem 0;">
+                            <a href="#" style="text-decoration: none; color: #333; font-size: 0.9rem;">{{ destaque.conteudo|truncatechars:50 }}</a>
+                            <span style="font-size: 0.8rem; color: #777; display: block;">por {{ destaque.autor.username }}</span>
+                        </li>
+                    {% empty %}
+                        <li>Não há destaques no momento.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="widget" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem;">
+                <h4 style="margin-top: 0;">10 Notícias/Serviços</h4>
+                <ul style="list-style: none; padding: 0;">
+                    {% for noticia in noticias_servicos %}
+                        <li style="border-bottom: 1px solid #eee; padding: 0.5rem 0;">
+                            <a href="{% url 'detalhe_noticia' slug=noticia.slug %}" style="text-decoration: none; color: #333; font-size: 0.9rem;">{{ noticia.titulo }}</a>
+                        </li>
+                    {% empty %}
+                        <li>Não há notícias no momento.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </aside>
+
+        <section class="coluna-central">
+            
+            <div class="criar-post-placeholder" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1.5rem;">
+                (Aqui ficará o formulário para criar uma nova publicação)
+            </div>
+
+
+            {% for publicacao in feed_publicacoes %}
+                <article class="card-publicacao" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 1.5rem;">
+                    
+                    <div class="post-header" style="padding: 1rem; display: flex; align-items: center; border-bottom: 1px solid #eee;">
+                        <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #ccc; margin-right: 10px;"></div>
+                        <div>
+                            <strong>{{ publicacao.autor.username }}</strong>
+                            <span style="font-size: 0.9rem; color: #777;"> | {{ publicacao.data_publicacao|timesince }} atrás</span>
+                        </div>
+                    </div>
+
+                    <div class="post-conteudo" style="padding: 1rem;">
+                        <p>{{ publicacao.conteudo|linebreaksbr }}</p>
+                    </div>
+
+                    <div class="post-footer" style="padding: 1rem; border-top: 1px solid #eee; display: flex; gap: 1.5rem; font-size: 0.9rem; color: #555;">
+                        <span>
+                            👍 {{ publicacao.curtidas.count }} Curtidas
+                        </span>
+                        <span>
+                            💬 {{ publicacao.comentarios.count }} Comentários
+                        </span>
+                        <span>
+                            💾 Salvar
+                        </span>
+                    </div>
+
+                </article>
+            {% empty %}
+                <div style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem;">
+                    <p>Esta comunidade ainda não tem publicações. Seja o primeiro a postar!</p>
+                </div>
+            {% endfor %}
+
+        </section>
+
+        <aside class="coluna-direita">
+            <div class="widget-vazio" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; min-height: 200px;">
+                <p>(Espaço Direita)</p>
+            </div>
+        </aside>
+    </main>
+
+</div>
+{% endblock %}

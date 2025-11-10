@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .forms import FeedbackForm
 import json
 from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario
@@ -74,3 +74,43 @@ class ComunidadeListView(ListView):
     
     # Opcional: para a paginação, se tiver muitas comunidades
     paginate_by = 10
+
+class ComunidadeDetailView(DetailView):
+    """
+    Esta view cuida da página que mostra UMA comunidade e seu feed.
+    (A sua segunda imagem do frontend)
+    """
+    model = Comunidade  # 1. Modelo principal que esta view vai buscar
+    
+    # 2. Template que será usado para exibir a página
+    template_name = 'jornal_commercio/comunidade_detalhe.html'
+    
+    # 3. Nome da variável no template (ex: 'comunidade')
+    context_object_name = 'comunidade'
+    
+    # 4. Esta função mágica nos deixa adicionar MAIS DADOS (contexto)
+    #    para o template, além da 'comunidade'
+    def get_context_data(self, **kwargs):
+        # Primeiro, pega o contexto padrão (que já inclui a 'comunidade')
+        context = super().get_context_data(**kwargs)
+        
+        # Pega o objeto 'comunidade' que a view já buscou
+        comunidade = self.get_object()
+        
+        # --- BUSCANDO DADOS ADICIONAIS ---
+
+        # 1. Busca todas as publicações desta comunidade
+        todas_as_publicacoes = Publicacao.objects.filter(comunidade=comunidade)
+
+        # 2. Filtra os "Destaques" (baseado no seu layout)
+        context['destaques'] = todas_as_publicacoes.filter(is_destaque=True).order_by('-data_publicacao')[:10]
+        
+        # 3. Pega o feed principal (publicações que NÃO são destaque)
+        context['feed_publicacoes'] = todas_as_publicacoes.filter(is_destaque=False).order_by('-data_publicacao')
+        
+        # 4. Busca "Notícias/Serviços" (baseado no layout)
+        #    Por agora, vamos pegar as 10 últimas notícias gerais do site
+        context['noticias_servicos'] = Noticia.objects.all().order_by('-data_publicacao')[:10]
+        
+        # 5. Retorna o contexto completo para o template
+        return context

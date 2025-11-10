@@ -21,13 +21,8 @@
 
     <div class="comunidade-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
 
-        {% comment %}
-            Aqui começa a mágica do Django.
-            Ele vai repetir este bloco para cada item na lista 'comunidades'.
-        {% endcomment %}
-
         {% for comunidade in comunidades %}
-            <a href="#" class="comunidade-card" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff; text-decoration: none; color: #333;">
+            <a href="{% url 'comunidade_detalhe' pk=comunidade.pk %}" class="comunidade-card" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff; text-decoration: none; color: #333;">
                 
                 {% if comunidade.imagem_card %}
                     <img src="{{ comunidade.imagem_card.url }}" alt="Imagem da comunidade {{ comunidade.nome }}" style="width: 100%; height: 150px; object-fit: cover;">
