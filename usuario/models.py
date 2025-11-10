@@ -9,6 +9,15 @@ class Perfil(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     localizacao = models.CharField(max_length=100, blank=True)
     website = models.URLField(max_length=200, blank=True)
+    data_nascimento = models.DateField(null=True, blank=True)
+    cidade = models.CharField(max_length=100, blank=True)
+    estado = models.CharField(max_length=100, blank=True)
+    frequencia = models.CharField(max_length=50, blank=True)
+    interesses = models.JSONField(default=list, blank=True)
+
+    class Meta:
+        verbose_name = "Perfil"
+        verbose_name_plural = "Perfis"
 
     def __str__(self):
         return f'Perfil de {self.usuario.username}'

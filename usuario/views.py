@@ -89,6 +89,16 @@ def registrar_interesses(request):
                     first_name=first_name, last_name=last_name
                 )
 
+                user.perfil.data_nascimento = dados_passo_1['data_nascimento']
+                user.perfil.cidade = dados_passo_1['cidade']
+                user.perfil.estado = dados_passo_1['estado']
+                user.perfil.localizacao = f"{dados_passo_1['cidade']}, {dados_passo_1['estado']}"
+                
+                user.perfil.frequencia = dados_passo_3['frequencia']
+                
+                user.perfil.interesses = dados_passo_4['interesses']
+                
+                user.perfil.save()
                 
                 del request.session['registro_passo_1']
                 del request.session['registro_passo_2']
