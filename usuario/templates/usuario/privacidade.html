@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'usuario/css/perfil_style.css' %}">
+{% endblock styles %}
+
+{% block content %}
+
+{% if messages %}
+    <ul class="messages-container">
+        {% for message in messages %}
+            <li class="message {{ message.tags }}">
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="perfil-container-full-width">
+    <div class="perfil-content-wrapper">
+        <aside class="perfil-sidebar">
+            <div class="perfil-foto-wrapper">
+                <img src="{% static 'usuario/images/logo_jc1.png' %}" alt="Foto do Perfil">
+            </div>
+            
+            <h3 class="perfil-nome">{{ user.get_full_name|default:user.username }}</h3>
+            
+            <nav class="perfil-nav">
+                <ul>
+                    <li><a href="{% url 'perfil' %}">Sobre mim</a></li>
+                    <li><a href="{% url 'interesses' %}">Interesses</a></li>
+                    <li class="active"><a href="{% url 'privacidade' %}">Privacidade</a></li>
+                </ul>
+            </nav>
+            
+            <form class="perfil-sair-form" action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="perfil-sair-btn">
+                    <span class="icon-sair"></span>Sair
+                </button>
+            </form>
+        </aside>
+
+        <main class="perfil-main">
+            <div class="perfil-form-and-progress">
+                
+                <form class="perfil-form" method="POST" action="">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Obrigatório" value="{{ user.email }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email_confirm">Confirme seu email</label>
+                        <input type="email" id="email_confirm" name="email_confirm" placeholder="Obrigatório" value="{{ user.email }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefone_ddd">Telefone</label>
+                        <div class="form-row-telefone">
+                            <input type="text" id="telefone_ddd" name="telefone_ddd" placeholder="DDD" class="input-ddd">
+                            <input type="text" id="telefone_numero" name="telefone_numero" placeholder="Número" class="input-numero">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha_atual">Senha atual</label>
+                        <input type="password" id="senha_atual" name="senha_atual" placeholder="Obrigatório">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nova_senha">Nova senha</label>
+                        <input type="password" id="nova_senha" name="nova_senha" placeholder="Obrigatório">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmar_nova_senha">Confirmar nova senha</label>
+                        <input type="password" id="confirmar_nova_senha" name="confirmar_nova_senha" placeholder="Obrigatório">
+                    </div>
+
+                    <button type="submit" class="btn-salvar-alt">Salvar alterações</button>
+                </form>
+
+                <div class="perfil-progresso-widget">
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

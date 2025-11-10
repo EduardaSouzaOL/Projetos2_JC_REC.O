@@ -1,115 +1,98 @@
-{% extends 'base.html' %} 
-
+{% extends 'base.html' %}
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'usuario/css/perfil_style.css' %}">
-{% endblock %}
+    <link rel="stylesheet" href="{% static 'usuario/css/perfil_style.css' %}">
+{% endblock styles %}
 
 {% block content %}
-<div class="profile-container">
-    <aside class="profile-sidebar">
-        <div class="profile-avatar"></div>
-        <h2>{{ user.first_name|default:user.username }}</h2>
-        <p>Leitora ávida</p>
-        
-        <ul class="profile-menu">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-    </aside>
 
-    <main class="profile-main">
-        <div class="profile-header">
-            <div class="info">
-                <h1>{{ user.username }}</h1>
-            </div>
-        </div>
+{% if messages %}
+    <ul class="messages-container">
+        {% for message in messages %}
+            <li class="message {{ message.tags }}">
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
-        <section class="profile-section">
-            <div class="details-grid">
-                <div class="detail-item">
-                    <strong>Nome:</strong>
-                    <span>{{ user.first_name|default:"Não informado" }}</span>
-                </div>
-                <div class="detail-item">
-                    <strong>Sobrenome:</strong>
-                    <span>{{ user.last_name|default:"Não informado" }}</span>
-                </div>
-                <div class="detail-item">
-                    <strong>E-mail:</strong>
-                    <span>{{ user.email|default:"Não informado" }}</span>
-                </div>
-                <div class="detail-item">
-                    <strong>Telefone:</strong>
-                    <span>
-                        {% if user.perfil.telefone %}
-                            {{ user.perfil.telefone }}
-                        {% else %}
-                            Não informado
-                        {% endif %}
-                    </span>
-                </div>
+<div class="perfil-container-full-width">
+    <div class="perfil-content-wrapper">
+        <aside class="perfil-sidebar">
+            <div class="perfil-foto-wrapper">
+                <img src="{% static 'usuario/images/logo_jc1.png' %}" alt="Foto do Perfil">
             </div>
-        </section>
+            
+            <h3 class="perfil-nome">{{ user.get_full_name|default:user.username }}</h3>
+            
+            <nav class="perfil-nav">
+                <ul>
+                    <li class="active"><a href="{% url 'perfil' %}">Sobre mim</a></li>
+                    <li><a href="{% url 'interesses' %}">Interesses</a></li>
+                    <li><a href="{% url 'privacidade' %}">Privacidade</a></li>
+                </ul>
+            </nav>
+            
+            <form class="perfil-sair-form" action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="perfil-sair-btn">
+                    <span class="icon-sair"></span>Sair
+                </button>
+            </form>
+        </aside>
 
-        <section class="profile-section">
-            <h3>Suas tags de interesse</h3>
-            <div class="tags-container">
-                <span class="tag dark">TAG</span>
-                <span class="tag">TAG</span>
-            </div>
-            <br>
-             <div class="tags-container">
-                <span class="tag dark">TAG</span>
-                <span class="tag">TAG</span>
-                <span class="tag">TAG</span>
-                <span class="tag">TAG</span>
-            </div>
-            <br>
-            <div class="tags-container">
-                <span class="tag">TAG</span>
-                <span class="tag">TAG</span>
-            </div>
-        </section>
+        <main class="perfil-main">
+            <h2>Sobre mim</h2>
+            <p class="perfil-descricao-texto">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce maximus
+                eget eros amet, consectetur adipiscing elit. Fusce maximus eget eros.
+            </p>
 
-        <section class="profile-section">
-             <div class="tags-container">
-                <span class="tag dark">TAG</span>
-                <span class="tag">TAG</span>
+            <div class="perfil-form-and-progress">
+                
+                <form class="perfil-form" method="POST" action="">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input type="text" id="nome" name="first_name" placeholder="Obrigatório" value="{{ user.first_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="sobrenome">Sobrenome</label>
+                            <input type="text" id="sobrenome" name="last_name" placeholder="Obrigatória" value="{{ user.last_name }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Biografia</label>
+                        <textarea id="bio" name="bio" placeholder="Fale um pouco sobre você">{{ user.perfil.bio|default:'' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="localizacao">Localização</label>
+                        <input type="text" id="localizacao" name="localizacao" placeholder="Opcional" value="{{ user.perfil.localizacao|default:'' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="text" id="website" name="website" placeholder="Opcional" value="{{ user.perfil.website|default:'' }}">
+                    </div>
+
+                    <button type="submit" class="btn-salvar-perfil">Salvar alterações</button>
+                </form>
+
+                <div class="perfil-progresso-widget">
+                    <div class="progresso-circulo-estilo" style="--p:75;">
+                        <span class="progresso-valor">75%</span>
+                    </div>
+                    <p class="progresso-info-texto">
+                        Super! O seu perfil está quase completo.
+                    </p>
+                </div>
             </div>
-            <br>
-             <div class="tags-container">
-                <span class="tag dark">TAG</span>
-                <span class="tag">TAG</span>
-            </div>
-             <br>
-             <div class="tags-container">
-                <span class="tag dark">TAG</span>
-                <span class="tag">TAG</span>
-                <span class="tag">TAG</span>
-                <span class="tag">TAG</span>
-            </div>
-            <br>
-            <div class="tags-container">
-                <span class="tag">TAG</span>
-                <span class="tag">TAG</span>
-            </div>
-            <br>
-            <div class="tags-container">
-                <span class="tag dotted">TAG</span>
-            </div>
-        </section>
-        
-    </main>
+        </main>
+    </div>
 </div>
-<div style="text-align: center; margin: 20px;">
-    <form id="logout-form" method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <a class="nav-item nav-link" href="#" onclick="document.getElementById('logout-form').submit(); return false;" style="color: red; text-decoration: underline;">Sair</a>
-    </form>
-</div>
-{% endblock content %}
+{% endblock %}

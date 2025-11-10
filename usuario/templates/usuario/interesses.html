@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'usuario/css/perfil_style.css' %}">
+{% endblock styles %}
+
+{% block content %}
+
+<div class="perfil-container-full-width">
+    <div class="perfil-content-wrapper">
+        <aside class="perfil-sidebar">
+            <div class="perfil-foto-wrapper">
+                <img src="{% static 'usuario/images/logo_jc1.png' %}" alt="Foto do Perfil">
+            </div>
+            
+            <h3 class="perfil-nome">{{ user.get_full_name|default:user.username }}</h3>
+            
+            <nav class="perfil-nav">
+                <ul>
+                    <li><a href="{% url 'perfil' %}">Sobre mim</a></li>
+                    <li class="active"><a href="{% url 'interesses' %}">Interesses</a></li>
+                    <li><a href="{% url 'privacidade' %}">Privacidade</a></li>
+                </ul>
+            </nav>
+            
+            <form class="perfil-sair-form" action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="perfil-sair-btn">
+                    <span class="icon-sair"></span>Sair
+                </button>
+            </form>
+        </aside>
+
+        <main class="perfil-main">
+            <h2>Meus interesses</h2>
+            <p class="perfil-descricao-texto">
+                Você não selecionou nenhum interesse até o momento. Escolha três ou mais tópicos para personalizar o seu perfil.
+            </p>
+
+            <div class="perfil-form-and-progress">
+                
+                <form class="perfil-form" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="topicos">Adicionar tópicos</label>
+                        <input type="text" id="topicos" name="topicos" placeholder="Ex: Política...">
+                    </div>
+
+                    <h3 class="sugestoes-titulo">Sugestões com base no seu perfil</h3>
+                    <div class="sugestoes-tags">
+                        <button class="tag-sugestao" type="button">Social</button>
+                        <button class="tag-sugestao" type="button">Comércio</button>
+                        <button class="tag-sugestao" type="button">Entretenimento</button>
+                        <button class="tag-sugestao" type="button">Educação</button>
+                        <button class="tag-sugestao" type="button">Política</button>
+                        <button class="tag-sugestao" type="button">Esportes</button>
+                    </div>
+
+                    <button type="submit" class="btn-salvar-alt">Salvar alterações</button>
+                </form>
+
+                <div class="perfil-progresso-widget">
+                    <div class="progresso-circulo-estilo" style="--p:75;">
+                        <span class="progresso-valor">75%</span>
+                    </div>
+                    <p class="progresso-info-texto">
+                        Super! O seu perfil está quase completo.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

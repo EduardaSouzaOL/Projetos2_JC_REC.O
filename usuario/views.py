@@ -1,4 +1,3 @@
-# usuario/views.py
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,8 +8,9 @@ from .forms import (
     RegistroInteressesForm
 )
 from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, update_session_auth_hash
 from datetime import date 
+from .models import Perfil
 
 
 
@@ -76,7 +76,7 @@ def registrar_interesses(request):
         if form.is_valid():
             dados_passo_4 = form.cleaned_data
 
-           
+            
             try:
                 email = dados_passo_1['email']
                 nome_completo = dados_passo_1['nome_completo']
@@ -96,8 +96,8 @@ def registrar_interesses(request):
 
                 login(request, user)
 
-               
-               
+                
+                
                 return redirect('registrar_sucesso') 
 
             except Exception as e:
@@ -115,4 +115,73 @@ def registrar_sucesso(request):
 
 @login_required
 def perfil(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.save()
+
+        user.perfil.bio = request.POST.get('bio', '')
+        user.perfil.localizacao = request.POST.get('localizacao', '')
+        user.perfil.website = request.POST.get('website', '')
+        user.perfil.save()
+        
+        messages.success(request, 'Perfil atualizado com sucesso!')
+        return redirect('perfil') 
+
     return render(request, 'usuario/perfil.html')
+
+@login_required
+def interesses(request):
+    return render(request, 'usuario/interesses.html')
+
+@login_required
+def privacidade(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        email = request.POST.get('email')
+        email_confirm = request.POST.get('email_confirm')
+        
+        telefone_ddd = request.POST.get('telefone_ddd', '')
+        telefone_numero = request.POST.get('telefone_numero', '')
+        
+        senha_atual = request.POST.get('senha_atual')
+        nova_senha = request.POST.get('nova_senha')
+        confirmar_nova_senha = request.POST.get('confirmar_nova_senha')
+
+        if email and email != user.email:
+            if email != email_confirm:
+                messages.error(request, 'Os e-mails não coincidem.')
+                return redirect('privacidade')
+            
+            if User.objects.filter(email=email).exclude(pk=user.pk).exists():
+                 messages.error(request, 'Este e-mail já está em uso.')
+                 return redirect('privacidade')
+
+            user.email = email
+            user.username = email
+            user.save()
+            messages.success(request, 'E-mail atualizado com sucesso.')
+
+        user.perfil.telefone = f"({telefone_ddd}) {telefone_numero}"
+        user.perfil.save()
+        
+        if nova_senha and senha_atual:
+            if not user.check_password(senha_atual):
+                messages.error(request, 'A senha atual está incorreta.')
+                return redirect('privacidade')
+            
+            if nova_senha != confirmar_nova_senha:
+                messages.error(request, 'As novas senhas não coincidem.')
+                return redirect('privacidade')
+            
+            user.set_password(nova_senha)
+            user.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Senha atualizada com sucesso.')
+            
+        return redirect('privacidade')
+
+    return render(request, 'usuario/privacidade.html')

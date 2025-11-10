@@ -1,4 +1,3 @@
-# usuario/urls.py
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
@@ -20,6 +19,8 @@ urlpatterns = [
     path('registrar/interesses/', views.registrar_interesses, name='registrar_interesses'),
     path('registrar/sucesso/', views.registrar_sucesso, name='registrar_sucesso'),
     path('perfil/', views.perfil, name='perfil'),
+    path('perfil/interesses/', views.interesses, name='interesses'),
+    path('perfil/privacidade/', views.privacidade, name='privacidade'),
     path('password-reset/', 
          auth_views.PasswordResetView.as_view(
              template_name='usuario/password_reset.html' 
