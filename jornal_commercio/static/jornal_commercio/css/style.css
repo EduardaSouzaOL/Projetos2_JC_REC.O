@@ -335,17 +335,29 @@ ul {
 }
 
 /* Classes para feedback de sucesso/erro */
-.form-message {
-    display: none;
-    padding: 10px;
-    margin-top: 10px;
+.messages-container {
+    list-style: none;
+    padding: 15px;
+    margin: 10px auto;
+    max-width: 1200px;
     border-radius: 4px;
+    font-size: 0.95rem;
 }
-.form-message.success {
-    background: #e6f7d9;
-    color: #2a5700;
+
+.message {
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    border-radius: 3px;
 }
-.form-message.error {
-    background: #fdecea;
-    color: #a30000;
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }

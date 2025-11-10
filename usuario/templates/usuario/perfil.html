@@ -7,16 +7,6 @@
 
 {% block content %}
 
-{% if messages %}
-    <ul class="messages-container">
-        {% for message in messages %}
-            <li class="message {{ message.tags }}">
-                {{ message }}
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
 <div class="perfil-container-full-width">
     <div class="perfil-content-wrapper">
         <aside class="perfil-sidebar">
