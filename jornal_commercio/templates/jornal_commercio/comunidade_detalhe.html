@@ -115,11 +115,68 @@
                         <span>
                             💬 {{ publicacao.comentarios.count }} Comentários
                         </span>
-                        <span>
-                            💾 Salvar
+                        <span class="save-wrapper">
+                            {% if user.is_authenticated %}
+                                <form action="{% url 'salvar_publicacao' pk=publicacao.pk %}" method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    
+                                    <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer; font-size: 0.9rem;">
+                                        
+                                        {% if user in publicacao.salvo_por.all %}
+                                            <strong style="color: #007bff;">💾 Salvo</strong>
+                                        {% else %}
+                                            <span style="color: #555;">💾 Salvar</span>
+                                        {% endif %}
+                                        
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span style="font-size: 0.9rem; color: #555;">
+                                    💾 Salvar
+                                </span>
+                            {% endif %}
                         </span>
                     </div>
+                    <div class="comentarios-secao" style="padding: 0 1rem 1rem 1rem; border-top: 1px solid #eee;">
 
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'adicionar_comentario' pk=publicacao.pk %}" method="POST" style="margin-top: 1rem;">
+                                {% csrf_token %}
+                                
+                                <div class="form_campo">
+                                    {{ form_comentario.conteudo }}
+                                </div>
+                                
+                                <button type="submit" style="padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 0.9rem;">
+                                    Comentar
+                                </button>
+                            </form>
+                        {% else %}
+                            <p style="font-size: 0.9rem; color: #555; margin-top: 1rem;">
+                                <a href="{% url 'login' %}">Faça login</a> para comentar.
+                            </p>
+                        {% endif %}
+
+                        <div class="lista-comentarios" style="margin-top: 1.5rem;">
+                            
+                            {% for comentario in publicacao.comentarios.all %}
+                                <div class="comentario-item" style="margin-bottom: 1rem; font-size: 0.9rem;">
+                                    
+                                    <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                        <div class="avatar" style="width: 25px; height: 25px; border-radius: 50%; background: #ddd; margin-right: 8px;"></div>
+                                        <strong>{{ comentario.autor.username }}</strong>
+                                        <span style="color: #777; margin-left: 10px;">{{ comentario.data_publicacao|timesince }} atrás</span>
+                                    </div>
+                                    
+                                    <p style="margin: 0 0 0 33px; padding-left: 0;">{{ comentario.conteudo|linebreaksbr }}</p>
+                                </div>
+                            {% empty %}
+                                {% if user.is_authenticated %}
+                                    <p style="font-size: 0.9rem; color: #777;">Seja o primeiro a comentar!</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </article>
             {% empty %}
                 <div style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem;">

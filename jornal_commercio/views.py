@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 from django.urls import reverse
-from .forms import FeedbackForm, PublicacaoForm
+from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
 from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario
 
@@ -87,19 +87,17 @@ class ComunidadeDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         comunidade = self.get_object()
 
-        # Contexto que você já tinha:
         todas_as_publicacoes = Publicacao.objects.filter(comunidade=comunidade)
         context['destaques'] = todas_as_publicacoes.filter(is_destaque=True).order_by('-data_publicacao')[:10]
         context['feed_publicacoes'] = todas_as_publicacoes.filter(is_destaque=False).order_by('-data_publicacao')
         context['noticias_servicos'] = Noticia.objects.all().order_by('-data_publicacao')[:10]
         
-        # --- NOVO ---
-        # Adiciona o formulário de publicação ao contexto
         context['form_publicacao'] = PublicacaoForm()
+        
+        context['form_comentario'] = ComentarioForm()
         
         return context
 
-    # --- MÉTODO NOVO PARA LIDAR COM POST ---
     def post(self, request, *args, **kwargs):
         # Pega a comunidade atual
         comunidade = self.get_object()
@@ -131,7 +129,7 @@ class ComunidadeDetailView(DetailView):
             return self.render_to_response(context)
         
 @login_required # Garante que apenas usuários logados possam curtir
-def curtir_publicacao(request, pk):
+def curtir_publicacao(request, pk):    
     """
     Esta view lida com a ação de curtir ou descurtir uma publicação.
     'pk' é o ID da Publicacao que está sendo curtida.
@@ -159,4 +157,68 @@ def curtir_publicacao(request, pk):
     
     else:
         # Se alguém tentar acessar esta URL via GET, retorna um erro
+        return HttpResponseForbidden("Ação não permitida.")
+    
+@login_required # Garante que apenas usuários logados possam salvar
+def salvar_publicacao(request, pk):
+    """
+    Esta view lida com a ação de salvar ou "dessalvar" uma publicação.
+    'pk' é o ID da Publicacao.
+    """
+    
+    # Apenas permitimos requisições POST
+    if request.method == 'POST':
+        # Busca a publicação
+        publicacao = get_object_or_404(Publicacao, pk=pk)
+        
+        # Pega o usuário logado
+        user = request.user
+        
+        # Verifica se o usuário já salvou esta publicação
+        if user in publicacao.salvo_por.all():
+            # Se sim, remove dos salvos
+            publicacao.salvo_por.remove(user)
+        else:
+            # Se não, adiciona aos salvos
+            publicacao.salvo_por.add(user)
+        
+        # Redireciona o usuário de volta para a página da comunidade
+        return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+    
+    else:
+        # Se alguém tentar acessar esta URL via GET, retorna um erro
+        return HttpResponseForbidden("Ação não permitida.")
+
+@login_required # Apenas usuários logados
+def adicionar_comentario(request, pk):
+    """
+    Esta view lida com a postagem de um novo comentário.
+    'pk' é o ID da Publicacao que está sendo comentada.
+    """
+    publicacao = get_object_or_404(Publicacao, pk=pk)
+    
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST)
+        
+        if form.is_valid():
+            # Cria o objeto comentário, mas não salva no banco ainda
+            novo_comentario = form.save(commit=False)
+            
+            # Define os campos que faltam
+            novo_comentario.publicacao = publicacao
+            novo_comentario.autor = request.user
+            
+            # Salva no banco
+            novo_comentario.save()
+            
+            # Redireciona de volta para a página da comunidade
+            return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+        
+        else:
+            # Se o formulário for inválido, apenas redireciona de volta
+            # (Uma implementação JS lidaria com isso de forma mais elegante)
+            return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+
+    else:
+        # Proíbe acesso via GET
         return HttpResponseForbidden("Ação não permitida.")
