@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
-from .forms import FeedbackForm
+from django.urls import reverse
+from .forms import FeedbackForm, PublicacaoForm
 import json
 from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario
 
@@ -76,41 +79,84 @@ class ComunidadeListView(ListView):
     paginate_by = 10
 
 class ComunidadeDetailView(DetailView):
-    """
-    Esta view cuida da página que mostra UMA comunidade e seu feed.
-    (A sua segunda imagem do frontend)
-    """
-    model = Comunidade  # 1. Modelo principal que esta view vai buscar
-    
-    # 2. Template que será usado para exibir a página
+    model = Comunidade
     template_name = 'jornal_commercio/comunidade_detalhe.html'
-    
-    # 3. Nome da variável no template (ex: 'comunidade')
     context_object_name = 'comunidade'
-    
-    # 4. Esta função mágica nos deixa adicionar MAIS DADOS (contexto)
-    #    para o template, além da 'comunidade'
+
     def get_context_data(self, **kwargs):
-        # Primeiro, pega o contexto padrão (que já inclui a 'comunidade')
         context = super().get_context_data(**kwargs)
-        
-        # Pega o objeto 'comunidade' que a view já buscou
         comunidade = self.get_object()
-        
-        # --- BUSCANDO DADOS ADICIONAIS ---
 
-        # 1. Busca todas as publicações desta comunidade
+        # Contexto que você já tinha:
         todas_as_publicacoes = Publicacao.objects.filter(comunidade=comunidade)
-
-        # 2. Filtra os "Destaques" (baseado no seu layout)
         context['destaques'] = todas_as_publicacoes.filter(is_destaque=True).order_by('-data_publicacao')[:10]
-        
-        # 3. Pega o feed principal (publicações que NÃO são destaque)
         context['feed_publicacoes'] = todas_as_publicacoes.filter(is_destaque=False).order_by('-data_publicacao')
-        
-        # 4. Busca "Notícias/Serviços" (baseado no layout)
-        #    Por agora, vamos pegar as 10 últimas notícias gerais do site
         context['noticias_servicos'] = Noticia.objects.all().order_by('-data_publicacao')[:10]
         
-        # 5. Retorna o contexto completo para o template
+        # --- NOVO ---
+        # Adiciona o formulário de publicação ao contexto
+        context['form_publicacao'] = PublicacaoForm()
+        
         return context
+
+    # --- MÉTODO NOVO PARA LIDAR COM POST ---
+    def post(self, request, *args, **kwargs):
+        # Pega a comunidade atual
+        comunidade = self.get_object()
+        
+        # Cria uma instância do formulário com os dados do POST
+        form = PublicacaoForm(request.POST)
+
+        if form.is_valid():
+            # Salva o formulário, mas não no banco ainda (commit=False)
+            # Isso nos dá um objeto 'Publicacao' sem salvar
+            nova_publicacao = form.save(commit=False)
+            
+            # Define os campos que faltam
+            nova_publicacao.comunidade = comunidade
+            nova_publicacao.autor = request.user # Pega o usuário logado
+            
+            # Agora sim, salva no banco
+            nova_publicacao.save()
+            
+            # Redireciona para a mesma página (para evitar reenvio do form)
+            # 'request.path' é a URL atual.
+            return redirect(request.path)
+        
+        else:
+            # Se o formulário for inválido, re-renderiza a página
+            # Mas desta vez, o 'form' terá os erros
+            context = self.get_context_data() # Pega todo o contexto de GET
+            context['form_publicacao'] = form # Substitui o form vazio pelo form com erros
+            return self.render_to_response(context)
+        
+@login_required # Garante que apenas usuários logados possam curtir
+def curtir_publicacao(request, pk):
+    """
+    Esta view lida com a ação de curtir ou descurtir uma publicação.
+    'pk' é o ID da Publicacao que está sendo curtida.
+    """
+    
+    # Apenas permitimos requisições POST para esta ação
+    if request.method == 'POST':
+        # Busca a publicação pelo 'pk' ou retorna um erro 404
+        publicacao = get_object_or_404(Publicacao, pk=pk)
+        
+        # Pega o usuário logado
+        user = request.user
+        
+        # Verifica se o usuário já curtiu esta publicação
+        if user in publicacao.curtidas.all():
+            # Se sim, remove a curtida (descurtir)
+            publicacao.curtidas.remove(user)
+        else:
+            # Se não, adiciona a curtida (curtir)
+            publicacao.curtidas.add(user)
+        
+        # Redireciona o usuário de volta para a página da comunidade
+        # O 'pk' aqui é da *comunidade*, para a qual a publicação pertence
+        return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+    
+    else:
+        # Se alguém tentar acessar esta URL via GET, retorna um erro
+        return HttpResponseForbidden("Ação não permitida.")

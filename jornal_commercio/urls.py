@@ -8,5 +8,6 @@ urlpatterns = [
     path('noticia/<slug:slug>/', views.detalhe_noticia, name='detalhe_noticia'),
     path('comunidades/', views.ComunidadeListView.as_view(), name='comunidades_lista'),
     path('comunidades/<int:pk>/', views.ComunidadeDetailView.as_view(), name='comunidade_detalhe'),
+    path('publicacao/<int:pk>/curtir/', views.curtir_publicacao, name='curtir_publicacao'),
 ]
 
