@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block title %}Comunidades - Jornal Commercio{% endblock %}
+
+{% block content %}
+<div class="container-principal-comunidades" style="background-color: #f0f2f5; padding: 2rem;">
+
+    <header class="comunidades-cabecalho" style="margin-bottom: 2rem;">
+        <h2>Comunidades</h2>
+        
+        <nav class="abas-filtro">
+            <a href="#" class="aba-ativa">Seguindo</a>
+            <a href="#">Criados por usuários</a>
+        </nav>
+
+        <div class="busca-comunidades">
+            <input type="text" placeholder="Busca">
+        </div>
+    </header>
+
+    <div class="comunidade-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+
+        {% comment %}
+            Aqui começa a mágica do Django.
+            Ele vai repetir este bloco para cada item na lista 'comunidades'.
+        {% endcomment %}
+
+        {% for comunidade in comunidades %}
+            <a href="#" class="comunidade-card" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff; text-decoration: none; color: #333;">
+                
+                {% if comunidade.imagem_card %}
+                    <img src="{{ comunidade.imagem_card.url }}" alt="Imagem da comunidade {{ comunidade.nome }}" style="width: 100%; height: 150px; object-fit: cover;">
+                {% else %}
+                    <div style="width: 100%; height: 150px; background: #ccc; display: grid; place-items: center;">Sem Imagem</div>
+                {% endif %}
+                
+                <div class="card-conteudo" style="padding: 1rem;">
+                    <h3 style="margin: 0 0 0.5rem 0;">{{ comunidade.nome }}</h3>
+                    
+                    {% if comunidade.criador %}
+                        <span class="card-criador" style="font-size: 0.9rem; color: #555;">
+                            Criado(a) por <strong>{{ comunidade.criador.username }}</strong>
+                        </span>
+                    {% endif %}
+
+                    <div class="card-stats" style="display: flex; justify-content: space-between; margin-top: 1rem; font-size: 0.9rem; color: #777;">
+                        <span class="stat-publicacoes">
+                            📄 
+                            {{ comunidade.publicacoes.count }}
+                        </span>
+                        <span class="stat-membros">
+                            👥 
+                            {{ comunidade.membros.count }}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <p>Ainda não há nenhuma comunidade para mostrar.</p>
+        {% endfor %}
+
+    </div>
+
+    <div class="paginacao" style="margin-top: 2rem; text-align: center;">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        <span class="pagina-atual">
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

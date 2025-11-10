@@ -6,5 +6,6 @@ urlpatterns = [
     path('salvar-feedback', views.salvar_feedback, name='salvar_feedback'),
     path('newsletter/', views.newsletter, name='newsletter'),
     path('noticia/<slug:slug>/', views.detalhe_noticia, name='detalhe_noticia'),
+    path('comunidades/', views.ComunidadeListView.as_view(), name='comunidades_lista'),
 ]
 

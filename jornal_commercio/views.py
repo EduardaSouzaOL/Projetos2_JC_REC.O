@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.views.generic import ListView
 from .forms import FeedbackForm
 import json
-from .models import Noticia, Feedback 
+from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario
 
 def home(request):
     
@@ -56,3 +57,20 @@ def salvar_feedback(request):
 
 def newsletter(request):
     return render(request, "jornal_commercio/newsletter.html")
+
+class ComunidadeListView(ListView):
+    """
+    Esta view cuida da página que lista TODAS as comunidades.
+    (A sua primeira imagem do frontend)
+    """
+    model = Comunidade  # 1. Diz ao Django qual modelo buscar no banco
+    
+    # 2. Diz ao Django qual arquivo de template usar para exibir a página
+    template_name = 'jornal_commercio/comunidades_lista.html'
+    
+    # 3. Dá um nome melhor para a lista no template
+    # (Em vez do padrão 'object_list', usaremos 'comunidades')
+    context_object_name = 'comunidades'
+    
+    # Opcional: para a paginação, se tiver muitas comunidades
+    paginate_by = 10
