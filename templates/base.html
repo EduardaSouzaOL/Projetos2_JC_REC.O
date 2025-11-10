@@ -63,14 +63,13 @@
             </div>
         </nav>
         {% if messages %}
-        <ul class="messages" style="list-style-type: none; padding: 10px; margin: 10px 0; border-radius: 5px; background-color: #f0f0f0; color: #333;">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} 
-                style="padding: 10px; background-color: {% if message.tags == 'success' %}#d4edda{% elif message.tags == 'error' %}#f8d7da{% else %}#e2e3e5{% endif %}; color: {% if message.tags == 'success' %}#155724{% elif message.tags == 'error' %}#721c24{% else %}#383d41{% endif %}; margin-bottom: 5px;">
-                {{ message }}
-            </li>
-            {% endfor %}
-        </ul>
+            <ul class="messages-container">
+                {% for message in messages %}
+                    <li class="message {{ message.tags }}">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
         {% endif %}
 
         <main>
