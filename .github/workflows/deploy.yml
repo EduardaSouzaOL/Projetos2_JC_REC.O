@@ -27,11 +27,14 @@ jobs:
           rm -f db.sqlite3
           rm -f .env
 
-      - name: 5. Zip artifact for deployment
+      - name: 5. Run collectstatic
+        run: python manage.py collectstatic --noinput
+
+      - name: 6. Zip artifact for deployment
         run: |
           zip -r release.zip . -x ".git/*" -x ".github/*"
 
-      - name: 6. Upload artifact for deployment
+      - name: 7. Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: python-app
