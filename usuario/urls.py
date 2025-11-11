@@ -19,6 +19,7 @@ urlpatterns = [
     path('registrar/interesses/', views.registrar_interesses, name='registrar_interesses'),
     path('registrar/sucesso/', views.registrar_sucesso, name='registrar_sucesso'),
     path('perfil/', views.perfil, name='perfil'),
+    # path('perfil/interesses/', views.interesses, name='interesses'),
     path('perfil/interesses/', views.interesses, name='interesses'),
     path('perfil/privacidade/', views.privacidade, name='privacidade'),
     path('password-reset/', 

@@ -3,6 +3,19 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+class Interesse(models.Model):
+    """
+    Modelo para armazenar os tipos de interesse (ex: Esporte, Política).
+    """
+    nome = models.CharField(max_length=100, unique=True)
+    # Vamos usar o nome para encontrar a imagem estática no template
+    
+    class Meta:
+        verbose_name_plural = "Interesses"
+
+    def __str__(self):
+        return self.nome
+
 class Perfil(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     telefone = models.CharField(max_length=20, null=True, blank=True)
@@ -13,7 +26,8 @@ class Perfil(models.Model):
     cidade = models.CharField(max_length=100, blank=True)
     estado = models.CharField(max_length=100, blank=True)
     frequencia = models.CharField(max_length=50, blank=True)
-    interesses = models.JSONField(default=list, blank=True)
+    # interesses = models.JSONField(default=list, blank=True)
+    interesses = models.ManyToManyField(Interesse, blank=True)
 
     class Meta:
         verbose_name = "Perfil"

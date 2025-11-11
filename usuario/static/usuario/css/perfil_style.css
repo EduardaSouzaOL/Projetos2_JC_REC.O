@@ -160,7 +160,7 @@ body {
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 50px;
 }
 
 .form-group label {
@@ -168,7 +168,7 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
     font-size: 1.1rem;
-    color: #444;
+    color: #222;
 }
 
 .form-group input[type="text"],
@@ -318,40 +318,82 @@ body {
     }
 }
 
-.sugestoes-titulo {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #333;
-    margin-top: 70px;
-    margin-bottom: 35px;
+.perfil-form h3{
+    color: #222;
 }
+/* ==========================
+   ESTILOS DOS INTERESSES
+   ========================== */
 
-.sugestoes-tags {
+/* flex para os interesses */
+.interesses-flex {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 180px;
+    /* Tenta criar 3 colunas, mas se não couber, passa para 2 ou 1 */
+    max-width: 40rem;
+    gap: 20px;
+    list-style-type: none; /* Remove bolinhas do <ul> */
+    padding: 0;
+    margin: 25px 0; /* Espaçamento entre o flex e o botão */
+    margin-bottom: 5rem;
+    place-items: center;
 }
 
-.tag-sugestao {
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    font-weight: 570;
-    color: #444444;
-    background-color: #dbdbdb;
-    border: 1px solid #000000;
-    border-radius: 20px;
+/* Esconde o checkbox real */
+.interesses-flex input[type="checkbox"] {
+    display: none;
+}
+
+/* Estilo do card (label) */
+.interesses-flex label {
+    display: block;
+    position: relative;
+    min-height: 1rem;
+    border-radius: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition: all 0.3s ease;
+    overflow: hidden; /* Garante que o overlay não vaze */
+
+    /* Alinhamento do texto */
+    display: flex;
+    align-items: flex-end; /* Alinha o texto na base */
+    padding: 1.2rem;
 }
 
-.tag-sugestao:hover {
-    background-color: #bbbaba;
-    border-color: #000000;
+/* Nome do interesse (span) */
+.interesses-flex label span {
+    font-size: 1rem;
+    color: black;
+    position: relative; /* Para ficar acima do overlay */
+    z-index: 2;
 }
 
-.tag-sugestao.active {
-    background-color: #ff0000;
-    color: #fff;
-    border-color: #ff0000;
+/* Overlay escuro sobre a imagem (para legibilidade) */
+.interesses-flex label::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e8e8e8; /* Sombra leve */
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+/* ----- 🎨 O EFEITO DE SELEÇÃO! (Fundo preto) ----- */
+.interesses-flex input[type="checkbox"]:checked + label {
+    background-color: #000000;
+}
+
+/* Texto fica branco (sem sombra) quando selecionado */
+.interesses-flex input[type="checkbox"]:checked + label span {
+    color: #ffffff;
+    text-shadow: none;
+}
+
+/* Overlay fica mais escuro quando selecionado */
+.interesses-flex input[type="checkbox"]:checked + label::before {
+    background-color: rgba(0, 0, 0, 0.5);
 }

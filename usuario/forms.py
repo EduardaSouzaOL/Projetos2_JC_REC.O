@@ -4,6 +4,7 @@ from django.forms import DateInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from .models import Perfil, Interesse
 
 
 class CustomLoginForm(AuthenticationForm):
@@ -104,3 +105,19 @@ class RegistroInteressesForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         required=False 
     )
+
+class InteressesForm(forms.ModelForm):
+    """
+    Formulário para o usuário selecionar seus interesses.
+    """
+    # Usamos ModelMultipleChoiceField com widget CheckboxSelectMultiple
+    # Isso dirá ao Django para renderizar uma lista de checkboxes
+    interesses = forms.ModelMultipleChoiceField(
+        queryset=Interesse.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Perfil
+        fields = ['interesses']

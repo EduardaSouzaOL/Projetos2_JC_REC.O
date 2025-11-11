@@ -42,20 +42,24 @@
                 
                 <form class="perfil-form" method="POST" action="">
                     {% csrf_token %}
+
                     <div class="form-group">
                         <label for="topicos">Adicionar tópicos</label>
                         <input type="text" id="topicos" name="topicos" placeholder="Ex: Política...">
                     </div>
 
-                    <h3 class="sugestoes-titulo">Sugestões com base no seu perfil</h3>
-                    <div class="sugestoes-tags">
-                        <button class="tag-sugestao" type="button">Social</button>
-                        <button class="tag-sugestao" type="button">Comércio</button>
-                        <button class="tag-sugestao" type="button">Entretenimento</button>
-                        <button class="tag-sugestao" type="button">Educação</button>
-                        <button class="tag-sugestao" type="button">Política</button>
-                        <button class="tag-sugestao" type="button">Esportes</button>
-                    </div>
+                    <h3 class="interesses-titulos">Sugestões com base no seu perfil</h3>
+                    <ul class="interesses-flex">
+                        {% for choice in form.interesses %}
+                        <li>
+                            {{ choice.tag }}
+
+                            <label for="{{ choice.id_for_label }}">
+                                <span>{{ choice.choice_label }}</span>
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
 
                     <button type="submit" class="btn-salvar-alt">Salvar alterações</button>
                 </form>
