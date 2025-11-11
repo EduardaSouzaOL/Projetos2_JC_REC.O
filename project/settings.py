@@ -1,5 +1,3 @@
-
-
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -13,10 +11,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
+AZURE_HOST = 'projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net'
+
 if DEBUG:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', AZURE_HOST]
 else:
-    ALLOWED_HOSTS = ['projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net']
+    ALLOWED_HOSTS = [AZURE_HOST]
+
 
 INSTALLED_APPS = [
 'django.contrib.admin',
@@ -27,12 +28,12 @@ INSTALLED_APPS = [
 'django.contrib.staticfiles',
 'usuario',
 'jornal_commercio',
-'whitenoise.runserver_nostatic', 
+'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
 'django.middleware.security.SecurityMiddleware',
-'whitenoise.middleware.WhiteNoiseMiddleware', 
+'whitenoise.middleware.WhiteNoiseMiddleware',
 'django.contrib.sessions.middleware.SessionMiddleware',
 'django.middleware.common.CommonMiddleware',
 'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,6 +62,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+# --- Database --- (Esta seção está correta para Azure)
 DB_HOST = os.environ.get('DB_HOST')
 
 if DB_HOST:
@@ -71,7 +73,7 @@ if DB_HOST:
             'USER': os.environ.get('DB_USER'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
             'HOST': DB_HOST,
-            'PORT': '5432', 
+            'PORT': '5432',
         }
     }
 else:
@@ -81,6 +83,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    
 AUTH_PASSWORD_VALIDATORS = [
 {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
 {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
