@@ -1,4 +1,4 @@
-name: Deploy Django App to Azure (Novo)
+name: Deploy Django App to Azure (FINAL)
 
 on:
   push:
@@ -19,22 +19,32 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 3. Install dependencies
-        run: pip install -r requirements.txt
+      - name: 3. Create and activate virtual environment
+        run: |
+          python -m venv antenv
+          source antenv/bin/activate
 
-      - name: 4. Cleaning testing files
+      - name: 4. Install dependencies
+        run: |
+          source antenv/bin/activate
+          pip install -r requirements.txt
+          pip install gunicorn # Gunicorn deve ser instalado para o Azure
+
+      - name: 5. Cleaning testing files
         run: |
           rm -f db.sqlite3
           rm -f .env
 
-      - name: 5. Run collectstatic
-        run: python manage.py collectstatic --noinput
+      - name: 6. Run collectstatic
+        run: |
+          source antenv/bin/activate
+          python manage.py collectstatic --noinput
 
-      - name: 6. Zip artifact for deployment
+      - name: 7. Zip artifact for deployment
         run: |
           zip -r release.zip . -x ".git/*" -x ".github/*"
 
-      - name: 7. Upload artifact for deployment
+      - name: 8. Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: python-app
@@ -58,3 +68,5 @@ jobs:
           app-name: 'projetoreco'
           package: release.zip
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          
+          startup-command: "/home/site/wwwroot/entrypoint.sh"
