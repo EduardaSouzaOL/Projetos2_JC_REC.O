@@ -1,4 +1,4 @@
-name: Deploy Python app to Azure (Método Publish Profile)
+name: Deploy Django App to Azure
 
 on:
   push:
@@ -9,30 +9,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: 1. Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python version
+      - name: 2. Set up Python version
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: 3. Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Cleaning testing files
+      - name: 4. Cleaning testing files
         run: |
           rm -f db.sqlite3
           rm -f .env
 
-      - name: Zip artifact for deployment
+      - name: 5. Zip artifact for deployment
         run: |
           zip -r release.zip . -x ".git/*" -x ".github/*"
 
-      - name: Upload artifact for deployment jobs
+      - name: 6. Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: python-app
@@ -40,18 +39,18 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build 
     permissions:
       contents: read 
 
     steps:
-      - name: Download artifact from build job
+      - name: 1. Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: python-app
-      - name: Deploy to Azure Web App
+      
+      - name: 2. Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
-        id: deploy-to-webapp
         with:
           app-name: 'RECO'
           package: release.zip
