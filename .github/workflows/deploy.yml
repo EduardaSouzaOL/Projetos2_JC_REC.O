@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 1. Checkout repository
         uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
         run: |
           source antenv/bin/activate
           pip install -r requirements.txt
-          pip install gunicorn # Gunicorn deve ser instalado para o Azure
+          pip install gunicorn
 
       - name: 5. Cleaning testing files
         run: |
@@ -40,11 +40,14 @@ jobs:
           source antenv/bin/activate
           python manage.py collectstatic --noinput
 
-      - name: 7. Zip artifact for deployment
+      - name: 7. Make entrypoint.sh executable
+        run: chmod +x entrypoint.sh
+
+      - name: 8. Zip artifact for deployment
         run: |
           zip -r release.zip . -x ".git/*" -x ".github/*"
 
-      - name: 8. Upload artifact for deployment
+      - name: 9. Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: python-app
@@ -61,10 +64,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: python-app
-      
+
       - name: 2. Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'projetoreco'
           package: release.zip
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
+          startup-command: "sh /home/site/wwwroot/entrypoint.sh"
