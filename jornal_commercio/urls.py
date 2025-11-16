@@ -11,5 +11,5 @@ urlpatterns = [
     path('publicacao/<int:pk>/curtir/', views.curtir_publicacao, name='curtir_publicacao'),
     path('publicacao/<int:pk>/salvar/', views.salvar_publicacao, name='salvar_publicacao'),
     path('publicacao/<int:pk>/comentar/', views.adicionar_comentario, name='adicionar_comentario'),
+    path('comunidades/<int:pk>/toggle_membro/', views.toggle_membro, name='toggle_membro'),
 ]
-

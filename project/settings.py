@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 'usuario',
 'jornal_commercio',
 'whitenoise.runserver_nostatic',
+'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

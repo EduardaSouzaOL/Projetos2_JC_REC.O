@@ -3,25 +3,32 @@ from django.utils import timezone
 from django.conf import settings
 from django.utils.text import slugify
 
+CATEGORIA_CHOICES = [
+    ('MUNDO', 'Mundo'),
+    ('SEGURANCA_VIARIA', 'Segurança Viária'),
+    ('CIDADES', 'Cidades'),
+    ('POLITICA', 'Política'),
+    ('GERAL', 'Geral'),
+    ('EDUCACAO', 'Educação'),
+    ('ESPORTE', 'Esporte'),
+    ('SAUDE', 'Saúde e Bem-Estar'),
+    ('MOBILIDADE', 'Mobilidade'),
+    ('CULTURA', 'Cultura'),
+    ('ENTRETENIMENTO', 'Entretenimento'),
+    ('ECONOMIA', 'Economia'),
+    ('COMERCIO', 'Comércio'),
+    ('SOCIAL', 'Social'),
+]
+
 class Noticia(models.Model):
     
-    # Opções de categoria, baseadas no seu home.html
-    CATEGORIA_CHOICES = [
-        ('MUNDO', 'Mundo'),
-        ('SEGURANCA_VIARIA', 'Segurança Viária'),
-        ('CIDADES', 'Cidades'), # Para 'DESCASO' e 'ALERTA'
-        ('POLITICA', 'Política'), # Para 'CRECHES'
-        ('GERAL', 'Geral'),
-    ]
-
     titulo = models.CharField(
         max_length=200,
         blank=False,
         null=False,
-        verbose_name="Título da notícia" # Ajuste no verbose_name
+        verbose_name="Título da notícia"
     )
     
-    # NOVO: Resumo para aparecer na home page
     resumo = models.TextField(
         verbose_name="Resumo (linha fina)",
         help_text="Um breve resumo da notícia que aparecerá na home page.",
@@ -35,16 +42,14 @@ class Noticia(models.Model):
         verbose_name="Conteúdo da notícia"
     )
 
-    # MELHORIA: Ligar ao usuário (jornalista) do Django
     autor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL, # Se o autor for deletado, a notícia não é
-        null=True, # Permite notícias sem autor definido
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
         verbose_name="Autor"
     )
     
-    # NOVO: Campo de Categoria
     categoria = models.CharField(
         max_length=50,
         choices=CATEGORIA_CHOICES,
@@ -62,7 +67,6 @@ class Noticia(models.Model):
         verbose_name="Última atualização"
     )
 
-    # MELHORIA: Campo Slug para URLs amigáveis
     slug = models.SlugField(
         max_length=255,
         unique=True,
@@ -71,25 +75,22 @@ class Noticia(models.Model):
         help_text="Usado para a URL da notícia. Deixe em branco para gerar automaticamente."
     )
 
-    # MELHORIA: Descomentado e configurado
     imagem_principal = models.ImageField(
-        upload_to='noticias_imagens/', # Define um subdiretório em 'media'
-        blank=True, # Imagem pode ser opcional
+        upload_to='noticias_imagens/',
+        blank=True,
         null=True,
         verbose_name="Imagem Principal"
     )
 
     class Meta:
-        ordering = ['-data_publicacao'] # Ordena as notícias da mais nova para a mais antiga
+        ordering = ['-data_publicacao']
 
     def __str__(self):
-        return self.titulo # Mais limpo
+        return self.titulo
     
     def save(self, *args, **kwargs):
-        # Gerar slug automaticamente a partir do título se não existir
         if not self.slug:
             self.slug = slugify(self.titulo)
-            # Garante que o slug seja único, adicionando um número se necessário
             original_slug = self.slug
             queryset = Noticia.objects.all().filter(slug__iexact=self.slug).exists()
             count = 1
@@ -119,28 +120,30 @@ class Comunidade(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     descricao = models.TextField(blank=True, null=True)
     
-    # Chave estrangeira para o usuário que criou a comunidade
-    # (Ex: "Autor: AmandaFigueiredo")
+    categoria = models.CharField(
+        max_length=50,
+        choices=CATEGORIA_CHOICES,
+        default='GERAL',
+        verbose_name="Categoria"
+    )
+
     criador = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
-        on_delete=models.SET_NULL, # Se o criador for deletado, a comunidade continua
+        on_delete=models.SET_NULL,
         null=True, 
         related_name="comunidades_criadas"
     )
     
-    # Armazena todos os usuários que "seguem" esta comunidade
-    # (Ex: "Comunidade Assinada" e "500K Membros")
     membros = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="comunidades_seguidas",
         blank=True
     )
     
-    # As imagens vistas no front-end
-    imagem_banner = models.ImageField(upload_to='banners_comunidade/', blank=True, null=True) # Imagem grande da pág. detalhe
-    imagem_card = models.ImageField(upload_to='cards_comunidade/', blank=True, null=True)   # Imagem quadrada da lista
+    imagem_banner = models.ImageField(upload_to='banners_comunidade/', blank=True, null=True)
+    imagem_card = models.ImageField(upload_to='cards_comunidade/', blank=True, null=True)
     
-    data_criacao = models.DateTimeField(auto_now_add=True) # (Ex: "Desde 21 de agosto...")
+    data_criacao = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.nome
@@ -154,32 +157,27 @@ class Publicacao(models.Model):
 
     comunidade = models.ForeignKey(
         Comunidade, 
-        on_delete=models.CASCADE, # Se a comunidade for deletada, seus posts somem
-        related_name="publicacoes" # Permite usar comunidade.publicacoes.all()
+        on_delete=models.CASCADE,
+        related_name="publicacoes"
     )
     
     autor = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE, # Se o autor for deletado, seus posts somem
+        on_delete=models.CASCADE,
         related_name="publicacoes"
     )
     
-    # O conteúdo do post (ex: "Lorem ipsum...")
     conteudo = models.TextField()
     data_publicacao = models.DateTimeField(auto_now_add=True)
     
-    # Para a funcionalidade de "10 Destaques"
     is_destaque = models.BooleanField(default=False)
 
-    # Armazena todos os usuários que curtiram este post
-    # (Ex: "21K" curtidas)
     curtidas = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="publicacoes_curtidas",
         blank=True
     )
 
-    # Armazena todos os usuários que salvaram este post
     salvo_por = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="publicacoes_salvas",
@@ -187,7 +185,7 @@ class Publicacao(models.Model):
     )
     
     class Meta:
-        ordering = ['-data_publicacao'] # Ordena os posts do mais novo para o mais antigo
+        ordering = ['-data_publicacao']
         verbose_name = "Publicação"
         verbose_name_plural = "Publicações"
 
@@ -200,7 +198,7 @@ class Comentario(models.Model):
     publicacao = models.ForeignKey(
         Publicacao, 
         on_delete=models.CASCADE,
-        related_name="comentarios" # Permite usar publicacao.comentarios.all()
+        related_name="comentarios"
     )
     
     autor = models.ForeignKey(
@@ -213,7 +211,7 @@ class Comentario(models.Model):
     data_publicacao = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        ordering = ['data_publicacao'] # Ordena os comentários do mais antigo para o mais novo
+        ordering = ['data_publicacao']
         verbose_name = "Comentário"
         verbose_name_plural = "Comentários"
 
