@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.timesince import timesince
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 from django.urls import reverse
@@ -129,96 +130,92 @@ class ComunidadeDetailView(DetailView):
             return self.render_to_response(context)
         
 @login_required # Garante que apenas usuários logados possam curtir
-def curtir_publicacao(request, pk):    
+def curtir_publicacao(request, pk):
     """
-    Esta view lida com a ação de curtir ou descurtir uma publicação.
-    'pk' é o ID da Publicacao que está sendo curtida.
+    Esta view lida com a ação de curtir ou descurtir uma publicação
+    e retorna um JSON para uma chamada AJAX.
     """
     
-    # Apenas permitimos requisições POST para esta ação
+    # Apenas permitimos requisições POST
     if request.method == 'POST':
-        # Busca a publicação pelo 'pk' ou retorna um erro 404
         publicacao = get_object_or_404(Publicacao, pk=pk)
-        
-        # Pega o usuário logado
         user = request.user
         
-        # Verifica se o usuário já curtiu esta publicação
-        if user in publicacao.curtidas.all():
-            # Se sim, remove a curtida (descurtir)
-            publicacao.curtidas.remove(user)
-        else:
-            # Se não, adiciona a curtida (curtir)
-            publicacao.curtidas.add(user)
+        is_liked = False # Variável para saber o novo estado
         
-        # Redireciona o usuário de volta para a página da comunidade
-        # O 'pk' aqui é da *comunidade*, para a qual a publicação pertence
-        return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+        if user in publicacao.curtidas.all():
+            # Usuário já curtiu, então vamos remover
+            publicacao.curtidas.remove(user)
+            is_liked = False
+        else:
+            # Usuário ainda não curtiu, então vamos adicionar
+            publicacao.curtidas.add(user)
+            is_liked = True
+            
+        # Prepara a resposta JSON
+        response_data = {
+            'success': True,
+            'is_liked': is_liked, # O novo estado (curtido ou não)
+            'likes_count': publicacao.curtidas.count() # A nova contagem
+        }
+        
+        return JsonResponse(response_data)
     
     else:
         # Se alguém tentar acessar esta URL via GET, retorna um erro
         return HttpResponseForbidden("Ação não permitida.")
     
-@login_required # Garante que apenas usuários logados possam salvar
+@login_required
 def salvar_publicacao(request, pk):
     """
-    Esta view lida com a ação de salvar ou "dessalvar" uma publicação.
-    'pk' é o ID da Publicacao.
+    View AJAX para salvar/dessalvar publicação.
     """
-    
-    # Apenas permitimos requisições POST
     if request.method == 'POST':
-        # Busca a publicação
         publicacao = get_object_or_404(Publicacao, pk=pk)
-        
-        # Pega o usuário logado
         user = request.user
         
-        # Verifica se o usuário já salvou esta publicação
-        if user in publicacao.salvo_por.all():
-            # Se sim, remove dos salvos
-            publicacao.salvo_por.remove(user)
-        else:
-            # Se não, adiciona aos salvos
-            publicacao.salvo_por.add(user)
+        is_saved = False
         
-        # Redireciona o usuário de volta para a página da comunidade
-        return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+        if user in publicacao.salvo_por.all():
+            publicacao.salvo_por.remove(user)
+            is_saved = False
+        else:
+            publicacao.salvo_por.add(user)
+            is_saved = True
+            
+        return JsonResponse({
+            'success': True,
+            'is_saved': is_saved
+        })
     
     else:
-        # Se alguém tentar acessar esta URL via GET, retorna um erro
         return HttpResponseForbidden("Ação não permitida.")
 
 @login_required # Apenas usuários logados
 def adicionar_comentario(request, pk):
     """
-    Esta view lida com a postagem de um novo comentário.
-    'pk' é o ID da Publicacao que está sendo comentada.
+    View AJAX para adicionar comentários.
     """
-    publicacao = get_object_or_404(Publicacao, pk=pk)
-    
     if request.method == 'POST':
+        publicacao = get_object_or_404(Publicacao, pk=pk)
         form = ComentarioForm(request.POST)
         
         if form.is_valid():
-            # Cria o objeto comentário, mas não salva no banco ainda
             novo_comentario = form.save(commit=False)
-            
-            # Define os campos que faltam
             novo_comentario.publicacao = publicacao
             novo_comentario.autor = request.user
-            
-            # Salva no banco
             novo_comentario.save()
             
-            # Redireciona de volta para a página da comunidade
-            return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+            # Retorna os dados do comentário criado para o JavaScript
+            return JsonResponse({
+                'success': True,
+                'autor': novo_comentario.autor.username,
+                'conteudo': novo_comentario.conteudo,
+                # Formata a data para ficar igual ao Django (ex: "0 minutos")
+                'data': timesince(novo_comentario.data_publicacao),
+                'comments_count': publicacao.comentarios.count()
+            })
         
-        else:
-            # Se o formulário for inválido, apenas redireciona de volta
-            # (Uma implementação JS lidaria com isso de forma mais elegante)
-            return redirect('comunidade_detalhe', pk=publicacao.comunidade.pk)
+        return JsonResponse({'success': False, 'error': 'Formulário inválido'})
 
-    else:
-        # Proíbe acesso via GET
-        return HttpResponseForbidden("Ação não permitida.")
+    return HttpResponseForbidden("Ação não permitida.")

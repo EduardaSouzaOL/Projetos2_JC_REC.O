@@ -30,7 +30,6 @@
     <main class="comunidade-layout-grid" style="display: grid; grid-template-columns: 250px 1fr 250px; gap: 2rem; padding: 2rem; background-color: #f0f2f5;">
 
         <aside class="coluna-esquerda">
-            
             <div class="widget" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1.5rem;">
                 <h4 style="margin-top: 0;">10 Destaques</h4>
                 <ul style="list-style: none; padding: 0;">
@@ -44,7 +43,6 @@
                     {% endfor %}
                 </ul>
             </div>
-
             <div class="widget" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem;">
                 <h4 style="margin-top: 0;">10 Notícias/Serviços</h4>
                 <ul style="list-style: none; padding: 0;">
@@ -62,18 +60,13 @@
         <section class="coluna-central">
             
             <form method="POST" class="form-publicacao" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1.5rem;">
-    
                 <h5 style="margin-top: 0;">Criar uma publicação</h5>
-                
                 {% csrf_token %}
-                
                 {{ form_publicacao.as_p }}
-                
                 <button type="submit" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
                     Publicar
                 </button>
             </form>
-
 
             {% for publicacao in feed_publicacoes %}
                 <article class="card-publicacao" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 1.5rem;">
@@ -91,56 +84,43 @@
                     </div>
 
                     <div class="post-footer" style="padding: 1rem; border-top: 1px solid #eee; display: flex; gap: 1.5rem; font-size: 0.9rem; color: #555;">
+                        
                         <span class="like-wrapper">
                             {% if user.is_authenticated %}
-                                <form action="{% url 'curtir_publicacao' pk=publicacao.pk %}" method="POST" style="display: inline;">
+                                <form action="{% url 'curtir_publicacao' pk=publicacao.pk %}" method="POST" class="form-like" style="display: inline;">
                                     {% csrf_token %}
-                                    
-                                    <button type-"submit" style="background: none; border: none; padding: 0; cursor: pointer; font-size: 0.9rem;">
-                                        
-                                        {% if user in publicacao.curtidas.all %}
-                                            <strong style="color: #007bff;">👍 {{ publicacao.curtidas.count }} Curtido</strong>
-                                        {% else %}
-                                            <span style="color: #555;">👍 {{ publicacao.curtidas.count }} Curtir</span>
-                                        {% endif %}
-                                        
+                                    <button type="submit" class="like-button" style="background: none; border: none; padding: 0; cursor: pointer; font-size: 0.9rem; color: {% if user in publicacao.curtidas.all %}#007bff{% else %}#555{% endif %};">
+                                        👍 <span class="like-count">{{ publicacao.curtidas.count }}</span>
+                                        <span class="like-text">{% if user in publicacao.curtidas.all %}Curtido{% else %}Curtir{% endif %}</span>
                                     </button>
                                 </form>
                             {% else %}
-                                <span style="font-size: 0.9rem; color: #555;">
-                                    👍 {{ publicacao.curtidas.count }} Curtidas
-                                </span>
+                                <span>👍 {{ publicacao.curtidas.count }} Curtidas</span>
                             {% endif %}
                         </span>
-                        <span>
-                            💬 {{ publicacao.comentarios.count }} Comentários
+
+                        <span class="botao-focar-comentario" style="cursor: pointer;" title="Escrever um comentário">
+                            💬 <span class="comment-count-val">{{ publicacao.comentarios.count }}</span> Comentários
                         </span>
+
                         <span class="save-wrapper">
                             {% if user.is_authenticated %}
-                                <form action="{% url 'salvar_publicacao' pk=publicacao.pk %}" method="POST" style="display: inline;">
+                                <form action="{% url 'salvar_publicacao' pk=publicacao.pk %}" method="POST" class="form-save" style="display: inline;">
                                     {% csrf_token %}
-                                    
-                                    <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer; font-size: 0.9rem;">
-                                        
-                                        {% if user in publicacao.salvo_por.all %}
-                                            <strong style="color: #007bff;">💾 Salvo</strong>
-                                        {% else %}
-                                            <span style="color: #555;">💾 Salvar</span>
-                                        {% endif %}
-                                        
+                                    <button type="submit" class="save-button" style="background: none; border: none; padding: 0; cursor: pointer; font-size: 0.9rem; color: {% if user in publicacao.salvo_por.all %}#007bff{% else %}#555{% endif %};">
+                                        <span class="save-text">{% if user in publicacao.salvo_por.all %}💾 Salvo{% else %}💾 Salvar{% endif %}</span>
                                     </button>
                                 </form>
                             {% else %}
-                                <span style="font-size: 0.9rem; color: #555;">
-                                    💾 Salvar
-                                </span>
+                                <span>💾 Salvar</span>
                             {% endif %}
                         </span>
                     </div>
+
                     <div class="comentarios-secao" style="padding: 0 1rem 1rem 1rem; border-top: 1px solid #eee;">
 
                         {% if user.is_authenticated %}
-                            <form action="{% url 'adicionar_comentario' pk=publicacao.pk %}" method="POST" style="margin-top: 1rem;">
+                            <form action="{% url 'adicionar_comentario' pk=publicacao.pk %}" method="POST" class="form-comentario" style="margin-top: 1rem;">
                                 {% csrf_token %}
                                 
                                 <div class="form_campo">
@@ -158,21 +138,18 @@
                         {% endif %}
 
                         <div class="lista-comentarios" style="margin-top: 1.5rem;">
-                            
                             {% for comentario in publicacao.comentarios.all %}
                                 <div class="comentario-item" style="margin-bottom: 1rem; font-size: 0.9rem;">
-                                    
                                     <div style="display: flex; align-items: center; margin-bottom: 5px;">
                                         <div class="avatar" style="width: 25px; height: 25px; border-radius: 50%; background: #ddd; margin-right: 8px;"></div>
                                         <strong>{{ comentario.autor.username }}</strong>
                                         <span style="color: #777; margin-left: 10px;">{{ comentario.data_publicacao|timesince }} atrás</span>
                                     </div>
-                                    
                                     <p style="margin: 0 0 0 33px; padding-left: 0;">{{ comentario.conteudo|linebreaksbr }}</p>
                                 </div>
                             {% empty %}
                                 {% if user.is_authenticated %}
-                                    <p style="font-size: 0.9rem; color: #777;">Seja o primeiro a comentar!</p>
+                                    <p class="sem-comentarios-msg" style="font-size: 0.9rem; color: #777;">Seja o primeiro a comentar!</p>
                                 {% endif %}
                             {% endfor %}
                         </div>
@@ -194,4 +171,145 @@
     </main>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. CURTIR
+    const likeForms = document.querySelectorAll('.form-like');
+    likeForms.forEach(form => {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const url = form.action;
+            const csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrf, 'Accept': 'application/json'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const button = form.querySelector('.like-button');
+                    const countSpan = form.querySelector('.like-count');
+                    const textSpan = form.querySelector('.like-text');
+                    countSpan.textContent = data.likes_count;
+                    if (data.is_liked) {
+                        textSpan.textContent = 'Curtido';
+                        button.style.color = '#007bff';
+                    } else {
+                        textSpan.textContent = 'Curtir';
+                        button.style.color = '#555';
+                    }
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+        });
+    });
+
+    // 2. SALVAR
+    const saveForms = document.querySelectorAll('.form-save');
+    saveForms.forEach(form => {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const url = form.action;
+            const csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrf, 'Accept': 'application/json'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const button = form.querySelector('.save-button');
+                    const textSpan = form.querySelector('.save-text');
+                    if (data.is_saved) {
+                        textSpan.textContent = '💾 Salvo';
+                        button.style.color = '#007bff';
+                        textSpan.style.fontWeight = 'bold'; 
+                    } else {
+                        textSpan.textContent = '💾 Salvar';
+                        button.style.color = '#555';
+                        textSpan.style.fontWeight = 'normal';
+                    }
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+        });
+    });
+
+    // 3. COMENTAR (AJAX)
+    const commentForms = document.querySelectorAll('.form-comentario');
+    commentForms.forEach(form => {
+        form.addEventListener('submit', (event) => {
+            // É ESTA LINHA QUE IMPEDE A TELA PRETA
+            event.preventDefault();
+            
+            const url = form.action;
+            const csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
+            const formData = new FormData(form);
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrf,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const section = form.closest('.comentarios-secao');
+                    const list = section.querySelector('.lista-comentarios');
+                    const emptyMsg = list.querySelector('.sem-comentarios-msg');
+                    
+                    if (emptyMsg) {
+                        emptyMsg.remove();
+                    }
+
+                    const newCommentHTML = `
+                        <div class="comentario-item" style="margin-bottom: 1rem; font-size: 0.9rem; animation: fadeIn 0.5s;">
+                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                <div class="avatar" style="width: 25px; height: 25px; border-radius: 50%; background: #ddd; margin-right: 8px;"></div>
+                                <strong>${data.autor}</strong>
+                                <span style="color: #777; margin-left: 10px;">agora mesmo</span>
+                            </div>
+                            <p style="margin: 0 0 0 33px; padding-left: 0;">${data.conteudo.replace(/\n/g, "<br>")}</p>
+                        </div>
+                    `;
+
+                    list.insertAdjacentHTML('beforeend', newCommentHTML);
+                    form.reset();
+
+                    const article = form.closest('article');
+                    const countSpan = article.querySelector('.comment-count-val');
+                    if (countSpan) {
+                        countSpan.textContent = data.comments_count;
+                    }
+                }
+            })
+            .catch(error => console.error('Erro ao comentar:', error));
+        });
+    });
+
+    // 4. CLIQUE NO BALÃO DE COMENTÁRIO (NOVO!)
+    const commentButtons = document.querySelectorAll('.botao-focar-comentario');
+    
+    commentButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Encontra o formulário de comentário dentro do MESMO card (article)
+            const article = btn.closest('article');
+            const input = article.querySelector('.form-comentario textarea, .form-comentario input[type=text]');
+            
+            if (input) {
+                input.focus(); // Coloca o cursor na caixa de texto
+            }
+        });
+    });
+
+});
+</script>
+
 {% endblock %}
