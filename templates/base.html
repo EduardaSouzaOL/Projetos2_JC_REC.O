@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Jornal do Commercio{% endblock %}</title>
         
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link rel="stylesheet" href="{% static 'jornal_commercio/css/style.css' %}">
         
         {% block styles %}{% endblock %}
@@ -56,7 +57,7 @@
                     <li><a href="#">NOTÍCIAS DO DIA</a></li>
                     <li><a href="#">COLUNISTAS</a></li>
                     <li><a href="#">NOTÍCIAS DE PE</a></li>
-                    <li><a href="#">COMUNIDADES</a></li>
+                    <li><a href="{% url 'comunidades_lista' %}">COMUNIDADES</a></li>
                     <li><a href="#">RECALL DA MARCA</a></li>
                     <li><a href="#">ANUNCIE AQUI</a></li>
                 </ul>

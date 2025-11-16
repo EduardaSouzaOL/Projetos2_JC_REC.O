@@ -1,0 +1,231 @@
+.container-principal-comunidades {
+    background-color: #f0f2f5;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.comunidades-cabecalho h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 1.5rem;
+}
+
+.comunidades-filtros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.filtro-busca {
+    position: relative;
+    flex-basis: 250px;
+    flex-grow: 0;
+}
+
+.filtro-busca input {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 8px 15px 8px 40px;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.filtro-busca::before {
+    content: '\f002';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.filtro-abas {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    background-color: #e4e6eb;
+    border-radius: 20px;
+    padding: 4px;
+}
+
+.aba-item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #333;
+    border-radius: 18px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.aba-item.aba-ativa {
+    font-weight: 600;
+}
+
+.aba-item:hover {
+    background-color: #6c757d;
+    color: #fff;
+    font-weight: 600;
+}
+
+.filtro-btn {
+    padding: 8px 16px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #333;
+}
+
+.filtro-btn::before {
+    content: '\f0b0';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.comunidade-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.comunidade-card {
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comunidade-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.card-imagem img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+.card-imagem-placeholder {
+    width: 100%;
+    height: 150px;
+    background: #ccc;
+    display: grid;
+    place-items: center;
+    color: #777;
+}
+
+.card-conteudo {
+    padding: 1rem;
+}
+
+.card-conteudo h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.1rem;
+    color: #000;
+}
+
+.card-info {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.info-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #E91E63;
+    margin-right: 8px;
+}
+
+.info-autor {
+    font-weight: 500;
+}
+
+.info-stats {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #777;
+}
+
+.info-stats::before {
+    content: '👥';
+    font-size: 0.9rem;
+}
+
+.paginacao {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.paginacao a {
+    text-decoration: none;
+    padding: 5px 10px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0 5px;
+}
+
+.paginacao a:hover {
+    background: #f0f0f0;
+}
+
+.pagina-atual {
+    color: #555;
+}
+
+@media (max-width: 992px) {
+    .comunidade-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .comunidade-grid {
+        grid-template-columns: 1fr;
+    }
+    .comunidades-filtros {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    .filtro-abas {
+        order: 1;
+        justify-content: space-around;
+    }
+    .filtro-busca {
+        order: 0;
+        flex-basis: auto;
+        max-width: 100%;
+    }
+    .filtro-btn {
+        order: 2;
+        justify-content: center;
+    }
+}

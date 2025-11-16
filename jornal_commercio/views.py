@@ -8,6 +8,7 @@ from django.urls import reverse
 from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
 from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario
+from django.db.models import Q, Count
 
 def home(request):
     
@@ -29,10 +30,6 @@ def home(request):
     return render(request, "jornal_commercio/home.html", context)
 
 def detalhe_noticia(request, slug):
-    """
-    Busca uma notícia específica pelo seu SLUG e a exibe na página de detalhe.
-    """
-    # Busca pelo campo 'slug' em vez de 'pk' (Primary Key)
     noticia = get_object_or_404(Noticia, slug=slug)
 
     todas_noticias = Noticia.objects.all()
@@ -63,21 +60,38 @@ def newsletter(request):
     return render(request, "jornal_commercio/newsletter.html")
 
 class ComunidadeListView(ListView):
-    """
-    Esta view cuida da página que lista TODAS as comunidades.
-    (A sua primeira imagem do frontend)
-    """
-    model = Comunidade  # 1. Diz ao Django qual modelo buscar no banco
-    
-    # 2. Diz ao Django qual arquivo de template usar para exibir a página
+    model = Comunidade
     template_name = 'jornal_commercio/comunidades_lista.html'
-    
-    # 3. Dá um nome melhor para a lista no template
-    # (Em vez do padrão 'object_list', usaremos 'comunidades')
     context_object_name = 'comunidades'
-    
-    # Opcional: para a paginação, se tiver muitas comunidades
     paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        filtro = self.request.GET.get('filtro', 'alta')
+
+        if filtro == 'seguindo' and self.request.user.is_authenticated:
+            queryset = queryset.filter(membros=self.request.user)
+        
+        elif filtro == 'criados':
+            queryset = queryset.order_by('-data_criacao')
+        
+        else:
+            queryset = queryset.annotate(num_membros=Count('membros')).order_by('-num_membros')
+
+        if query:
+            queryset = queryset.filter(
+                Q(nome__icontains=query) |
+                Q(descricao__icontains=query)
+            ).distinct()
+        
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('q', '')
+        context['filtro_ativo'] = self.request.GET.get('filtro', 'alta')
+        return context
 
 class ComunidadeDetailView(DetailView):
     model = Comunidade
@@ -100,76 +114,54 @@ class ComunidadeDetailView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        # Pega a comunidade atual
         comunidade = self.get_object()
         
-        # Cria uma instância do formulário com os dados do POST
         form = PublicacaoForm(request.POST)
 
         if form.is_valid():
-            # Salva o formulário, mas não no banco ainda (commit=False)
-            # Isso nos dá um objeto 'Publicacao' sem salvar
             nova_publicacao = form.save(commit=False)
             
-            # Define os campos que faltam
             nova_publicacao.comunidade = comunidade
-            nova_publicacao.autor = request.user # Pega o usuário logado
+            nova_publicacao.autor = request.user
             
-            # Agora sim, salva no banco
             nova_publicacao.save()
             
-            # Redireciona para a mesma página (para evitar reenvio do form)
-            # 'request.path' é a URL atual.
             return redirect(request.path)
         
         else:
-            # Se o formulário for inválido, re-renderiza a página
-            # Mas desta vez, o 'form' terá os erros
-            context = self.get_context_data() # Pega todo o contexto de GET
-            context['form_publicacao'] = form # Substitui o form vazio pelo form com erros
+            context = self.get_context_data()
+            context['form_publicacao'] = form
             return self.render_to_response(context)
         
-@login_required # Garante que apenas usuários logados possam curtir
+@login_required
 def curtir_publicacao(request, pk):
-    """
-    Esta view lida com a ação de curtir ou descurtir uma publicação
-    e retorna um JSON para uma chamada AJAX.
-    """
     
-    # Apenas permitimos requisições POST
     if request.method == 'POST':
         publicacao = get_object_or_404(Publicacao, pk=pk)
         user = request.user
         
-        is_liked = False # Variável para saber o novo estado
+        is_liked = False
         
         if user in publicacao.curtidas.all():
-            # Usuário já curtiu, então vamos remover
             publicacao.curtidas.remove(user)
             is_liked = False
         else:
-            # Usuário ainda não curtiu, então vamos adicionar
             publicacao.curtidas.add(user)
             is_liked = True
             
-        # Prepara a resposta JSON
         response_data = {
             'success': True,
-            'is_liked': is_liked, # O novo estado (curtido ou não)
-            'likes_count': publicacao.curtidas.count() # A nova contagem
+            'is_liked': is_liked,
+            'likes_count': publicacao.curtidas.count()
         }
         
         return JsonResponse(response_data)
     
     else:
-        # Se alguém tentar acessar esta URL via GET, retorna um erro
         return HttpResponseForbidden("Ação não permitida.")
     
 @login_required
 def salvar_publicacao(request, pk):
-    """
-    View AJAX para salvar/dessalvar publicação.
-    """
     if request.method == 'POST':
         publicacao = get_object_or_404(Publicacao, pk=pk)
         user = request.user
@@ -191,11 +183,8 @@ def salvar_publicacao(request, pk):
     else:
         return HttpResponseForbidden("Ação não permitida.")
 
-@login_required # Apenas usuários logados
+@login_required
 def adicionar_comentario(request, pk):
-    """
-    View AJAX para adicionar comentários.
-    """
     if request.method == 'POST':
         publicacao = get_object_or_404(Publicacao, pk=pk)
         form = ComentarioForm(request.POST)
@@ -206,16 +195,36 @@ def adicionar_comentario(request, pk):
             novo_comentario.autor = request.user
             novo_comentario.save()
             
-            # Retorna os dados do comentário criado para o JavaScript
             return JsonResponse({
                 'success': True,
                 'autor': novo_comentario.autor.username,
                 'conteudo': novo_comentario.conteudo,
-                # Formata a data para ficar igual ao Django (ex: "0 minutos")
                 'data': timesince(novo_comentario.data_publicacao),
                 'comments_count': publicacao.comentarios.count()
             })
         
         return JsonResponse({'success': False, 'error': 'Formulário inválido'})
 
-    return HttpResponseForbidden("Ação não permitida.")
+    return HttpResponseForbidden("Ação não permitida.") 
+
+@login_required
+def toggle_membro(request, pk):
+    if request.method == 'POST':
+        comunidade = get_object_or_404(Comunidade, pk=pk)
+        user = request.user
+        
+        is_member = False
+        if user in comunidade.membros.all():
+            comunidade.membros.remove(user)
+            is_member = False
+        else:
+            comunidade.membros.add(user)
+            is_member = True
+            
+        return JsonResponse({
+            'success': True,
+            'is_member': is_member,
+            'membros_count': comunidade.membros.count()
+        })
+    else:
+        return HttpResponseForbidden("Ação não permitida.")

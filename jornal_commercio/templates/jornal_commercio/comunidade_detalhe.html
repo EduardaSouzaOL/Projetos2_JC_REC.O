@@ -1,315 +1,350 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %} 
 
 {% block title %}{{ comunidade.nome }} - Comunidade{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'jornal_commercio/css/comunidade_detalhe.css' %}">
+{% endblock %}
+
 {% block content %}
+<div class="detalhe-container">
 
-<div class="container-principal-comunidade-detalhe" style="background-color: #fff; max-width: 1400px; margin: auto;">
-
-    <header class="comunidade-banner" style="position: relative; color: white;">
+    <header class="detalhe-header">
         {% if comunidade.imagem_banner %}
-            <img src="{{ comunidade.imagem_banner.url }}" alt="Banner da Comunidade {{ comunidade.nome }}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
+            <img class="banner-imagem" src="{{ comunidade.imagem_banner.url }}" alt="Banner da Comunidade {{ comunidade.nome }}">
         {% else %}
-            <div style="width: 100%; height: 300px; background-color: #555; border-radius: 8px;"></div>
+            <div class="banner-imagem-placeholder">{{ comunidade.nome }}</div>
         {% endif %}
-        
-        <div class="banner-info" style="position: absolute; bottom: 20px; left: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
-            <span style="background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">Comunidade Assinada</span>
-            <h1 style="margin: 10px 0;">{{ comunidade.nome }}</h1>
-            <p style="margin: 0;">
-                Autor: <strong>{{ comunidade.criador.username }}</strong>
-                &nbsp; | &nbsp; 
-                Desde {{ comunidade.data_criacao|date:"d M Y" }}
-                &nbsp; | &nbsp; 
-                {{ comunidade.membros.count }} Membros
-            </p>
+
+        <div class="header-info-container">
+            <div class="header-info-esq">
+                <span class="header-breadcrumb">Comunidade | {{ comunidade.get_categoria_display|upper }}</span>
+                <h1>{{ comunidade.nome }}</h1>
+                <p>{{ comunidade.descricao|default:"Discussões sobre o melhor da Educação de Pernambuco." }}</p>
+            </div>
+            <div class="header-info-dir">
+                <div class="info-bloco">
+                    <span class="info-label">Autor</span>
+                    <span class="info-valor">{{ comunidade.criador.username }}</span>
+                </div>
+                <div class="info-bloco">
+                    <span class="info-label">Desde</span>
+                    <span class="info-valor">{{ comunidade.data_criacao|date:"d M Y" }}</span>
+                </div>
+                <button class="btn-reportar">
+                    <i class="far fa-flag"></i> Reportar Comunidade
+                </button>
+            </div>
         </div>
     </header>
 
-    <main class="comunidade-layout-grid" style="display: grid; grid-template-columns: 250px 1fr 250px; gap: 2rem; padding: 2rem; background-color: #f0f2f5;">
+    <div class="detalhe-grid">
 
-        <aside class="coluna-esquerda">
-            <div class="widget" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1.5rem;">
-                <h4 style="margin-top: 0;">10 Destaques</h4>
-                <ul style="list-style: none; padding: 0;">
+        <aside class="detalhe-sidebar-esq">
+            <div class="widget-card">
+                <h3>Destaques</h3>
+                <ul class="lista-destaques-membros">
                     {% for destaque in destaques %}
-                        <li style="border-bottom: 1px solid #eee; padding: 0.5rem 0;">
-                            <a href="#" style="text-decoration: none; color: #333; font-size: 0.9rem;">{{ destaque.conteudo|truncatechars:50 }}</a>
-                            <span style="font-size: 0.8rem; color: #777; display: block;">por {{ destaque.autor.username }}</span>
+                        <li>
+                            <div class="item-avatar-placeholder">{{ destaque.autor.username.0|upper }}</div>
+                            <div class="item-info">
+                                <a href="#">{{ destaque.conteudo|truncatechars:30 }}</a>
+                                <span>{{ destaque.autor.username }}</span>
+                            </div>
+                            <span class="item-stats">{{ destaque.curtidas.count }}</span>
                         </li>
                     {% empty %}
-                        <li>Não há destaques no momento.</li>
+                        <li>Não há destaques.</li>
                     {% endfor %}
                 </ul>
             </div>
-            <div class="widget" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem;">
-                <h4 style="margin-top: 0;">10 Notícias/Serviços</h4>
-                <ul style="list-style: none; padding: 0;">
+            
+            <div class="widget-card">
+                <h3>Membros</h3>
+                <ul class="lista-destaques-membros">
+                    {% for membro in comunidade.membros.all|slice:":5" %}
+                        <li>
+                            <div class="item-avatar-placeholder">{{ membro.username.0|upper }}</div>
+                            <div class="item-info">
+                                <a href="#">{{ membro.username }}</a>
+                                <span>Membro</span>
+                            </div>
+                            <span class="item-stats">{{ membro.publicacao_set.count }}</span>
+                        </li>
+                    {% empty %}
+                        <li>Nenhum membro.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="widget-card">
+                <h3>Notícias relacionadas</h3>
+                <ul class="lista-noticias-relacionadas">
                     {% for noticia in noticias_servicos %}
-                        <li style="border-bottom: 1px solid #eee; padding: 0.5rem 0;">
-                            <a href="{% url 'detalhe_noticia' slug=noticia.slug %}" style="text-decoration: none; color: #333; font-size: 0.9rem;">{{ noticia.titulo }}</a>
+                        <li>
+                            <a href="{% url 'detalhe_noticia' slug=noticia.slug %}">
+                                {% if noticia.imagem_principal %}
+                                <img src="{{ noticia.imagem_principal.url }}" alt="">
+                                {% else %}
+                                <div class="noticia-placeholder-img"></div>
+                                {% endif %}
+                                <span>{{ noticia.titulo }}</span>
+                            </a>
                         </li>
                     {% empty %}
-                        <li>Não há notícias no momento.</li>
+                        <li>Não há notícias.</li>
                     {% endfor %}
                 </ul>
             </div>
+
+            <a href="#" class="widget-adicionar-algo">
+                <span>Adicionar algo ao assunto</span>
+                <i class="fas fa-plus"></i>
+            </a>
         </aside>
 
-        <section class="coluna-central">
+        <main class="detalhe-feed">
             
-            <form method="POST" class="form-publicacao" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1.5rem;">
-                <h5 style="margin-top: 0;">Criar uma publicação</h5>
-                {% csrf_token %}
-                {{ form_publicacao.as_p }}
-                <button type="submit" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                    Publicar
-                </button>
-            </form>
+            {% if user.is_authenticated and user in comunidade.membros.all %}
+            <div class="post-card form-publicar">
+                <form method="POST" action="{% url 'comunidade_detalhe' pk=comunidade.pk %}">
+                    {% csrf_token %}
+                    <div class="form-publicar-avatar">{{ user.username.0|upper }}</div>
+                    <textarea name="conteudo" placeholder="Escreva sua publicação..."></textarea>
+                    <button type="submit"><i class="fa fa-paper-plane"></i></button>
+                </form>
+            </div>
+            {% endif %}
 
             {% for publicacao in feed_publicacoes %}
-                <article class="card-publicacao" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 1.5rem;">
-                    
-                    <div class="post-header" style="padding: 1rem; display: flex; align-items: center; border-bottom: 1px solid #eee;">
-                        <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background: #ccc; margin-right: 10px;"></div>
-                        <div>
-                            <strong>{{ publicacao.autor.username }}</strong>
-                            <span style="font-size: 0.9rem; color: #777;"> | {{ publicacao.data_publicacao|timesince }} atrás</span>
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-autor-info">
+                            <div class="post-avatar-placeholder">{{ publicacao.autor.username.0|upper }}</div>
+                            <div class="post-info">
+                                <span class="autor">{{ publicacao.autor.username }}</span>
+                                <span class="data">{{ publicacao.data_publicacao|naturaltime }}</span>
+                            </div>
+                        </div>
+                        <div class="post-opcoes">
+                            <button class="btn-seguir">Seguir</button>
+                            <button class="btn-opcoes"><i class="fas fa-ellipsis-h"></i></button>
                         </div>
                     </div>
 
-                    <div class="post-conteudo" style="padding: 1rem;">
+                    <div class="post-conteudo">
                         <p>{{ publicacao.conteudo|linebreaksbr }}</p>
                     </div>
 
-                    <div class="post-footer" style="padding: 1rem; border-top: 1px solid #eee; display: flex; gap: 1.5rem; font-size: 0.9rem; color: #555;">
-                        
-                        <span class="like-wrapper">
-                            {% if user.is_authenticated %}
-                                <form action="{% url 'curtir_publicacao' pk=publicacao.pk %}" method="POST" class="form-like" style="display: inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="like-button" style="background: none; border: none; padding: 0; cursor: pointer; font-size: 0.9rem; color: {% if user in publicacao.curtidas.all %}#007bff{% else %}#555{% endif %};">
-                                        👍 <span class="like-count">{{ publicacao.curtidas.count }}</span>
-                                        <span class="like-text">{% if user in publicacao.curtidas.all %}Curtido{% else %}Curtir{% endif %}</span>
-                                    </button>
-                                </form>
-                            {% else %}
-                                <span>👍 {{ publicacao.curtidas.count }} Curtidas</span>
-                            {% endif %}
-                        </span>
-
-                        <span class="botao-focar-comentario" style="cursor: pointer;" title="Escrever um comentário">
-                            💬 <span class="comment-count-val">{{ publicacao.comentarios.count }}</span> Comentários
-                        </span>
-
-                        <span class="save-wrapper">
-                            {% if user.is_authenticated %}
-                                <form action="{% url 'salvar_publicacao' pk=publicacao.pk %}" method="POST" class="form-save" style="display: inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="save-button" style="background: none; border: none; padding: 0; cursor: pointer; font-size: 0.9rem; color: {% if user in publicacao.salvo_por.all %}#007bff{% else %}#555{% endif %};">
-                                        <span class="save-text">{% if user in publicacao.salvo_por.all %}💾 Salvo{% else %}💾 Salvar{% endif %}</span>
-                                    </button>
-                                </form>
-                            {% else %}
-                                <span>💾 Salvar</span>
-                            {% endif %}
-                        </span>
+                    <div class="post-acoes">
+                        <form class="form-ajax-acao" method="POST" action="{% url 'curtir_publicacao' pk=publicacao.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="acao-btn btn-curtir {% if user in publicacao.curtidas.all %}active{% endif %}">
+                                <i class="far fa-thumbs-up"></i>
+                                <span class="like-count">{{ publicacao.curtidas.count }}</span>
+                            </button>
+                        </form>
+                        <button class="acao-btn btn-dislike" disabled>
+                            <i class="far fa-thumbs-down"></i>
+                            <span>0</span>
+                        </button>
+                        <button class="acao-btn btn-comentar">
+                            <i class="far fa-comment"></i>
+                            <span class="comment-count-val">{{ publicacao.comentarios.count }}</span>
+                        </button>
+                        <form class="form-ajax-acao" method="POST" action="{% url 'salvar_publicacao' pk=publicacao.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="acao-btn btn-salvar {% if user in publicacao.salvo_por.all %}active{% endif %}">
+                                <i class="far fa-bookmark"></i>
+                                <span class="save-text">{% if user in publicacao.salvo_por.all %}Salvo{% else %}Salvar{% endif %}</span>
+                            </button>
+                        </form>
                     </div>
 
-                    <div class="comentarios-secao" style="padding: 0 1rem 1rem 1rem; border-top: 1px solid #eee;">
+                    <div class="comentarios-container">
+                        {% for comentario in publicacao.comentarios.all %}
+                        <div class="comentario-item">
+                            <div class="comentario-avatar-placeholder">{{ comentario.autor.username.0|upper }}</div>
+                            <div class="comentario-corpo">
+                                <span class="comentario-autor">{{ comentario.autor.username }}</span>
+                                <span class="comentario-data">{{ comentario.data_publicacao|naturaltime }}</span>
+                                <p class="comentario-texto">{{ comentario.conteudo|linebreaksbr }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                            {% if user.is_authenticated %}
+                            <p class="sem-comentarios-msg">Seja o primeiro a comentar!</p>
+                            {% endif %}
+                        {% endfor %}
 
                         {% if user.is_authenticated %}
-                            <form action="{% url 'adicionar_comentario' pk=publicacao.pk %}" method="POST" class="form-comentario" style="margin-top: 1rem;">
-                                {% csrf_token %}
-                                
-                                <div class="form_campo">
-                                    {{ form_comentario.conteudo }}
-                                </div>
-                                
-                                <button type="submit" style="padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 5px; font-size: 0.9rem;">
-                                    Comentar
-                                </button>
-                            </form>
+                        <form action="{% url 'adicionar_comentario' pk=publicacao.pk %}" method="POST" class="form-comentario">
+                            {% csrf_token %}
+                            <div class="comentario-avatar-placeholder">{{ user.username.0|upper }}</div>
+                            <textarea name="conteudo" placeholder="Escreva um comentário..." rows="1"></textarea>
+                            <button type="submit"><i class="fa fa-paper-plane"></i></button>
+                        </form>
                         {% else %}
-                            <p style="font-size: 0.9rem; color: #555; margin-top: 1rem;">
-                                <a href="{% url 'login' %}">Faça login</a> para comentar.
-                            </p>
+                        <p class="login-para-comentar">
+                            <a href="{% url 'login' %}">Faça login</a> para comentar.
+                        </p>
                         {% endif %}
-
-                        <div class="lista-comentarios" style="margin-top: 1.5rem;">
-                            {% for comentario in publicacao.comentarios.all %}
-                                <div class="comentario-item" style="margin-bottom: 1rem; font-size: 0.9rem;">
-                                    <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                                        <div class="avatar" style="width: 25px; height: 25px; border-radius: 50%; background: #ddd; margin-right: 8px;"></div>
-                                        <strong>{{ comentario.autor.username }}</strong>
-                                        <span style="color: #777; margin-left: 10px;">{{ comentario.data_publicacao|timesince }} atrás</span>
-                                    </div>
-                                    <p style="margin: 0 0 0 33px; padding-left: 0;">{{ comentario.conteudo|linebreaksbr }}</p>
-                                </div>
-                            {% empty %}
-                                {% if user.is_authenticated %}
-                                    <p class="sem-comentarios-msg" style="font-size: 0.9rem; color: #777;">Seja o primeiro a comentar!</p>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
                     </div>
-                </article>
+                </div>
             {% empty %}
-                <div style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem;">
-                    <p>Esta comunidade ainda não tem publicações. Seja o primeiro a postar!</p>
+                <div class="post-card">
+                    <div class="post-conteudo">
+                        <p>Esta comunidade ainda não tem publicações. Seja o primeiro a postar!</p>
+                    </div>
                 </div>
             {% endfor %}
 
-        </section>
-
-        <aside class="coluna-direita">
-            <div class="widget-vazio" style="background: #fff; border-radius: 8px; border: 1px solid #ddd; padding: 1rem; min-height: 200px;">
-                <p>(Espaço Direita)</p>
-            </div>
-        </aside>
-    </main>
+        </main>
+    </div>
 
 </div>
+{% endblock %}
 
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-
-    // 1. CURTIR
-    const likeForms = document.querySelectorAll('.form-like');
-    likeForms.forEach(form => {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const url = form.action;
-            const csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
-            
-            fetch(url, {
-                method: 'POST',
-                headers: {'X-CSRFToken': csrf, 'Accept': 'application/json'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const button = form.querySelector('.like-button');
-                    const countSpan = form.querySelector('.like-count');
-                    const textSpan = form.querySelector('.like-text');
-                    countSpan.textContent = data.likes_count;
-                    if (data.is_liked) {
-                        textSpan.textContent = 'Curtido';
-                        button.style.color = '#007bff';
-                    } else {
-                        textSpan.textContent = 'Curtir';
-                        button.style.color = '#555';
-                    }
-                }
-            })
-            .catch(error => console.error('Erro:', error));
-        });
-    });
-
-    // 2. SALVAR
-    const saveForms = document.querySelectorAll('.form-save');
-    saveForms.forEach(form => {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const url = form.action;
-            const csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {'X-CSRFToken': csrf, 'Accept': 'application/json'}
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const button = form.querySelector('.save-button');
-                    const textSpan = form.querySelector('.save-text');
-                    if (data.is_saved) {
-                        textSpan.textContent = '💾 Salvo';
-                        button.style.color = '#007bff';
-                        textSpan.style.fontWeight = 'bold'; 
-                    } else {
-                        textSpan.textContent = '💾 Salvar';
-                        button.style.color = '#555';
-                        textSpan.style.fontWeight = 'normal';
-                    }
-                }
-            })
-            .catch(error => console.error('Erro:', error));
-        });
-    });
-
-    // 3. COMENTAR (AJAX)
-    const commentForms = document.querySelectorAll('.form-comentario');
-    commentForms.forEach(form => {
-        form.addEventListener('submit', (event) => {
-            // É ESTA LINHA QUE IMPEDE A TELA PRETA
-            event.preventDefault();
-            
-            const url = form.action;
-            const csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
-            const formData = new FormData(form);
-
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': csrf,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const section = form.closest('.comentarios-secao');
-                    const list = section.querySelector('.lista-comentarios');
-                    const emptyMsg = list.querySelector('.sem-comentarios-msg');
-                    
-                    if (emptyMsg) {
-                        emptyMsg.remove();
-                    }
-
-                    const newCommentHTML = `
-                        <div class="comentario-item" style="margin-bottom: 1rem; font-size: 0.9rem; animation: fadeIn 0.5s;">
-                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                                <div class="avatar" style="width: 25px; height: 25px; border-radius: 50%; background: #ddd; margin-right: 8px;"></div>
-                                <strong>${data.autor}</strong>
-                                <span style="color: #777; margin-left: 10px;">agora mesmo</span>
-                            </div>
-                            <p style="margin: 0 0 0 33px; padding-left: 0;">${data.conteudo.replace(/\n/g, "<br>")}</p>
-                        </div>
-                    `;
-
-                    list.insertAdjacentHTML('beforeend', newCommentHTML);
-                    form.reset();
-
-                    const article = form.closest('article');
-                    const countSpan = article.querySelector('.comment-count-val');
-                    if (countSpan) {
-                        countSpan.textContent = data.comments_count;
-                    }
-                }
-            })
-            .catch(error => console.error('Erro ao comentar:', error));
-        });
-    });
-
-    // 4. CLIQUE NO BALÃO DE COMENTÁRIO (NOVO!)
-    const commentButtons = document.querySelectorAll('.botao-focar-comentario');
+$(document).ready(function() {
     
-    commentButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Encontra o formulário de comentário dentro do MESMO card (article)
-            const article = btn.closest('article');
-            const input = article.querySelector('.form-comentario textarea, .form-comentario input[type=text]');
-            
-            if (input) {
-                input.focus(); // Coloca o cursor na caixa de texto
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    
+    function handleAjaxAction(formSelector, successCallback) {
+        $(document).on('submit', formSelector, function(e) {
+            e.preventDefault();
+            const $form = $(this);
+            const url = $form.attr('action');
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                headers: {'X-CSRFToken': csrftoken},
+                success: function(data) {
+                    successCallback($form, data);
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log('Erro AJAX:', errmsg);
+                    if (xhr.status === 403) {
+                         alert('Você precisa estar logado para fazer isso.');
+                    }
+                }
+            });
+        });
+    }
+
+    
+    handleAjaxAction('.form-ajax-acao[action*="curtir"]', function($form, data) {
+        if (data.success) {
+            const $button = $form.find('.btn-curtir');
+            $button.find('.like-count').text(data.likes_count);
+            if (data.is_liked) {
+                $button.addClass('active');
+            } else {
+                $button.removeClass('active');
+            }
+        }
+    }); 
+
+    
+    handleAjaxAction('.form-ajax-acao[action*="salvar"]', function($form, data) {
+        if (data.success) {
+            const $button = $form.find('.btn-salvar');
+            const $text = $button.find('.save-text');
+            if (data.is_saved) {
+                $button.addClass('active');
+                $text.text('Salvo');
+            } else {
+                $button.removeClass('active');
+                $text.text('Salvar');
+            }
+        }
+    });
+
+    
+    $(document).on('submit', '.form-comentario', function(e) {
+        e.preventDefault();
+        const $form = $(this);
+        const url = $form.attr('action');
+        const $textarea = $form.find('textarea');
+        const $comentariosContainer = $form.closest('.comentarios-container');
+        const $listaComentarios = $comentariosContainer.find('.comentario-item').parent();
+        
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: $form.serialize(),
+            headers: {'X-CSRFToken': csrftoken},
+            success: function(data) {
+                if (data.success) {
+                    
+                    const newCommentHtml = `
+                    <div class="comentario-item" style="animation: fadeIn 0.5s;">
+                        <div class="comentario-avatar-placeholder">${data.autor.charAt(0).toUpperCase()}</div>
+                        <div class="comentario-corpo">
+                            <span class="comentario-autor">${data.autor}</span>
+                            <span class="comentario-data">${data.data} atrás</span>
+                            <p class="comentario-texto">${data.conteudo.replace(/\n/g, "<br>")}</p>
+                        </div>
+                    </div>
+                    `;
+                    
+                    if ($listaComentarios.length > 0) {
+                        $listaComentarios.append(newCommentHtml);
+                    } else {
+                        $comentariosContainer.prepend(newCommentHtml);
+                    }
+
+                    $textarea.val('');
+                    
+                    
+                    const $countSpan = $form.closest('.post-card').find('.comment-count-val');
+                    $countSpan.text(data.comments_count);
+                    
+                    
+                    $comentariosContainer.find('.sem-comentarios-msg').remove();
+                } else {
+                    alert('Erro ao comentar: ' + (data.error || 'Desconhecido'));
+                }
+            },
+            error: function() {
+                alert('Você precisa estar logado para comentar.');
             }
         });
+    });
+
+    
+    $(document).on('click', '.btn-comentar', function() {
+        const $input = $(this).closest('.post-card').find('.form-comentario textarea');
+        $input.focus();
     });
 
 });
 </script>
 
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 {% endblock %}
