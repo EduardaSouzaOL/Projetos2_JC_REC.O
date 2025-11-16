@@ -28,10 +28,7 @@ jobs:
         run: |
           source antenv/bin/activate
           pip install -r requirements.txt
-<<<<<<< HEAD
           pip install gunicorn # Gunicorn deve ser instalado para o Azure
-=======
->>>>>>> 7a9f401e85ee53be1a3a01b40f09a20e8d8b512c
 
       - name: 5. Cleaning testing files
         run: |
@@ -43,10 +40,6 @@ jobs:
           source antenv/bin/activate
           python manage.py collectstatic --noinput
 
-<<<<<<< HEAD
-=======
-      # 3. Zipa TUDO (incluindo a pasta 'antenv' com o Django)
->>>>>>> 7a9f401e85ee53be1a3a01b40f09a20e8d8b512c
       - name: 7. Zip artifact for deployment
         run: |
           zip -r release.zip . -x ".git/*" -x ".github/*"
