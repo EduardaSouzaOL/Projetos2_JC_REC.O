@@ -50,7 +50,7 @@
                         <li>
                             <div class="item-avatar-placeholder">{{ destaque.autor.username.0|upper }}</div>
                             <div class="item-info">
-                                <a href="#">{{ destaque.conteudo|truncatechars:30 }}</a>
+                                <a href="#publicacao-{{ destaque.pk }}">{{ destaque.conteudo|truncatechars:30 }}</a>
                                 <span>{{ destaque.autor.username }}</span>
                             </div>
                             <span class="item-stats">{{ destaque.curtidas.count }}</span>
@@ -119,7 +119,7 @@
             {% endif %}
 
             {% for publicacao in feed_publicacoes %}
-                <div class="post-card">
+                <div class="post-card" id="publicacao-{{ publicacao.pk }}">
                     <div class="post-header">
                         <div class="post-autor-info">
                             <div class="post-avatar-placeholder">{{ publicacao.autor.username.0|upper }}</div>

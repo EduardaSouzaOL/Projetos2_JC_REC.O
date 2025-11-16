@@ -102,9 +102,10 @@ class ComunidadeDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         comunidade = self.get_object()
 
-        todas_as_publicacoes = Publicacao.objects.filter(comunidade=comunidade)
-        context['destaques'] = todas_as_publicacoes.filter(is_destaque=True).order_by('-data_publicacao')[:10]
-        context['feed_publicacoes'] = todas_as_publicacoes.filter(is_destaque=False).order_by('-data_publicacao')
+        todas_as_publicacoes = Publicacao.objects.filter(comunidade=comunidade).order_by('-data_publicacao')
+        
+        context['destaques'] = todas_as_publicacoes.filter(is_destaque=True)[:10]
+        context['feed_publicacoes'] = todas_as_publicacoes
         context['noticias_servicos'] = Noticia.objects.all().order_by('-data_publicacao')[:10]
         
         context['form_publicacao'] = PublicacaoForm()
