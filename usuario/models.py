@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import uuid
 
 class Interesse(models.Model):
     """
@@ -47,3 +48,35 @@ def save_user_perfil(sender, instance, **kwargs):
         instance.perfil.save()
     except Perfil.DoesNotExist:
         Perfil.objects.create(usuario=instance)
+        
+class AssinanteNewsletter(models.Model):
+
+    email = models.EmailField(
+        unique=True, 
+        verbose_name="E-mail"
+    )
+    
+    is_active = models.BooleanField(
+        default=True, 
+        verbose_name="Inscrição Ativa"
+    )
+    
+    unsubscribe_token = models.UUIDField(
+        default=uuid.uuid4, 
+        editable=False, 
+        unique=True,
+        help_text="Token para descadastro"
+    )
+    
+    created_at = models.DateTimeField(
+        auto_now_add=True, 
+        verbose_name="Data de Inscrição"
+    )
+
+    class Meta:
+        verbose_name = "Assinante da Newsletter"
+        verbose_name_plural = "Assinantes da Newsletter"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.email
