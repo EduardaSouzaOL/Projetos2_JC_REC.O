@@ -4,7 +4,7 @@ from django.forms import DateInput
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from .models import Perfil, Interesse
+from .models import Perfil, Interesse, AssinanteNewsletter
 
 
 class CustomLoginForm(AuthenticationForm):
@@ -121,3 +121,18 @@ class InteressesForm(forms.ModelForm):
     class Meta:
         model = Perfil
         fields = ['interesses']
+        
+class AssinanteNewsletterForm(forms.ModelForm):
+    class Meta:
+        model = AssinanteNewsletter
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'Seu melhor e-mail...',
+                'class': 'form-control-newsletter',
+                'aria-label': 'Email para newsletter'
+            })
+        }
+        labels = {
+            'email': ""
+        }
