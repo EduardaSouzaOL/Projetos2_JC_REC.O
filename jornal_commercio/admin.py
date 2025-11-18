@@ -4,6 +4,7 @@ from .models import Feedback
 from .models import Comunidade
 from .models import Publicacao
 from .models import Comentario
+from .models import HistoricoLeitura
 
 @admin.register(Noticia)
 class NoticiaAdmin(admin.ModelAdmin):
@@ -40,3 +41,8 @@ class ComentarioAdmin(admin.ModelAdmin):
     list_display = ('autor', 'publicacao', 'data_publicacao')
     list_filter = ('autor', 'data_publicacao')
     search_fields = ('conteudo', 'autor__username')
+
+@admin.register(HistoricoLeitura)
+class HistoricoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'noticia', 'lido_completo')
+    list_filter = ('usuario', 'lido_completo')

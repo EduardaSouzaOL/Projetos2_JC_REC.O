@@ -224,3 +224,41 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f"Comentário de {self.autor.username} em {self.publicacao.id}"
+    
+
+class HistoricoLeitura(models.Model):
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE,
+        related_name="historico_leitura"
+    )
+    
+    noticia = models.ForeignKey(
+        Noticia, 
+        on_delete=models.CASCADE,
+        related_name="leituras"
+    )
+    
+    porcentagem_lida = models.PositiveIntegerField(
+        default=0, 
+        verbose_name="Porcentagem Lida"
+    )
+    
+    lido_completo = models.BooleanField(default=False, verbose_name="Leitura Concluída")
+
+    ultima_interacao = models.DateTimeField(auto_now=True) 
+
+    class Meta:
+        verbose_name = "Histórico de Leitura"
+        verbose_name_plural = "Históricos de Leitura"
+        unique_together = ('usuario', 'noticia')
+        ordering = ['-ultima_interacao'] 
+
+    def __str__(self):
+        return f"{self.usuario} - {self.noticia} ({self.porcentagem_lida}%)"
+
+    def save(self, *args, **kwargs):
+        if self.porcentagem_lida >= 100:
+            self.porcentagem_lida = 100
+            self.lido_completo = True
+        super(HistoricoLeitura, self).save(*args, **kwargs)

@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timesince import timesince
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
