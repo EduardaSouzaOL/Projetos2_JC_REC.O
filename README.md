@@ -5,6 +5,9 @@ Estudantes de Design e Ciência da Computação, que surge pela necessidade de p
 
 Projeto desenvolvido em **Python**, com a framework **Django** para resolver pontos de atrito na experiência do usuário, como a jornada longa até o conteúdo desejado e um layout pouco convidativo.
 
+## Acesso ao deploy
+[Site do deploy](https://projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net/)
+
 ## Desenvolvido para o Jornal do Commercio
 Conhecido também como JC, é um dos veículos de imprensa mais tradicionais do Brasil e ocupa um lugar central no cenário midiático de Pernambuco.
 
@@ -92,6 +95,40 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 [Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/894d4dbe-e701-433f-883c-10b5030a7a95" width="800" height="800">
+
+</details>
+
+<summary><h2><strong>Semana 13</strong></h2></summary>
+
+## Readme do projeto
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Github/Bug tracker 
+<img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
+
+
+</details>
+
+</details>
+
+<summary><h2><strong>Semana 14</strong></h2></summary>
+
+## Readme do projeto
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Github/Bug tracker 
+<img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
+
+
+</details>
+
+</details>
+
+<summary><h2><strong>Semana 13</strong></h2></summary>
+
+## Readme do projeto
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Github/Bug tracker 
+<img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
+
 
 </details>
 
