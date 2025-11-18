@@ -5,8 +5,8 @@ Estudantes de Design e Ciência da Computação, que surge pela necessidade de p
 
 Projeto desenvolvido em **Python**, com a framework **Django** para resolver pontos de atrito na experiência do usuário, como a jornada longa até o conteúdo desejado e um layout pouco convidativo.
 
-## Acesso ao deploy
-[Site do deploy](https://projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net/)
+## Deploy Azure
+[Acesse ao site](https://projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net/)
 
 ## Desenvolvido para o Jornal do Commercio
 Conhecido também como JC, é um dos veículos de imprensa mais tradicionais do Brasil e ocupa um lugar central no cenário midiático de Pernambuco.
