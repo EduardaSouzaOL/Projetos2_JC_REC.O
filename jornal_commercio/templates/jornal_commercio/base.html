@@ -33,7 +33,7 @@
         </a>
         <a href="#" aria-label="Perfil de Usuário">
             <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
-        </a>     
+        </a>    
     </div>
     </div>
     </header>
@@ -51,6 +51,15 @@
         </div>
     </nav>
 
+    {% if messages %}
+        <div class="container messages-container">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     <main>
         {% block content %}
         {% endblock content %}
@@ -60,7 +69,7 @@
         <div class="container">
             <div class="footer-column">
                 <img src="{% static 'jornal_commercio/images/logo_jc.png' %}" alt="Logo JC" class="footer-logo" height="40">
-                <a href="#">Newsletter</a>
+                <a href="{% url 'usuario:newsletter_page' %}">Newsletter</a>
                 <a href="#">Quem somos nós</a>
                 <a href="#">FAQ</a>
             </div>

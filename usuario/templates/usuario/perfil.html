@@ -18,13 +18,13 @@
             
             <nav class="perfil-nav">
                 <ul>
-                    <li class="active"><a href="{% url 'perfil' %}">Sobre mim</a></li>
-                    <li><a href="{% url 'interesses' %}">Interesses</a></li>
-                    <li><a href="{% url 'privacidade' %}">Privacidade</a></li>
+                    <li class="active"><a href="{% url 'usuario:perfil' %}">Sobre mim</a></li>
+                    <li><a href="{% url 'usuario:interesses' %}">Interesses</a></li>
+                    <li><a href="{% url 'usuario:privacidade' %}">Privacidade</a></li>
                 </ul>
             </nav>
             
-            <form class="perfil-sair-form" action="{% url 'logout' %}" method="POST">
+            <form class="perfil-sair-form" action="{% url 'usuario:logout' %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class="perfil-sair-btn">
                     <span class="icon-sair"></span>Sair

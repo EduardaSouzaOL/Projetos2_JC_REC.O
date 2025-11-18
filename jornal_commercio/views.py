@@ -56,9 +56,6 @@ def salvar_feedback(request):
     
     return JsonResponse({'success': False, 'message': 'Método inválido.'}, status=405)
 
-def newsletter(request):
-    return render(request, "jornal_commercio/newsletter.html")
-
 class ComunidadeListView(ListView):
     model = Comunidade
     template_name = 'jornal_commercio/comunidades_lista.html'

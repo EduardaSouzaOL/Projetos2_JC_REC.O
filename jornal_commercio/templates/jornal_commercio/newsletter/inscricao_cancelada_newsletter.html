@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inscrição Cancelada | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px 20px; text-align: center; min-height: 50vh;">
+    <div style="max-width: 600px; margin: auto;">
+        <h2>Inscrição Cancelada</h2>
+        <p class="lead" style="font-size: 1.2rem; margin-top: 20px;">
+            O e-mail <strong>{{ email }}</strong> foi removido da nossa lista de newsletter.
+        </p>
+        <p style="margin-top: 10px;">Você não receberá mais nossos e-mails diários. Sentiremos sua falta!</p>
+        <a href="/" class="btn-primary" style="text-decoration: none; padding: 10px 20px; background: #0056b3; color: white; display: inline-block; margin-top: 30px;">
+            Voltar para a Home
+        </a>
+    </div>
+</div>
+{% endblock %}

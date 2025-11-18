@@ -56,6 +56,7 @@ TEMPLATES = [
 'django.contrib.auth.context_processors.auth',
 'django.contrib.messages.context_processors.messages',
 'jornal_commercio.context_processors.global_feedback_form',
+'jornal_commercio.context_processors.newsletter_form_context',
 ],
 },
 },
@@ -92,9 +93,9 @@ AUTH_PASSWORD_VALIDATORS = [
 {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-LOGIN_REDIRECT_URL = 'perfil'
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = 'usuario:perfil'
+LOGIN_URL = 'usuario:login'
+LOGOUT_REDIRECT_URL = 'usuario:login'
 
 
 # --- Internationalization ---
@@ -107,6 +108,26 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# QUANDO FOR PARA PRODUÇÃO (Azure), troque o backend por um serviço real (SendGrid, Mailgun, etc)
+# Exemplo para SMTP genérico (não use para produção real sem .env):
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.seuservidor.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+
+# E-mail padrão para envio (ex: 'nao-responda@meujornal.com')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+
+# Domínio padrão para os links no e-mail (MUITO IMPORTANTE)
+if DEBUG:
+    DEFAULT_DOMAIN = 'http://127.0.0.1:8000'
+else:
+    DEFAULT_DOMAIN = f'https://{AZURE_HOST}'
 
 STATICFILES_DIRS = [
 os.path.join(BASE_DIR, 'static'),

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django.utils.text import slugify
+from django.urls import reverse
 
 CATEGORIA_CHOICES = [
     ('MUNDO', 'Mundo'),
@@ -87,6 +88,12 @@ class Noticia(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+    def get_absolute_url(self):
+        try:
+            return reverse('jornal_commercio:noticia_detalhe', kwargs={'slug': self.slug})
+        except:
+            return "/"
     
     def save(self, *args, **kwargs):
         if not self.slug:

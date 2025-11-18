@@ -3,6 +3,8 @@ from django.contrib.auth import views as auth_views
 from . import views
 from .forms import CustomLoginForm 
 
+app_name = 'usuario'
+
 urlpatterns = [
     path('registrar/', views.registrar, name='registrar'),
     
@@ -27,6 +29,18 @@ urlpatterns = [
              template_name='usuario/password_reset.html' 
          ), 
          name='password_reset'),
+    
+    path('newsletter/', 
+         views.newsletter_page, 
+         name='newsletter_page'),
+    
+    path('newsletter/inscrever/', 
+         views.subscribe_newsletter, 
+         name='subscribe_newsletter'),
+    
+    path('newsletter/cancelar/<uuid:token>/', 
+         views.unsubscribe_newsletter, 
+         name='unsubscribe_newsletter'),
 
     path('password-reset/done/', 
          auth_views.PasswordResetDoneView.as_view(

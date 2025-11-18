@@ -1,0 +1,24 @@
+Olá!
+
+Aqui está o seu resumo diário de notícias do Jornal Commercio:
+
+---
+{% for noticia in noticias %}
+
+{{ noticia.titulo|upper }}
+{{ noticia.resumo }}
+
+Leia a matéria completa em: {{ host_url }}{{ noticia.get_absolute_url }}
+
+---
+{% empty %}
+Nenhuma notícia foi publicada hoje.
+{% endfor %}
+
+
+Obrigado por ler,
+Equipe Jornal Commercio
+
+---
+Para cancelar sua inscrição e não receber mais estes e-mails, clique no link abaixo:
+{{ unsubscribe_link }}

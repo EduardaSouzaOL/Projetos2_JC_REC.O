@@ -52,12 +52,12 @@
                 Entrar <span class="arrow-right">→</span>
             </button>
             
-            <a href="{% url 'password_reset' %}" class="forgot-password" class="forgot-password">Esqueceu a senha?</a>
+            <a href="{% url 'usuario:password_reset' %}" class="forgot-password" class="forgot-password">Esqueceu a senha?</a>
             
         </form>
         
         <p class="register-prompt">
-            Precisa de uma conta? <a href="{% url 'registrar' %}">Registre-se Agora</a>
+            Precisa de uma conta? <a href="{% url 'usuario:registrar' %}">Registre-se Agora</a>
         </p>
         
     </div> </div> {% endblock content %}

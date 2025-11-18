@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import (
@@ -6,12 +6,13 @@ from .forms import (
     RegistroSenhaForm, 
     RegistroFrequenciaForm,
     RegistroInteressesForm,
-    InteressesForm
+    InteressesForm,
+    AssinanteNewsletterForm
 )
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from datetime import date 
-from .models import Perfil, Interesse
+from .models import Perfil, Interesse, AssinanteNewsletter
 
 
 def registrar(request):
@@ -21,7 +22,7 @@ def registrar(request):
             dados_passo_1 = form.cleaned_data
             dados_passo_1['data_nascimento'] = dados_passo_1['data_nascimento'].isoformat()
             request.session['registro_passo_1'] = dados_passo_1
-            return redirect('registrar_senha') 
+            return redirect('usuario:registrar_senha') 
     else:
         form = RegistroUsuarioForm()
     return render(request, 'usuario/registrar.html', {'form': form})
@@ -32,12 +33,12 @@ def registrar_senha(request):
     dados_passo_1 = request.session.get('registro_passo_1')
     if not dados_passo_1:
         messages.error(request, 'Sessão expirada, por favor, comece novamente.')
-        return redirect('registrar')
+        return redirect('usuario:registrar')
     if request.method == 'POST':
         form = RegistroSenhaForm(request.POST)
         if form.is_valid():
             request.session['registro_passo_2'] = form.cleaned_data
-            return redirect('registrar_frequencia') 
+            return redirect('usuario:registrar_frequencia') 
     else:
         form = RegistroSenhaForm()
     return render(request, 'usuario/registrar_senha.html', {'form': form})
@@ -48,12 +49,12 @@ def registrar_frequencia(request):
     dados_passo_2 = request.session.get('registro_passo_2')
     if not dados_passo_1 or not dados_passo_2:
         messages.error(request, 'Sessão expirada, por favor, comece novamente.')
-        return redirect('registrar')
+        return redirect('usuario:registrar')
     if request.method == 'POST':
         form = RegistroFrequenciaForm(request.POST)
         if form.is_valid():
             request.session['registro_passo_3'] = form.cleaned_data
-            return redirect('registrar_interesses') 
+            return redirect('usuario:registrar_interesses') 
     else:
         form = RegistroFrequenciaForm()
     return render(request, 'usuario/registrar_frequencia.html', {'form': form})
@@ -66,7 +67,7 @@ def registrar_interesses(request):
 
     if not dados_passo_1_serializados or not dados_passo_2 or not dados_passo_3:
         messages.error(request, 'Sessão expirada, por favor, comece novamente.')
-        return redirect('registrar')
+        return redirect('usuario:registrar')
 
     dados_passo_1 = dados_passo_1_serializados.copy()
     dados_passo_1['data_nascimento'] = date.fromisoformat(dados_passo_1['data_nascimento'])
@@ -137,7 +138,7 @@ def registrar_interesses(request):
 
                 login(request, user)
                 
-                return redirect('registrar_sucesso') 
+                return redirect('usuario:registrar_sucesso') 
 
             except Exception as e:
                 messages.error(request, f'Ocorreu um erro ao criar a conta: {e}')
@@ -167,7 +168,7 @@ def perfil(request):
         user.perfil.save()
         
         messages.success(request, 'Perfil atualizado com sucesso!')
-        return redirect('perfil') 
+        return redirect('usuario:perfil') 
 
     return render(request, 'usuario/perfil.html')
 
@@ -196,7 +197,7 @@ def interesses(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Seus interesses foram atualizados com sucesso!')
-            return redirect('interesses')
+            return redirect('usuario:interesses')
     else:
         # GET: Mostra o formulário com os interesses atuais do usuário marcados
         form = InteressesForm(instance=perfil)
@@ -225,11 +226,11 @@ def privacidade(request):
         if email and email != user.email:
             if email != email_confirm:
                 messages.error(request, 'Os e-mails não coincidem.')
-                return redirect('privacidade')
+                return redirect('usuario:privacidade')
             
             if User.objects.filter(email=email).exclude(pk=user.pk).exists():
                  messages.error(request, 'Este e-mail já está em uso.')
-                 return redirect('privacidade')
+                 return redirect('usuario:privacidade')
 
             user.email = email
             user.username = email
@@ -242,17 +243,65 @@ def privacidade(request):
         if nova_senha and senha_atual:
             if not user.check_password(senha_atual):
                 messages.error(request, 'A senha atual está incorreta.')
-                return redirect('privacidade')
+                return redirect('usuario:privacidade')
             
             if nova_senha != confirmar_nova_senha:
                 messages.error(request, 'As novas senhas não coincidem.')
-                return redirect('privacidade')
+                return redirect('usuario:privacidade')
             
             user.set_password(nova_senha)
             user.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Senha atualizada com sucesso.')
             
-        return redirect('privacidade')
+        return redirect('usuario:privacidade')
 
     return render(request, 'usuario/privacidade.html')
+
+def newsletter_page(request):
+    return render(request, 'jornal_commercio/newsletter/newsletter_page.html')
+
+def subscribe_newsletter(request):
+    
+    if request.method == 'POST':
+        form = AssinanteNewsletterForm(request.POST)
+        
+        # Pega o e-mail do formulário
+        email = request.POST.get('email')
+        
+        if form.is_valid():
+            # Tenta encontrar um assinante com esse e-mail
+            assinante, created = AssinanteNewsletter.objects.get_or_create(email=email)
+
+            if created:
+                # Foi criado agora (novo assinante)
+                messages.success(request, 'Inscrição realizada com sucesso! Obrigado.')
+            elif not assinante.is_active:
+                # Já existia, mas estava inativo. Reativa ele.
+                assinante.is_active = True
+                assinante.save()
+                messages.success(request, 'Sua inscrição foi reativada! Bem-vindo de volta.')
+            else:
+                # Já existia E estava ativo
+                messages.warning(request, 'Este e-mail já está inscrito em nossa newsletter.')
+        
+        else:
+            # Formulário inválido (ex: não é um e-mail)
+            messages.error(request, 'Por favor, insira um e-mail válido.')
+
+    # Redireciona para a página de onde o usuário veio
+    # Se não encontrar o 'HTTP_REFERER', redireciona para a home (ajuste 'home' se for outro nome)
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def unsubscribe_newsletter(request, token):
+
+    # Encontra o assinante pelo token único ou retorna erro 404
+    assinante = get_object_or_404(AssinanteNewsletter, unsubscribe_token=token)
+    
+    # Desativa a inscrição
+    assinante.is_active = False
+    assinante.save()
+    
+    # Retorna uma página simples de confirmação
+    return render(request, 'jornal_commercio/newsletter/inscricao_cancelada_newsletter.html', {'email': assinante.email})
