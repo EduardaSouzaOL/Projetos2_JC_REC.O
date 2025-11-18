@@ -31,6 +31,13 @@ class Command(BaseCommand):
         assunto = f"Seu Resumo Diário de Notícias - {hoje.strftime('%d/%m/%Y')}"
         host_url = settings.DEFAULT_DOMAIN
 
+        contexto_base = {
+            'noticias': noticias,
+            'host_url': host_url,
+            'static_url': settings.STATIC_URL, 
+            'edicao_do_dia_url': host_url + '/',
+        }
+        
         total_enviados = 0
         total_falhas = 0
         
@@ -39,21 +46,24 @@ class Command(BaseCommand):
                 unsubscribe_link = host_url + reverse('usuario:unsubscribe_newsletter', 
                                                      kwargs={'token': assinante.unsubscribe_token})
 
-                contexto = {
+                contexto_assinante = {
                     'noticias': noticias,
                     'host_url': host_url,
                     'unsubscribe_link': unsubscribe_link,
                 }
                 
-                corpo_email = render_to_string('jornal_commercio/newsletter/email_diario.txt', contexto)
+                corpo_texto = render_to_string('jornal_commercio/newsletter/email_diario.txt', contexto_assinante)
+                corpo_html = render_to_string('jornal_commercio/newsletter/email_diario.html', contexto_assinante)
 
                 send_mail(
                     subject=assunto,
-                    message=corpo_email,
+                    message=corpo_texto,
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[assinante.email],
                     fail_silently=False,
+                    html_message=corpo_html
                 )
+                
                 total_enviados += 1
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Erro ao enviar para {assinante.email}: {e}"))

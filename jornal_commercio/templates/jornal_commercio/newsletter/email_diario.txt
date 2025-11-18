@@ -1,5 +1,7 @@
 Olá!
 
+Veja a edição completa do dia em: {{ edicao_do_dia_url }}
+
 Aqui está o seu resumo diário de notícias do Jornal Commercio:
 
 ---

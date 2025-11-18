@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JC Newsletter</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+    
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f4f4f4">
+        <tr>
+            <td>
+                <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" style="display: block; max-width: 600px; margin: 20px auto; background-color: #ffffff;">
+                    
+                    <tr>
+                        <td style="padding: 20px; text-align: center; background-color: #333333;">
+                            <img src="{{ host_url }}{{ static_url }}jornal_commercio/images/logo_jc.png" alt="Logo JC" width="150" style="display: block; margin: 0 auto;">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 30px 20px 20px 20px; text-align: center;">
+                            <h1 style="font-size: 24px; color: #DC0000; margin: 0; padding: 0;">JC NEWSLETTER</h1>
+                            <p style="font-size: 16px; color: #DC0000; margin: 5px 0 0 0; font-weight: bold; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee; padding: 10px 0;">
+                                {% now "l, d \d\e F"|upper %}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 0 20px 30px 20px; text-align: center;">
+                            <p style="font-size: 14px; color: #333; margin: 0 0 10px 0;">ACESSE A VERSÃO COMPLETA DA NOSSA <strong>EDIÇÃO DO DIA:</strong></p>
+                            <a href="{{ edicao_do_dia_url }}" target="_blank" style="background-color: #444444; color: #ffffff; padding: 15px 25px; text-decoration: none; font-weight: bold; font-size: 18px; display: inline-block; border-radius: 5px;">
+                                CLIQUE AQUI
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% for noticia in noticias %}
+                    <tr>
+                        <td style="padding: 0 20px 20px 20px;">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td width="150" valign="top">
+                                        {% if noticia.imagem_principal %}
+                                            <a href="{{ host_url }}{{ noticia.get_absolute_url }}" target="_blank">
+                                                <img src="{{ host_url }}{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}" width="150" style="display: block; border: 0;">
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                    <td width="20"></td>
+                                    <td valign="top">
+                                        <p style="font-size: 12px; color: #DC0000; margin: 0 0 5px 0; font-weight: bold;">{{ noticia.get_categoria_display|upper }}</p>
+                                        <h3 style="font-size: 16px; margin: 0 0 5px 0;">
+                                            <a href="{{ host_url }}{{ noticia.get_absolute_url }}" target="_blank" style="color: #333333; text-decoration: none;">
+                                                {{ noticia.titulo }}
+                                            </a>
+                                        </h3>
+                                        <p style="font-size: 14px; color: #555555; margin: 0;">
+                                            <a href="{{ host_url }}{{ noticia.get_absolute_url }}" target="_blank" style="color: #555555; text-decoration: underline;">
+                                                Entenda
+                                            </a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td style="padding: 30px 20px 30px 20px; text-align: center; background-color: #f9f9f9; border-top: 1px solid #eeeeee;">
+                            <p style="font-size: 12px; color: #777777; margin: 0;">
+                                Você está recebendo este e-mail porque se inscreveu na newsletter do JC.
+                            </p>
+                            <p style="font-size: 12px; color: #777777; margin: 10px 0 0 0;">
+                                <a href="{{ unsubscribe_link }}" target="_blank" style="color: #777777; text-decoration: underline;">
+                                    Cancelar inscrição
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+
+                </table></td>
+        </tr>
+    </table></body>
+</html>
