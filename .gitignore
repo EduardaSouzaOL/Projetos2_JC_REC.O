@@ -175,3 +175,5 @@ cython_debug/
 #add
 media/
 node_modules/
+
+*.pyc
