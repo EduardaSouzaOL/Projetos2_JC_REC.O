@@ -1,0 +1,14 @@
+.ad-placeholder {
+    width: 700px; /* Largura do anúncio (ex: banner médio) */
+    height: 250px; /* Altura do anúncio */
+    border: 2px dashed #ccc; /* Borda tracejada para visualização */
+    background-color: #f9f9f9; /* Cor de fundo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #888;
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: 10px auto; /* Centraliza o placeholder na página */
+}

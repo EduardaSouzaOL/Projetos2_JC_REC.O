@@ -3,6 +3,7 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/detalhe_style.css' %}">
+    <link rel="stylesheet" href="{% static 'jornal_commercio/css/anuncio_style.css' %}">
 {% endblock %}
 
 
@@ -40,6 +41,20 @@
     {% if noticia.imagem_secundaria_2 %}
         <img src="{{ noticia.imagem_secundaria_2.url }}" alt="Imagem secundária" class="detalhe-imagem-secundaria">
     {% endif %}
+    <!DOCTYPE html>
+
+    <body>
+            <!-- Código do Placeholder do Anúncio -->
+            <div class="ad-placeholder" role="img" aria-label="Espaço para anúncio">
+                Espaço para Anúncio (700x250)
+            </div>
+            <!-- Fim do Código do Placeholder -->
+
+            <p>O conteúdo da sua página continua aqui.</p>
+
+        </body>
+    </html>
+
 
     <section class="relacionadas">
         <div class="container">
