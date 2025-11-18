@@ -1,0 +1,61 @@
+/* Estrutura Principal */
+.content-sharing-tags {
+    display: flex; /* Alinha as duas colunas lado a lado */
+    gap: 50px; /* Espaçamento entre as seções */
+    padding: 20px 0;
+}
+
+/* Títulos de Seção (COMPARTILHE e TAGS) */
+.title-section {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333; /* Cor do texto */
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 3px solid #e74c3c; /* Linha vermelha abaixo do título */
+    text-transform: uppercase;
+}
+
+/* Ícones de Compartilhamento */
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaçamento entre os ícones */
+}
+
+.social-icons a {
+    text-decoration: none;
+    font-size: 24px; /* Tamanho dos ícones */
+    color: #333; /* Cor padrão dos ícones */
+    transition: color 0.3s;
+}
+
+/* Cores específicas para os ícones */
+.social-icons .icon-whatsapp {
+    color: #25d366; /* Verde do WhatsApp (exemplo, use preto se quiser igual a imagem) */
+}
+.social-icons .icon-facebook {
+    color: #3b5998; /* Azul do Facebook (exemplo, use preto se quiser igual a imagem) */
+}
+
+/* Botões de Tags */
+.tag-buttons {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os botões */
+}
+
+.tag-button {
+    text-decoration: none;
+    color: #e74c3c; /* Cor do texto */
+    border: 1px solid #e74c3c; /* Borda vermelha */
+    padding: 5px 15px;
+    border-radius: 20px; /* Borda arredondada */
+    font-size: 14px;
+    white-space: nowrap; /* Evita quebra de linha no texto */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tag-button:hover {
+    background-color: #e74c3c;
+    color: white;
+}

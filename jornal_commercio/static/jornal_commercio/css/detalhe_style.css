@@ -157,3 +157,80 @@
     color: #222;
     margin-bottom: 20px;
 }
+
+
+/*produtos*/
+/* Container principal da seção */
+.nossos-produtos-section {
+    background-color: #f7f7f7; /* Cor de fundo da seção (cinza claro) */
+    padding: 40px 0;
+    text-align: center;
+}
+
+/* Título da seção */
+.nossos-produtos-section .section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Lista de produtos (utiliza Flexbox para alinhar) */
+.produtos-list {
+    display: flex;
+    justify-content: center; /* Centraliza a lista horizontalmente */
+    flex-wrap: wrap; /* Permite quebras de linha em telas menores */
+    gap: 25px; /* Espaço entre os itens */
+    max-width: 1200px; /* Limite a largura para melhor visualização */
+    margin: 0 auto;
+}
+
+/* Item individual do produto (link) */
+.produto-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none; /* Remove sublinhado do link */
+    color: #333; /* Cor do nome do produto */
+    font-size: 14px;
+    font-weight: 500;
+    width: 120px; /* Largura base do item */
+}
+
+/* Wrapper do Logo para aplicar o efeito */
+.produto-logo-wrapper {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%; /* Torna o wrapper circular */
+    overflow: hidden; /* Garante que a imagem se ajuste */
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar o círculo */
+    transition: transform 0.3s ease-in-out; /* Transição para o efeito hover */
+}
+
+/* Estilo da Imagem (logo) */
+.produto-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem preencha o círculo */
+    display: block;
+}
+
+/* Nome do Produto */
+.produto-name {
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* EFEITO HOVER: Ação ao passar o mouse */
+.produto-item:hover .produto-logo-wrapper {
+    /* Aplica um leve aumento de escala (zoom) */
+    transform: scale(1.05); 
+    /* Você pode adicionar uma sombra mais forte se preferir */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+}
+
+.produto-item:hover .produto-name {
+    /* Opção: mudar a cor do nome no hover */
+    color: #e74c3c; /* Exemplo de cor vermelha */
+}

@@ -361,3 +361,147 @@ ul {
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
+
+
+
+
+/* shared in jornal_commercio */
+
+/* Estrutura Principal */
+.content-sharing-tags {
+    display: flex; /* Alinha as duas colunas lado a lado */
+    gap: 50px; /* Espaçamento entre as seções */
+    padding: 20px 0;
+}
+
+/* Títulos de Seção (COMPARTILHE e TAGS) */
+.title-section {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333; /* Cor do texto */
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 3px solid #e74c3c; /* Linha vermelha abaixo do título */
+    text-transform: uppercase;
+}
+
+/* Ícones de Compartilhamento */
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaçamento entre os ícones */
+}
+
+.social-icons a {
+    text-decoration: none;
+    font-size: 24px; /* Tamanho dos ícones */
+    color: #333; /* Cor padrão dos ícones */
+    transition: color 0.3s;
+}
+
+/* Cores específicas para os ícones */
+.social-icons .icon-whatsapp {
+    color: #25d366; /* Verde do WhatsApp (exemplo, use preto se quiser igual a imagem) */
+}
+.social-icons .icon-facebook {
+    color: #3b5998; /* Azul do Facebook (exemplo, use preto se quiser igual a imagem) */
+}
+
+/* Botões de Tags */
+.tag-buttons {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os botões */
+}
+
+.tag-button {
+    text-decoration: none;
+    color: #e74c3c; /* Cor do texto */
+    border: 1px solid #e74c3c; /* Borda vermelha */
+    padding: 5px 15px;
+    border-radius: 20px; /* Borda arredondada */
+    font-size: 14px;
+    white-space: nowrap; /* Evita quebra de linha no texto */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tag-button:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+
+/*produtos*/
+/* Container principal da seção */
+.nossos-produtos-section {
+    background-color: #f7f7f7; /* Cor de fundo da seção (cinza claro) */
+    padding: 40px 0;
+    text-align: center;
+}
+
+/* Título da seção */
+.nossos-produtos-section .section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Lista de produtos (utiliza Flexbox para alinhar) */
+.produtos-list {
+    display: flex;
+    justify-content: center; /* Centraliza a lista horizontalmente */
+    flex-wrap: wrap; /* Permite quebras de linha em telas menores */
+    gap: 25px; /* Espaço entre os itens */
+    max-width: 1200px; /* Limite a largura para melhor visualização */
+    margin: 0 auto;
+}
+
+/* Item individual do produto (link) */
+.produto-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none; /* Remove sublinhado do link */
+    color: #333; /* Cor do nome do produto */
+    font-size: 14px;
+    font-weight: 500;
+    width: 120px; /* Largura base do item */
+}
+
+/* Wrapper do Logo para aplicar o efeito */
+.produto-logo-wrapper {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%; /* Torna o wrapper circular */
+    overflow: hidden; /* Garante que a imagem se ajuste */
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar o círculo */
+    transition: transform 0.3s ease-in-out; /* Transição para o efeito hover */
+}
+
+/* Estilo da Imagem (logo) */
+.produto-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem preencha o círculo */
+    display: block;
+}
+
+/* Nome do Produto */
+.produto-name {
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* EFEITO HOVER: Ação ao passar o mouse */
+.produto-item:hover .produto-logo-wrapper {
+    /* Aplica um leve aumento de escala (zoom) */
+    transform: scale(1.05); 
+    /* Você pode adicionar uma sombra mais forte se preferir */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+}
+
+.produto-item:hover .produto-name {
+    /* Opção: mudar a cor do nome no hover */
+    color: #e74c3c; /* Exemplo de cor vermelha */
+}

@@ -4,6 +4,8 @@
 {% block styles %}
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/detalhe_style.css' %}">
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/anuncio_style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'jornal_commercio/css/RD_compartilhar.css' %}">
 {% endblock %}
 
 
@@ -43,18 +45,99 @@
     {% endif %}
     <!DOCTYPE html>
 
-    <body>
+        <body>
             <!-- Código do Placeholder do Anúncio -->
             <div class="ad-placeholder" role="img" aria-label="Espaço para anúncio">
                 Espaço para Anúncio (700x250)
             </div>
             <!-- Fim do Código do Placeholder -->
-
-            <p>O conteúdo da sua página continua aqui.</p>
+            <div class= "quiz-container">
+                
+            </div>
 
         </body>
-    </html>
+        <div class="content-sharing-tags">
+            <div class="compartilhe-section">
+                <h3 class="title-section">COMPARTILHE</h3>
+                <div class="social-icons">
+                    <a href="whatsapp://send?text=Link e texto para compartilhar" target="_blank" class="icon-whatsapp">
+                        <i class="fab fa-whatsapp"></i> 
+                    </a>
+                    
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=URL_DA_PAGINA" target="_blank" class="icon-facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    
+                    <a href="#" class="icon-share">
+                        <i class="fas fa-share-alt"></i>
+                    </a>
+                </div>
+            </div>
+    <div class="tags-section">
+        <h3 class="title-section">TAGS</h3>
+        <div class="tag-buttons">
+            <a href="/tag/autoescola" class="tag-button">Autoescola</a>
+            <a href="/tag/cnh" class="tag-button">CNH</a>
+            <a href="/tag/mobilidade" class="tag-button">Mobilidade</a>
+        </div>
+    </div>
+</div>
 
+<section class="nossos-produtos-section">
+    <h2 class="section-title">Nossos Produtos</h2>
+    <div class="produtos-list">
+
+        <a href="URL_DO_NE10_INTERIOR" class="produto-item" target="_blank">
+            <div class="produto-logo-wrapper">
+                <img src="URL_DA_IMAGEM_NE10_INTERIOR" alt="Logo NE10 Interior" class="produto-logo">
+            </div>
+            <span class="produto-name">NE10 Interior</span>
+        </a>
+
+        <a href="URL_DA_RADIO_JORNAL" class="produto-item" target="_blank">
+            <div class="produto-logo-wrapper">
+                <img src="URL_DA_IMAGEM_RADIO_JORNAL" alt="Logo Rádio Jornal" class="produto-logo">
+            </div>
+            <span class="produto-name">Rádio Jornal</span>
+        </a>
+
+        <a href="URL_DA_TV_JORNAL" class="produto-item" target="_blank">
+            <div class="produto-logo-wrapper">
+                <img src="URL_DA_IMAGEM_TV_JORNAL" alt="Logo TV Jornal" class="produto-logo">
+            </div>
+            <span class="produto-name">TV Jornal</span>
+        </a>
+
+        <a href="URL_DO_JORNAL_DO_COMMERCIO" class="produto-item" target="_blank">
+            <div class="produto-logo-wrapper">
+                <img src="URL_DA_IMAGEM_JC" alt="Logo Jornal do Commercio" class="produto-logo">
+            </div>
+            <span class="produto-name">Jornal do Commercio</span>
+        </a>
+        
+        <a href="URL_DO_BLOG_DO_TORCEDOR" class="produto-item" target="_blank">
+            <div class="produto-logo-wrapper">
+                <img src="URL_DA_IMAGEM_BLOG_TORCEDOR" alt="Logo Blog do Torcedor" class="produto-logo">
+            </div>
+            <span class="produto-name">Blog do Torcedor</span>
+        </a>
+        
+        <a href="URL_DO_SOCIAL1" class="produto-item" target="_blank">
+            <div class="produto-logo-wrapper">
+                <img src="URL_DA_IMAGEM_SOCIAL1" alt="Logo Social1" class="produto-logo">
+            </div>
+            <span class="produto-name">Social1</span>
+        </a>
+        
+        <a href="URL_DA_RECEITA_DA_BOA" class="produto-item" target="_blank">
+            <div class="produto-logo-wrapper">
+                <img src="URL_DA_IMAGEM_RECEITA_DA_BOA" alt="Logo Receita da Boa" class="produto-logo">
+            </div>
+            <span class="produto-name">Receita da Boa</span>
+        </a>
+        
+    </div>
+</section>
 
     <section class="relacionadas">
         <div class="container">

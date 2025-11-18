@@ -1,0 +1,19 @@
+.quiz-container { /* Use um nome de classe descritivo */
+    /* Layout automático (Flexbox) */
+    display: flex;
+    flex-direction: row; /* Os itens são dispostos em uma linha */
+    align-items: flex-end; /* Os itens são alinhados à parte inferior do container (no eixo cruzado) */
+    gap: 195px; /* Espaço entre os itens flexíveis */
+    padding: 32px; /* Preenchimento interno */
+
+    /* Posicionamento e Dimensões */
+    position: absolute; /* O elemento é posicionado em relação ao seu ancestral posicionado mais próximo */
+    width: 953.05px;
+    height: 252.85px;
+    left: 203px; /* Distância da borda esquerda */
+    top: 2112px; /* Distância da borda superior */
+
+    /* Estilo Visual */
+    background: rgba(51, 51, 51, 0.2);
+    border-radius: 8px; /* Cantos arredondados */
+}
