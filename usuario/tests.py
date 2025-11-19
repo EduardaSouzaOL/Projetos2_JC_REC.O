@@ -6,117 +6,103 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from .models import Interesse
 from selenium.common.exceptions import TimeoutException
 
-class TestAutenticacaoSelenium(StaticLiveServerTestCase):
-
+class UsuarioSeleniumTests(StaticLiveServerTestCase):
+    
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.driver = webdriver.Chrome()
-        cls.driver.implicitly_wait(10) 
+        cls.selenium = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        cls.selenium.maximize_window()
+        cls.selenium.implicitly_wait(10)
 
     @classmethod
     def tearDownClass(cls):
-        cls.driver.quit()
+        cls.selenium.quit()
         super().tearDownClass()
 
     def setUp(self):
-        super().setUp()
-        self.username = 'usuarioteste'
-        self.email = 'teste@email.com'
-        self.password = 'senhaSegura123'
-        self.nome = 'Usuario'
-        self.sobrenome = 'Teste'
+        nomes = ['Política', 'Segurança', 'Saúde', 'Educação', 'Esporte', 'Entretenimento']
+        for nome in nomes:
+            Interesse.objects.get_or_create(nome=nome)
 
-        User.objects.create_user(
-            username=self.username,
-            email=self.email,
-            password=self.password,
-            first_name=self.nome,
-            last_name=self.sobrenome
-        )
+    def test_login_usuario_existente(self):
+        """
+        Testa o fluxo de login usando os IDs específicos do seu HTML (login.html)
+        """
+        
+        senha = 'SenhaForte123!'
+        user = User.objects.create_user(username='teste@jc.com', email='teste@jc.com', password=senha)
+        
+        self.selenium.get(f'{self.live_server_url}/usuario/login/')
+        
+        campo_email = self.selenium.find_element(By.ID, 'id_username')
+        campo_senha = self.selenium.find_element(By.ID, 'id_password')
+        
+        campo_email.send_keys('teste@jc.com')
+        campo_senha.send_keys(senha)
+        
+        btn_entrar = self.selenium.find_element(By.CSS_SELECTOR, 'button.btn-login-submit')
+        btn_entrar.click()
+        
+        self.assertNotEqual(self.selenium.current_url, f'{self.live_server_url}/usuario/login/')
 
-    def test_registro_usuario_sucesso(self):
-        """Testa o registro de um novo usuário com sucesso."""
+    def test_wizard_registro_completo(self):
+        """
+        Testa Passo a Passo: Dados -> Senha -> Frequência -> Interesses -> Sucesso
+        """
+        # ================= PASSO 1: DADOS PESSOAIS =================
+        self.selenium.get(f'{self.live_server_url}/usuario/registrar/')
         
-        unique_username = f"novo_usuario_{int(time.time())}"
+        self.selenium.find_element(By.NAME, 'nome_completo').send_keys('Novo Assinante Selenium')
+        self.selenium.find_element(By.NAME, 'email').send_keys('novo@selenium.com')
         
-        self.driver.get(f"{self.live_server_url}{reverse('registrar')}")
+        self.selenium.find_element(By.NAME, 'data_nascimento').send_keys('01011995')
         
-        #
-        self.driver.find_element(By.ID, 'id_username').send_keys(unique_username)
-        self.driver.find_element(By.ID, 'id_first_name').send_keys("Novo")
-        self.driver.find_element(By.ID, 'id_last_name').send_keys("Usuario")
-        self.driver.find_element(By.ID, 'id_email').send_keys(f"{unique_username}@example.com")
-        self.driver.find_element(By.ID, 'id_telefone').send_keys("123456789")
-        self.driver.find_element(By.ID, 'id_password1').send_keys("senhaForte123")
-        self.driver.find_element(By.ID, 'id_password2').send_keys("senhaForte123")
+        self.selenium.find_element(By.NAME, 'cidade').send_keys('Recife')
+        self.selenium.find_element(By.NAME, 'estado').send_keys('Pernambuco')
         
-        #
-        self.driver.find_element(By.CSS_SELECTOR, 'button.auth-btn').click()
-        
-        #
-        # 1. Espera explícita para a URL mudar para a página de login
-        WebDriverWait(self.driver, 10).until(
-            EC.url_contains(reverse('login'))
-        )
-        
-        # 2. Verifica se a URL de fato é a de login
-        self.assertIn(reverse('login'), self.driver.current_url)
-        
-        # 3. AGORA (com o base.html corrigido) verifica se a mensagem de sucesso está presente
-        #
-        body_text = self.driver.find_element(By.TAG_NAME, 'body').text
-        self.assertIn(f'Usuário criado com sucesso para {unique_username}!', body_text)
+        self.selenium.find_element(By.CSS_SELECTOR, 'button.btn-login-submit').click()
 
+        WebDriverWait(self.selenium, 10).until(EC.url_contains('/registrar/senha/'))
+        
+        self.selenium.find_element(By.NAME, 'senha').send_keys('SenhaForte123!')
+        self.selenium.find_element(By.NAME, 'confirme_a_senha').send_keys('SenhaForte123!')
+        
+        self.selenium.find_element(By.CSS_SELECTOR, 'button.btn-login-submit').click()
 
-    def test_login_e_logout_sucesso(self):
-        """Testa o fluxo de login e logout de um usuário existente."""
+        WebDriverWait(self.selenium, 10).until(EC.url_contains('/registrar/frequencia/'))
         
-        # --- Teste de Login ---
+        radio_btn = self.selenium.find_element(By.CSS_SELECTOR, "input[name='frequencia'][value='uma_vez']")
+        self.selenium.execute_script("arguments[0].click();", radio_btn)
         
-        #
-        self.driver.get(f"{self.live_server_url}{reverse('login')}")
-        
-        #
-        self.driver.find_element(By.ID, 'id_username').send_keys(self.username)
-        self.driver.find_element(By.ID, 'id_password').send_keys(self.password)
-        self.driver.find_element(By.CSS_SELECTOR, 'button.auth-btn').click()
-        
-        #
-        WebDriverWait(self.driver, 10).until(
-            EC.url_contains(reverse('perfil'))
-        )
-        self.assertIn(reverse('perfil'), self.driver.current_url)
-        
-        # --- Teste de Logout ---
-        
-        #
-        # Esta linha agora vai funcionar por causa do "return false;"
-        # self.driver.find_element(By.LINK_TEXT, 'Sair').click() 
-        
-        # #
-        # # MUDANÇA: Estamos esperando pelo H2 de confirmação, não pela URL.
-        # # Isto é mais confiável.
-        # try:
-        #     h2_confirmacao = WebDriverWait(self.driver, 10).until(
-        #         EC.visibility_of_element_located(
-        #             (By.XPATH, "//h2[contains(text(), 'Você saiu da sua conta.')]")
-        #         )
-        #     )
-        # except TimeoutException:
-        #     # Se falhar, imprime o HTML atual para nos ajudar a depurar
-        #     print("--- HTML ATUAL (FALHA NO LOGOUT) ---")
-        #     print(self.driver.find_element(By.TAG_NAME, 'body').get_attribute('innerHTML'))
-        #     print("-------------------------------------")
-        #     raise
+        self.selenium.find_element(By.CSS_SELECTOR, 'button.btn-login-submit').click()
 
-        # # Agora que o H2 apareceu, podemos verificar o resto
-        # self.assertIn('Você saiu da sua conta.', h2_confirmacao.text)
-        # self.assertIn(reverse('logout'), self.driver.current_url)
+        WebDriverWait(self.selenium, 10).until(EC.url_contains('/registrar/interesses/'))
         
-        # body_text = self.driver.find_element(By.TAG_NAME, 'body').text
-        # self.assertIn('Fazer Login Novamente', body_text)
+        chk_esporte = self.selenium.find_element(By.CSS_SELECTOR, "input[name='interesses'][value='esporte']")
+        chk_politica = self.selenium.find_element(By.CSS_SELECTOR, "input[name='interesses'][value='politica']")
+        
+        self.selenium.execute_script("arguments[0].click();", chk_esporte)
+        self.selenium.execute_script("arguments[0].click();", chk_politica)
+        
+        self.selenium.find_element(By.CSS_SELECTOR, 'button.btn-login-submit').click()
+
+        WebDriverWait(self.selenium, 10).until(EC.url_contains('/registrar/sucesso/'))
+        
+        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
+        self.assertIn('Cadastro feito com sucesso', body_text)
+        
+        usuario_criado = User.objects.filter(email='novo@selenium.com').exists()
+        self.assertTrue(usuario_criado, "O usuário deveria ter sido criado no banco de dados")
+        
+        user_db = User.objects.get(email='novo@selenium.com')
+        interesses_db = user_db.perfil.interesses.values_list('nome', flat=True)
+        self.assertIn('Esporte', interesses_db)
+        self.assertIn('Política', interesses_db)
