@@ -98,7 +98,6 @@ LOGIN_URL = 'usuario:login'
 LOGOUT_REDIRECT_URL = 'usuario:login'
 
 
-# --- Internationalization ---
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
@@ -140,3 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # --- Default primary key field type ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net',
+]
