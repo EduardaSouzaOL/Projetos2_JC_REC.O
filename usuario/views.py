@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.conf import settings        
 from .forms import (
     RegistroUsuarioForm, 
     RegistroSenhaForm, 
@@ -265,35 +267,42 @@ def newsletter_page(request):
     return render(request, 'jornal_commercio/newsletter/newsletter_page.html')
 
 def subscribe_newsletter(request):
-    
     if request.method == 'POST':
         form = AssinanteNewsletterForm(request.POST)
-        
-        # Pega o e-mail do formulário
+
         email = request.POST.get('email')
         
         if form.is_valid():
-            # Tenta encontrar um assinante com esse e-mail
             assinante, created = AssinanteNewsletter.objects.get_or_create(email=email)
 
             if created:
-                # Foi criado agora (novo assinante)
-                messages.success(request, 'Inscrição realizada com sucesso! Obrigado.')
+                try:
+                    send_mail(
+                        subject='Bem-vindo ao Jornal Commercio!',
+                        message=(
+                            'Olá!\n\n'
+                            'Obrigado por se inscrever em nossa newsletter. '
+                            'A partir de agora, você receberá diariamente as principais notícias.\n\n'
+                            'Atenciosamente,\nEquipe Jornal Commercio'
+                        ),
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[email],
+                        fail_silently=True
+                    )
+                except Exception as e:
+                    print(f"Erro ao enviar boas-vindas: {e}")
+                messages.success(request, 'Inscrição realizada com sucesso! Enviamos um e-mail de boas-vindas para você.')
+
             elif not assinante.is_active:
-                # Já existia, mas estava inativo. Reativa ele.
                 assinante.is_active = True
                 assinante.save()
                 messages.success(request, 'Sua inscrição foi reativada! Bem-vindo de volta.')
             else:
-                # Já existia E estava ativo
                 messages.warning(request, 'Este e-mail já está inscrito em nossa newsletter.')
         
         else:
-            # Formulário inválido (ex: não é um e-mail)
             messages.error(request, 'Por favor, insira um e-mail válido.')
 
-    # Redireciona para a página de onde o usuário veio
-    # Se não encontrar o 'HTTP_REFERER', redireciona para a home (ajuste 'home' se for outro nome)
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
