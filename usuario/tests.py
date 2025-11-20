@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from .models import Interesse
+from .models import Interesse, AssinanteNewsletter
 from selenium.common.exceptions import TimeoutException
 
 class UsuarioSeleniumTests(StaticLiveServerTestCase):
@@ -106,3 +106,58 @@ class UsuarioSeleniumTests(StaticLiveServerTestCase):
         interesses_db = user_db.perfil.interesses.values_list('nome', flat=True)
         self.assertIn('Esporte', interesses_db)
         self.assertIn('Política', interesses_db)
+        
+class NewsletterSeleniumTests(StaticLiveServerTestCase):
+    
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.selenium = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        cls.selenium.maximize_window()
+        cls.selenium.implicitly_wait(5) 
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super().tearDownClass()
+
+    def test_cenario_1_inscricao_newsletter(self):
+
+        email_teste = "novo.leitor@teste.com"
+
+        url_pagina = self.live_server_url + reverse('usuario:newsletter_page')
+        self.selenium.get(url_pagina)
+
+        campo_email = self.selenium.find_element(By.NAME, 'email')
+        campo_email.clear()
+        campo_email.send_keys(email_teste)
+
+        botao_inscrever = self.selenium.find_element(By.CSS_SELECTOR, '.newsletter-button')
+        botao_inscrever.click()
+
+        WebDriverWait(self.selenium, 10).until(
+            lambda driver: "sucesso" in driver.find_element(By.TAG_NAME, "body").text.lower()
+        )
+
+        body_text = self.selenium.find_element(By.TAG_NAME, 'body').text
+        self.assertIn("sucesso", body_text.lower(), "A mensagem de sucesso não apareceu na tela.")
+
+        assinante = AssinanteNewsletter.objects.get(email=email_teste)
+        self.assertTrue(assinante.is_active, "O usuário deveria estar ativo no banco.")
+
+    def test_cenario_3_cancelamento_newsletter(self):
+
+        email_cancelar = "quero.sair@teste.com"
+        assinante = AssinanteNewsletter.objects.create(email=email_cancelar, is_active=True)
+        
+        url_cancelamento = self.live_server_url + reverse('usuario:unsubscribe_newsletter', args=[assinante.unsubscribe_token])
+        self.selenium.get(url_cancelamento)
+
+        titulo = self.selenium.find_element(By.TAG_NAME, 'h2').text
+        self.assertEqual(titulo, "Inscrição Cancelada")
+        
+        email_na_tela = self.selenium.find_element(By.TAG_NAME, 'strong').text
+        self.assertEqual(email_na_tela, email_cancelar)
+
+        assinante.refresh_from_db()
+        self.assertFalse(assinante.is_active, "O status do usuário deveria ser False após cancelar.")

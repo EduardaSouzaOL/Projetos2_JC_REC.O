@@ -259,6 +259,9 @@ def privacidade(request):
     return render(request, 'usuario/privacidade.html')
 
 def newsletter_page(request):
+    context = {
+        'newsletter_form': AssinanteNewsletterForm()
+    }
     return render(request, 'jornal_commercio/newsletter/newsletter_page.html')
 
 def subscribe_newsletter(request):
