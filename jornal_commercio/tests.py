@@ -28,44 +28,39 @@ class TestFeedbackSelenium(StaticLiveServerTestCase):
         # Navega para a home page
         self.driver.get(f"{self.live_server_url}{reverse('home')}")
         
-        # --- ETAPA CRÍTICA: Abrir o Modal ---
-        # Você precisa de um elemento (botão/link) na sua página para abrir o modal.
-        # Substitua 'id-do-seu-botao-trigger' pelo ID ou seletor real.
-        
-        # Exemplo (descomente e ajuste quando tiver o botão):
-        # try:
-        #     feedback_trigger = self.driver.find_element(By.ID, 'id-do-seu-botao-trigger')
-        #     feedback_trigger.click()
-        # except Exception as e:
-        #     print("AVISO: Não foi possível encontrar o gatilho do modal de feedback. "
-        #           "O teste pode falhar se o modal não estiver visível.", e)
-        
-        # Para o teste passar sem um gatilho, você pode forçar a abertura do modal via JS
-        # (Não é o ideal, mas funciona se o gatilho não existir)
-        self.driver.execute_script("document.getElementById('feedback-modal').style.display = 'block';")
+        # 1. Abrir o Modal (Clicando no botão real em vez de usar JS)
+        botao_abrir_modal = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'open-feedback-modal'))
+        )
+        botao_abrir_modal.click()
 
-        # Aguarda o modal (e o formulário dentro dele) ficar visível
-        #
+        # 2. Aguarda o modal ficar visível
+        # O ID no base.html é 'feedback-modal-overlay'
         WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.ID, 'feedback-form'))
+            EC.visibility_of_element_located((By.ID, 'feedback-modal-overlay'))
         )
         
-        # Preenche os campos do formulário de feedback
-        # Os IDs vêm dos widgets definidos em FeedbackForm
-        self.driver.find_element(By.ID, 'id_feedback_nome').send_keys('Testador Selenium')
-        self.driver.find_element(By.ID, 'id_feedback_email').send_keys('selenium@teste.com')
-        self.driver.find_element(By.ID, 'id_feedback_mensagem').send_keys('Isso é uma mensagem de teste automatizado.')
+        # 3. Preenche os campos
+        # Nota: No seu base.html apenas Email e Mensagem aparecem.
+        # Usando seletores CSS pelo 'name' para ser mais robusto caso o ID mude.
         
-        # Envia o formulário
-        #
-        self.driver.find_element(By.ID, 'feedback-submit-btn').click()
+        # Se o campo nome realmente não existir no template base.html, remova esta linha:
+        # self.driver.find_element(By.NAME, 'nome').send_keys('Testador Selenium') 
         
-        # O formulário é enviado via AJAX
-        # Precisamos esperar a mensagem de sucesso aparecer
-        #
+        self.driver.find_element(By.NAME, 'email').send_keys('selenium@teste.com')
+        self.driver.find_element(By.NAME, 'mensagem').send_keys('Isso é uma mensagem de teste automatizado.')
+        
+        # 4. Envia o formulário
+        # O botão não tem ID, então buscamos pelo tipo dentro do formulário correto
+        submit_btn = self.driver.find_element(By.CSS_SELECTOR, '#modal-feedback-form button[type="submit"]')
+        submit_btn.click()
+        
+        # 5. Espera a mensagem de sucesso
+        # O ID no base.html é 'form-message-box'
         success_message_div = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.ID, 'feedback-success-message'))
+            EC.visibility_of_element_located((By.ID, 'form-message-box'))
         )
         
-        # Verifica a mensagem de sucesso
-        self.assertIn('Feedback enviado com sucesso! Obrigado.', success_message_div.text)
+        # Verifica o texto
+        self.assertIn('Feedback enviado com sucesso', success_message_div.text)
+        

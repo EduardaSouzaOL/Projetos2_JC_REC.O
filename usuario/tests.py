@@ -11,7 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from .models import Interesse, AssinanteNewsletter
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 
 class UsuarioSeleniumTests(StaticLiveServerTestCase):
     
@@ -135,7 +135,7 @@ class NewsletterSeleniumTests(StaticLiveServerTestCase):
         botao_inscrever = self.selenium.find_element(By.CSS_SELECTOR, '.newsletter-button')
         botao_inscrever.click()
 
-        WebDriverWait(self.selenium, 10).until(
+        WebDriverWait(self.selenium, 10, ignored_exceptions=[StaleElementReferenceException]).until(
             lambda driver: "sucesso" in driver.find_element(By.TAG_NAME, "body").text.lower()
         )
 
