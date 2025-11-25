@@ -262,3 +262,113 @@ class HistoricoLeitura(models.Model):
             self.porcentagem_lida = 100
             self.lido_completo = True
         super(HistoricoLeitura, self).save(*args, **kwargs)
+
+class Quiz(models.Model):
+    noticia = models.OneToOneField(
+        Noticia,
+        on_delete=models.CASCADE,
+        related_name='quiz',
+        verbose_name="Notícia Relacionada"
+    )
+    titulo = models.CharField(max_length=200, verbose_name="Título do Quiz", blank=True)
+    descricao = models.TextField(blank=True, verbose_name="Descrição/Instruções")
+    
+    gerado_por_ia = models.BooleanField(default=False, verbose_name="Gerado automaticamente?")
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Quiz: {self.noticia.titulo}"
+
+    class Meta:
+        verbose_name = "Quiz"
+        verbose_name_plural = "Quizzes"
+
+
+class Pergunta(models.Model):
+    quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.CASCADE,
+        related_name='perguntas'
+    )
+    texto = models.TextField(verbose_name="Enunciado da Pergunta")
+    ordem = models.PositiveIntegerField(default=0, help_text="Ordem de exibição")
+
+    def __str__(self):
+        return f"{self.quiz.noticia.titulo[:20]}... - {self.texto[:50]}"
+    
+    class Meta:
+        ordering = ['ordem']
+
+
+class Opcao(models.Model):
+
+    pergunta = models.ForeignKey(
+        Pergunta,
+        on_delete=models.CASCADE,
+        related_name='opcoes'
+    )
+    texto = models.CharField(max_length=255, verbose_name="Texto da Opção")
+    correta = models.BooleanField(default=False, verbose_name="É a resposta correta?")
+
+    def __str__(self):
+        return f"({'X' if self.correta else ' '}) {self.texto}"
+
+class TentativaQuiz(models.Model):
+
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='tentativas_quiz'
+    )
+    quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.CASCADE,
+        related_name='tentativas'
+    )
+    data_inicio = models.DateTimeField(auto_now_add=True)
+    data_conclusao = models.DateTimeField(null=True, blank=True)
+    
+    pontuacao = models.PositiveIntegerField(default=0, verbose_name="Acertos")
+    
+    concluido = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('usuario', 'quiz')
+        verbose_name = "Tentativa de Quiz"
+        verbose_name_plural = "Tentativas de Quiz"
+
+    def __str__(self):
+        status = "Concluído" if self.concluido else "Em andamento"
+        return f"{self.usuario} - {self.quiz} ({status})"
+
+
+class RespostaUsuario(models.Model):
+    tentativa = models.ForeignKey(
+        TentativaQuiz,
+        on_delete=models.CASCADE,
+        related_name='respostas'
+    )
+    pergunta = models.ForeignKey(
+        Pergunta,
+        on_delete=models.CASCADE
+    )
+    opcao_escolhida = models.ForeignKey(
+        Opcao,
+        on_delete=models.CASCADE
+    )
+    data_resposta = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('tentativa', 'pergunta')
+
+    def __str__(self):
+        return f"Resposta de {self.tentativa.usuario} para {self.pergunta.id}"
+
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=Noticia)
+def gerar_quiz_automatico(sender, instance, created, **kwargs):
+    if created:
+        print(f"--- GATILHO: Notícia '{instance.titulo}' criada. Iniciando geração de Quiz com IA... ---")

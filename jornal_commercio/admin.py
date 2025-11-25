@@ -1,16 +1,15 @@
 from django.contrib import admin
-from .models import Noticia
-from .models import Feedback
-from .models import Comunidade
-from .models import Publicacao
-from .models import Comentario
-from .models import HistoricoLeitura
+from .models import (
+    Noticia, Feedback, Comunidade, Publicacao, Comentario, HistoricoLeitura,
+    Quiz, Pergunta, Opcao, TentativaQuiz, RespostaUsuario
+)
 
 @admin.register(Noticia)
 class NoticiaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'categoria', 'autor', 'data_publicacao')
     list_filter = ('categoria', 'autor')
     search_fields = ('titulo', 'resumo', 'conteudo')
+    # Mantivemos sua configuração de slug automático
     prepopulated_fields = {'slug': ('titulo',)}
 
 admin.site.register(Feedback)
@@ -46,3 +45,46 @@ class ComentarioAdmin(admin.ModelAdmin):
 class HistoricoAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'noticia', 'lido_completo')
     list_filter = ('usuario', 'lido_completo')
+
+
+class OpcaoInline(admin.TabularInline):
+    model = Opcao
+    extra = 4
+    min_num = 2 
+
+@admin.register(Pergunta)
+class PerguntaAdmin(admin.ModelAdmin):
+    list_display = ('texto', 'quiz', 'ordem')
+    list_filter = ('quiz',)
+    inlines = [OpcaoInline]
+    search_fields = ('texto',)
+
+class PerguntaInline(admin.StackedInline):
+    model = Pergunta
+    extra = 0
+    show_change_link = True
+    fields = ('texto', 'ordem')
+
+@admin.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    list_display = ('noticia', 'gerado_por_ia', 'data_criacao')
+    inlines = [PerguntaInline]
+    search_fields = ('noticia__titulo',)
+
+class RespostaUsuarioInline(admin.TabularInline):
+    model = RespostaUsuario
+    extra = 0
+    readonly_fields = ('pergunta', 'opcao_escolhida', 'data_resposta')
+    can_delete = False
+    
+    def has_add_permission(self, request, obj):
+        return False
+
+@admin.register(TentativaQuiz)
+class TentativaQuizAdmin(admin.ModelAdmin):
+
+    list_display = ('usuario', 'quiz', 'pontuacao', 'concluido', 'data_inicio')
+    list_filter = ('concluido', 'data_inicio', 'quiz')
+    search_fields = ('usuario__username', 'quiz__noticia__titulo')
+    inlines = [RespostaUsuarioInline]
+    readonly_fields = ('data_inicio', 'data_conclusao', 'pontuacao')
