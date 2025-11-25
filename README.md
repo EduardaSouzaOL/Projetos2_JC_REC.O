@@ -134,7 +134,7 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 
 
-## Equipe:
+## Equipe
 ### Ciência da Computação
 Bernardo Guimarães - bgnp@cesar.school <br>
 Cauã Henrique - chccp@cesar.school <br>
