@@ -6,6 +6,94 @@
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/anuncio_style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/RD_compartilhar.css' %}">
+    
+    <style>
+        /* Banner Fixo no Final (Apenas Visual) */
+        .quiz-banner-trigger {
+            background: white;
+            border: 1px solid #ddd;
+            border-left: 5px solid #e62323;
+            padding: 20px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .quiz-banner-trigger:hover { transform: scale(1.02); }
+
+        /* Modal Overlay */
+        .quiz-modal-overlay {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(2px);
+        }
+
+        .quiz-modal-card {
+            background: #f9f9f9;
+            width: 100%; max-width: 600px; max-height: 90vh;
+            border-radius: 20px; padding: 30px;
+            position: relative; overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .btn-close-modal {
+            position: absolute; top: 15px; right: 20px;
+            background: none; border: none; font-size: 2rem;
+            cursor: pointer; color: #888;
+        }
+
+        /* Opções */
+        .quiz-option-label {
+            display: flex; justify-content: space-between; align-items: center;
+            background: white; border: 1px solid #ddd;
+            padding: 15px; border-radius: 12px; margin-bottom: 12px;
+            cursor: pointer; font-weight: 600; color: #444;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option-label:hover { background: #fff5f5; border-color: #ffcccc; }
+
+        /* Estados de Feedback */
+        .quiz-option-label.correct {
+            background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important;
+        }
+        .quiz-option-label.incorrect {
+            background-color: #e74c3c !important; color: white !important; border-color: #c0392b !important;
+        }
+        .quiz-option-label.disabled {
+            pointer-events: none; opacity: 0.7;
+        }
+
+        .feedback-icon { display: none; font-size: 1.2rem; }
+        .correct .fa-check { display: block; }
+        .incorrect .fa-times { display: block; }
+
+        /* Botão Vermelho JC */
+        .btn-jc {
+            background: #e62323; color: white; border: none;
+            padding: 10px 25px; border-radius: 50px; font-weight: bold;
+            font-size: 1rem; cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-jc:hover {
+            background: #c01b1b;
+        }
+    </style>
 {% endblock %}
 
 
@@ -13,7 +101,6 @@
 <div class="detalhe-container">
     
     <span class="detalhe-categoria">{{ noticia.get_categoria_display }}</span>
-    
     <h1 class="detalhe-titulo">{{ noticia.titulo }}</h1>
 
     {% if noticia.resumo %}
@@ -22,11 +109,9 @@
     
     <div class="detalhe-meta">
         <span class="detalhe-autor">
-            Por <strong>{{ noticia.autor.get_full_name|default:noticia.autor.username }}</strong>
+            Por <strong>{% if noticia.autor %}{{ noticia.autor.get_full_name|default:noticia.autor.username }}{% else %}Redação JC{% endif %}</strong>
         </span>
-        <span class="detalhe-data">
-            {{ noticia.data_publicacao|date:"d/m/Y \à\s H:i" }}
-        </span>
+        <span class="detalhe-data">{{ noticia.data_publicacao|date:"d/m/Y \à\s H:i" }}</span>
     </div>
 
     {% if noticia.imagem_principal %}
@@ -37,48 +122,177 @@
         {{ noticia.conteudo|linebreaksbr }}
     </div>
 
+    <div id="fim-da-leitura" style="height: 1px; width: 100%;"></div>
+
     {% if noticia.imagem_secundaria_1 %}
         <img src="{{ noticia.imagem_secundaria_1.url }}" alt="Imagem secundária" class="detalhe-imagem-secundaria">
     {% endif %}
-    {% if noticia.imagem_secundaria_2 %}
-        <img src="{{ noticia.imagem_secundaria_2.url }}" alt="Imagem secundária" class="detalhe-imagem-secundaria">
-    {% endif %}
-    <!DOCTYPE html>
+    
+    <div class="ad-placeholder" role="img" aria-label="Espaço para anúncio">Espaço para Anúncio (700x250)</div>
 
-        <body>
-            <!-- Código do Placeholder do Anúncio -->
-            <div class="ad-placeholder" role="img" aria-label="Espaço para anúncio">
-                Espaço para Anúncio (700x250)
-            </div>
-            <!-- Fim do Código do Placeholder -->
-            <div class= "quiz-container">
-                
+
+    {% if noticia.quiz %}
+    
+    <div class="quiz-banner-trigger" onclick="abrirQuiz()">
+        <div>
+            <h3 style="margin:0; font-size: 1.2rem;">JC <span style="color:#e62323">QUEST</span> 🧠</h3>
+            <p style="margin:5px 0 0 0; color:#666; font-size: 0.9rem;">Teste seus conhecimentos sobre esta notícia.</p>
+        </div>
+        <button class="btn-jc">Jogar</button>
+    </div>
+
+    <div id="quizModal" class="quiz-modal-overlay">
+        <div class="quiz-modal-card">
+            <button class="btn-close-modal" onclick="fecharQuiz()">&times;</button>
+            
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="font-weight:800; margin:0;">JC <span style="color:#e62323">QUEST</span></h2>
+                <span style="font-size: 0.9rem; color: #888;">Responda e ganhe moedas</span>
             </div>
 
-        </body>
-        <div class="content-sharing-tags">
-            <div class="compartilhe-section">
-                <h3 class="title-section">COMPARTILHE</h3>
-                <div class="social-icons">
-                    <a href="whatsapp://send?text=Link e texto para compartilhar" target="_blank" class="icon-whatsapp">
-                        <i class="fab fa-whatsapp"></i> 
-                    </a>
+            <form id="quizForm">
+                {% for pergunta in noticia.quiz.perguntas.all %}
+                <div class="quiz-pergunta-block" style="margin-bottom: 35px;">
+                    <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">
+                        {{ forloop.counter }}. {{ pergunta.texto }}
+                    </p>
                     
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=URL_DA_PAGINA" target="_blank" class="icon-facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    
-                    <a href="#" class="icon-share">
-                        <i class="fas fa-share-alt"></i>
-                    </a>
+                    <div class="quiz-opcoes-list" id="pergunta-{{ pergunta.id }}">
+                        {% for opcao in pergunta.opcoes.all %}
+                        
+                        <label class="quiz-option-label 
+                               {% if opcao.id in respostas_ids %}
+                                   {% if opcao.correta %}correct{% else %}incorrect{% endif %} disabled
+                               {% endif %}"
+                               onclick="verificarResposta(this, '{{ opcao.id }}', '{{ opcao.correta|lower }}', {{ pergunta.id }})">
+                            
+                            <span>{{ opcao.texto }}</span>
+                            
+                            <i class="fas fa-check feedback-icon" style="color: white;"></i>
+                            <i class="fas fa-times feedback-icon" style="color: white;"></i>
+                        </label>
+
+                        {% endfor %}
+                    </div>
                 </div>
+                {% endfor %}
+            </form>
+            
+            <button id="btn-finalizar" onclick="acaoFinalizarQuiz()" class="btn-jc" style="width:100%; margin-top:20px;">
+                {% if quiz_concluido %}
+                    Continuar Lendo
+                {% else %}
+                    Finalizar e Salvar
+                {% endif %}
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% if not quiz_concluido %}
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        abrirQuiz();
+                        observer.disconnect(); 
+                    }
+                });
+            });
+            observer.observe(document.querySelector("#fim-da-leitura"));
+            {% endif %}
+        });
+
+        function abrirQuiz() {
+            document.getElementById('quizModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharQuiz() {
+            document.getElementById('quizModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function acaoFinalizarQuiz() {
+            const btn = document.getElementById('btn-finalizar');
+
+            if (btn.innerText.includes("Continuar Lendo")) {
+                fecharQuiz();
+                return;
+            }
+
+            fetch("{% url 'jornal_commercio:finalizar_quiz' quiz_id=noticia.quiz.id %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                }
+            })
+            .then(response => {
+                if(response.ok) {
+                    btn.innerText = "Continuar Lendo";
+                    fecharQuiz();
+                } else {
+                    console.error("Erro ao finalizar quiz");
+                }
+            })
+            .catch(error => console.error("Erro de rede:", error));
+        }
+
+        function verificarResposta(element, opcaoId, isCorrect, perguntaId) {
+            if (element.classList.contains('disabled')) return;
+
+            const parent = document.getElementById('pergunta-' + perguntaId);
+            const siblings = parent.querySelectorAll('.quiz-option-label');
+            siblings.forEach(el => el.classList.add('disabled'));
+
+            if (isCorrect === 'true') {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+            }
+
+            {% if user.is_authenticated %}
+            fetch("{% url 'jornal_commercio:salvar_resposta_quiz' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ opcao_id: opcaoId })
+            })
+            .then(response => response.json())
+            .then(data => console.log("Resposta salva"))
+            .catch(error => console.error("Erro ao salvar:", error));
+            {% else %}
+            alert("Faça login para salvar seu progresso!");
+            {% endif %}
+        }
+    </script>
+    {% endif %}
+
+    <div class="content-sharing-tags">
+        <div class="compartilhe-section">
+            <h3 class="title-section">COMPARTILHE</h3>
+            <div class="social-icons">
+                <a href="whatsapp://send?text={{ noticia.titulo }} - {{ request.build_absolute_uri }}" target="_blank" class="icon-whatsapp">
+                    <i class="fab fa-whatsapp"></i> 
+                </a>
+                
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="icon-facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                
+                <a href="#" class="icon-share">
+                    <i class="fas fa-share-alt"></i>
+                </a>
             </div>
-    <div class="tags-section">
-        <h3 class="title-section">TAGS</h3>
-        <div class="tag-buttons">
-            <a href="/tag/autoescola" class="tag-button">Autoescola</a>
-            <a href="/tag/cnh" class="tag-button">CNH</a>
-            <a href="/tag/mobilidade" class="tag-button">Mobilidade</a>
+        </div>
+        <div class="tags-section">
+            <h3 class="title-section">TAGS</h3>
+            <div class="tag-buttons">
+                <a href="#" class="tag-button">Notícia</a>
+                <a href="#" class="tag-button">JC</a>
+            </div>
         </div>
     </div>
 </div>
@@ -86,91 +300,36 @@
 <section class="nossos-produtos-section">
     <h2 class="section-title">Nossos Produtos</h2>
     <div class="produtos-list">
-
-        <a href="URL_DO_NE10_INTERIOR" class="produto-item" target="_blank">
-            <div class="produto-logo-wrapper">
-                <img src="URL_DA_IMAGEM_NE10_INTERIOR" alt="Logo NE10 Interior" class="produto-logo">
-            </div>
-            <span class="produto-name">NE10 Interior</span>
-        </a>
-
-        <a href="URL_DA_RADIO_JORNAL" class="produto-item" target="_blank">
-            <div class="produto-logo-wrapper">
-                <img src="URL_DA_IMAGEM_RADIO_JORNAL" alt="Logo Rádio Jornal" class="produto-logo">
-            </div>
-            <span class="produto-name">Rádio Jornal</span>
-        </a>
-
-        <a href="URL_DA_TV_JORNAL" class="produto-item" target="_blank">
-            <div class="produto-logo-wrapper">
-                <img src="URL_DA_IMAGEM_TV_JORNAL" alt="Logo TV Jornal" class="produto-logo">
-            </div>
-            <span class="produto-name">TV Jornal</span>
-        </a>
-
-        <a href="URL_DO_JORNAL_DO_COMMERCIO" class="produto-item" target="_blank">
-            <div class="produto-logo-wrapper">
-                <img src="URL_DA_IMAGEM_JC" alt="Logo Jornal do Commercio" class="produto-logo">
-            </div>
-            <span class="produto-name">Jornal do Commercio</span>
-        </a>
-        
-        <a href="URL_DO_BLOG_DO_TORCEDOR" class="produto-item" target="_blank">
-            <div class="produto-logo-wrapper">
-                <img src="URL_DA_IMAGEM_BLOG_TORCEDOR" alt="Logo Blog do Torcedor" class="produto-logo">
-            </div>
-            <span class="produto-name">Blog do Torcedor</span>
-        </a>
-        
-        <a href="URL_DO_SOCIAL1" class="produto-item" target="_blank">
-            <div class="produto-logo-wrapper">
-                <img src="URL_DA_IMAGEM_SOCIAL1" alt="Logo Social1" class="produto-logo">
-            </div>
-            <span class="produto-name">Social1</span>
-        </a>
-        
-        <a href="URL_DA_RECEITA_DA_BOA" class="produto-item" target="_blank">
-            <div class="produto-logo-wrapper">
-                <img src="URL_DA_IMAGEM_RECEITA_DA_BOA" alt="Logo Receita da Boa" class="produto-logo">
-            </div>
-            <span class="produto-name">Receita da Boa</span>
-        </a>
-        
+        <a href="#" class="produto-item"><span class="produto-name">NE10 Interior</span></a>
+         <a href="#" class="produto-item"><span class="produto-name">Rádio Jornal</span></a>
+         <a href="#" class="produto-item"><span class="produto-name">TV Jornal</span></a>
+         <a href="#" class="produto-item"><span class="produto-name">Jornal do Commercio</span></a>
+         <a href="#" class="produto-item"><span class="produto-name">Blog do Torcedor</span></a>
+         <a href="#" class="produto-item"><span class="produto-name">Social1</span></a>
+         <a href="#" class="produto-item"><span class="produto-name">Receita da Boa</span></a>
     </div>
 </section>
 
-    <section class="relacionadas">
-        <div class="container">
-            <h2>NOTÍCIAS RELACIONADAS</h2>
-            {% if noticias_relacionadas %}
-            <div class="listagem_relacionadas">
-
-                {% for noticia in noticias_relacionadas %}
-                <article class="news-card">
-
-                    <a href="{% url 'detalhe_noticia' slug=noticia.slug %}"> 
-                        {% if noticia.imagem_principal %}
-                            <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
-                        {% else %}
-                            <img src="{% static 'jornal_commercio/images/cnh.png' %}" alt="Imagem padrão">
-                        {% endif %}
-                    </a>
-
-                    <span class="category-tag">{{ noticia.get_categoria_display }}</span>
-                            
-                    <h4><a href="{% url 'detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
-
-                </article>
-                {% endfor %}
-
-            </div>
-            {% endif %}
+<section class="relacionadas">
+    <div class="container">
+        <h2>NOTÍCIAS RELACIONADAS</h2>
+        {% if noticias_relacionadas %}
+        <div class="listagem_relacionadas">
+            {% for noticia in noticias_relacionadas %}
+            <article class="news-card">
+                <a href="{% url 'jornal_commercio:detalhe_noticia' slug=noticia.slug %}"> 
+                    {% if noticia.imagem_principal %}
+                        <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
+                    {% else %}
+                        <img src="{% static 'jornal_commercio/images/cnh.png' %}" alt="Imagem padrão">
+                    {% endif %}
+                </a>
+                <span class="category-tag">{{ noticia.get_categoria_display }}</span>
+                <h4><a href="{% url 'jornal_commercio:detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
+            </article>
+            {% endfor %}
         </div>
-    </section>
-    {% comment %} <div class="comentarios-secao">
-        <h3>Comentários</h3>
-        <p>(A seção de comentários ainda está em desenvolvimento.)</p>
-    </div> {% endcomment %}
-    
-</div>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

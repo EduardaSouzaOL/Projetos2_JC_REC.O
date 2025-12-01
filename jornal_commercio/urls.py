@@ -11,4 +11,6 @@ urlpatterns = [
     path('publicacao/<int:pk>/salvar/', views.salvar_publicacao, name='salvar_publicacao'),
     path('publicacao/<int:pk>/comentar/', views.adicionar_comentario, name='adicionar_comentario'),
     path('comunidades/<int:pk>/toggle_membro/', views.toggle_membro, name='toggle_membro'),
+    path('api/salvar-quiz/', views.salvar_resposta_quiz, name='salvar_resposta_quiz'),
+    path('api/finalizar-quiz/<int:quiz_id>/', views.finalizar_quiz, name='finalizar_quiz'),
 ]

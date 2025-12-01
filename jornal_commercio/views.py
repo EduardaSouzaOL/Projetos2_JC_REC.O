@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
-from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario
+from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta
 from django.db.models import Q, Count
 
 def home(request):
@@ -35,11 +35,21 @@ def detalhe_noticia(request, slug):
 
     todas_noticias = Noticia.objects.all()
     noticias_relacionadas = todas_noticias[1:4]
-
     
+    respostas_ids = []
+    quiz_concluido = False
+
+    if request.user.is_authenticated and hasattr(noticia, 'quiz'):
+        tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz=noticia.quiz).first()
+        if tentativa:
+            respostas_ids = list(tentativa.respostas.values_list('opcao_escolhida_id', flat=True))
+            quiz_concluido = tentativa.concluido
+            
     context = {
         'noticia': noticia,
         'noticias_relacionadas': noticias_relacionadas,
+        'respostas_ids': respostas_ids,
+        'quiz_concluido': quiz_concluido
     }
     
     return render(request, 'jornal_commercio/detalhe_noticia.html', context)
@@ -227,3 +237,38 @@ def toggle_membro(request, pk):
         })
     else:
         return HttpResponseForbidden("Ação não permitida.")
+    
+def salvar_resposta_quiz(request):
+
+    if request.method == "POST" and request.user.is_authenticated:
+        data = json.loads(request.body)
+        opcao_id = data.get('opcao_id')
+        
+        opcao = get_object_or_404(Opcao, id=opcao_id)
+        quiz = opcao.pergunta.quiz
+
+        tentativa, created = TentativaQuiz.objects.get_or_create(
+            usuario=request.user, 
+            quiz=quiz
+        )
+        
+        RespostaUsuario.objects.get_or_create(
+            tentativa=tentativa,
+            pergunta=opcao.pergunta,
+            defaults={'opcao_escolhida': opcao}
+        )
+        
+        return JsonResponse({'status': 'ok', 'correta': opcao.correta})
+    
+    return JsonResponse({'status': 'erro', 'message': 'Não autorizado'}, status=403)
+
+def finalizar_quiz(request, quiz_id):
+    if request.method == "POST" and request.user.is_authenticated:
+        tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz_id=quiz_id).first()
+        
+        if tentativa:
+            tentativa.concluido = True
+            tentativa.save()
+            return JsonResponse({'status': 'ok', 'message': 'Quiz concluído!'})
+            
+    return JsonResponse({'status': 'erro'}, status=400)

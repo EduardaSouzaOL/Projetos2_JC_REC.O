@@ -1,8 +1,11 @@
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils import timezone
 from django.conf import settings
 from django.utils.text import slugify
 from django.urls import reverse
+from django.dispatch import receiver
+import threading
 
 CATEGORIA_CHOICES = [
     ('MUNDO', 'Mundo'),
@@ -372,3 +375,12 @@ from django.dispatch import receiver
 def gerar_quiz_automatico(sender, instance, created, **kwargs):
     if created:
         print(f"--- GATILHO: Notícia '{instance.titulo}' criada. Iniciando geração de Quiz com IA... ---")
+        
+@receiver(post_save, sender=Noticia)
+def gerar_quiz_automatico(sender, instance, created, **kwargs):
+
+    if created:
+        from .ai_service import gerar_quiz_com_gemini
+        
+        thread = threading.Thread(target=gerar_quiz_com_gemini, args=(instance,))
+        thread.start()
