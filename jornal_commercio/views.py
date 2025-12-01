@@ -36,6 +36,8 @@ def detalhe_noticia(request, slug):
     todas_noticias = Noticia.objects.all()
     noticias_relacionadas = todas_noticias[1:4]
     
+    comunidade_relacionada = Comunidade.objects.filter(categoria=noticia.categoria).first()
+    
     respostas_ids = []
     quiz_concluido = False
 
@@ -49,7 +51,8 @@ def detalhe_noticia(request, slug):
         'noticia': noticia,
         'noticias_relacionadas': noticias_relacionadas,
         'respostas_ids': respostas_ids,
-        'quiz_concluido': quiz_concluido
+        'quiz_concluido': quiz_concluido,
+        'comunidade_relacionada': comunidade_relacionada,
     }
     
     return render(request, 'jornal_commercio/detalhe_noticia.html', context)
@@ -77,6 +80,10 @@ class ComunidadeListView(ListView):
         queryset = super().get_queryset()
         query = self.request.GET.get('q')
         filtro = self.request.GET.get('filtro', 'alta')
+        
+        categoria_filtro = self.request.GET.get('categoria')
+        if categoria_filtro:
+            queryset = queryset.filter(categoria=categoria_filtro)
 
         if filtro == 'seguindo' and self.request.user.is_authenticated:
             queryset = queryset.filter(membros=self.request.user)
@@ -99,6 +106,9 @@ class ComunidadeListView(ListView):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('q', '')
         context['filtro_ativo'] = self.request.GET.get('filtro', 'alta')
+        context['categoria_ativa'] = self.request.GET.get('categoria', '') 
+        from .models import CATEGORIA_CHOICES
+        context['categorias'] = CATEGORIA_CHOICES
         return context
 
 class ComunidadeDetailView(DetailView):
@@ -109,6 +119,13 @@ class ComunidadeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         comunidade = self.get_object()
+        
+        noticia_id = self.request.GET.get('noticia_id')
+        if noticia_id:
+            try:
+                context['noticia_referencia'] = Noticia.objects.get(id=noticia_id)
+            except Noticia.DoesNotExist:
+                context['noticia_referencia'] = None
 
         todas_as_publicacoes = Publicacao.objects.filter(comunidade=comunidade).order_by('-data_publicacao')
         
@@ -133,10 +150,18 @@ class ComunidadeDetailView(DetailView):
             nova_publicacao.comunidade = comunidade
             nova_publicacao.autor = request.user
             
-            nova_publicacao.save()
+            noticia_id = request.POST.get('noticia_id_hidden')
+            if noticia_id:
+                from .models import Noticia
+                try:
+                    noticia = Noticia.objects.get(id=noticia_id)
+                    nova_publicacao.noticia_relacionada = noticia
+                except:
+                    pass
             
-            return redirect(request.path)
-        
+            nova_publicacao.save()
+                        
+            return redirect(request.path)  
         else:
             context = self.get_context_data()
             context['form_publicacao'] = form

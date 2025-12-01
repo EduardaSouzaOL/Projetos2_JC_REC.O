@@ -6,6 +6,105 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/comunidade_detalhe.css' %}">
+    
+    <style>
+        /* --- ESTILOS ESPECÍFICOS PARA CORRIGIR OS BOTÕES --- */
+
+        /* Container para alinhar Reportar e Sair lado a lado */
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        /* Estilo do Botão Reportar (Restaurado) */
+        .btn-reportar {
+            background: white;
+            border: 1px solid #ccc;
+            color: #555;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-reportar:hover {
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        /* Estilo do Botão de Ação (Participar/Sair) */
+        .btn-toggle-membro {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        /* ESTADO: NÃO É MEMBRO (Botão Azul) */
+        .btn-toggle-membro.entrar {
+            background-color: #004aad;
+            color: white;
+        }
+        .btn-toggle-membro.entrar:hover {
+            background-color: #003380;
+        }
+
+        /* ESTADO: JÁ É MEMBRO (Botão Vermelho para Sair) */
+        .btn-toggle-membro.sair {
+            background-color: #dc3545 !important; /* Vermelho forte */
+            color: white !important;
+            border: 1px solid #dc3545;
+        }
+        .btn-toggle-membro.sair:hover {
+            background-color: #bb2d3b !important; /* Vermelho mais escuro no hover */
+        }
+        
+        /* Garante que o ícone fique branco no botão sair */
+        .btn-toggle-membro.sair i {
+            color: white !important;
+        }
+
+        /* Banner de Tópico em Foco */
+        .noticia-foco-banner {
+            background-color: #f0f7ff;
+            border-left: 5px solid #004aad;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: slideDown 0.5s ease;
+        }
+        .noticia-foco-banner strong {
+            color: #004aad;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .noticia-foco-banner em {
+            font-size: 1.1rem;
+            color: #333;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -22,8 +121,9 @@
             <div class="header-info-esq">
                 <span class="header-breadcrumb">Comunidade | {{ comunidade.get_categoria_display|upper }}</span>
                 <h1>{{ comunidade.nome }}</h1>
-                <p>{{ comunidade.descricao|default:"Discussões sobre o melhor da Educação de Pernambuco." }}</p>
+                <p>{{ comunidade.descricao|default:"Espaço para discussões e novidades." }}</p>
             </div>
+            
             <div class="header-info-dir">
                 <div class="info-bloco">
                     <span class="info-label">Autor</span>
@@ -33,10 +133,23 @@
                     <span class="info-label">Desde</span>
                     <span class="info-valor">{{ comunidade.data_criacao|date:"d M Y" }}</span>
                 </div>
-                <button class="btn-reportar">
-                    <i class="far fa-flag"></i> Reportar Comunidade
-                </button>
-            </div>
+                
+                <div class="header-actions">
+                    <button class="btn-reportar" title="Reportar esta comunidade">
+                        <i class="far fa-flag"></i> <span>Reportar Comunidade</span>
+                    </button>
+
+                    <button id="btn-toggle-membro" 
+                            class="btn-toggle-membro {% if request.user in comunidade.membros.all %}sair{% else %}entrar{% endif %}"
+                            onclick="toggleMembro('{{ comunidade.id }}')">
+                        {% if request.user in comunidade.membros.all %}
+                            <i class="fas fa-sign-out-alt"></i> <span>Sair da Comunidade</span>
+                        {% else %}
+                            <i class="fas fa-plus"></i> <span>Participar</span>
+                        {% endif %}
+                    </button>
+                </div>
+                </div>
         </div>
     </header>
 
@@ -62,7 +175,7 @@
             </div>
             
             <div class="widget-card">
-                <h3>Membros</h3>
+                <h3>Membros <span id="contador-membros" style="font-size:0.8em; color:#888;">({{ comunidade.membros.count }})</span></h3>
                 <ul class="lista-destaques-membros">
                     {% for membro in comunidade.membros.all|slice:":5" %}
                         <li>
@@ -107,15 +220,30 @@
 
         <main class="detalhe-feed">
             
-            {% if user.is_authenticated and user in comunidade.membros.all %}
-            <div class="post-card form-publicar">
-                <form method="POST" action="{% url 'comunidade_detalhe' pk=comunidade.pk %}">
-                    {% csrf_token %}
-                    <div class="form-publicar-avatar">{{ user.username.0|upper }}</div>
-                    <textarea name="conteudo" placeholder="Escreva sua publicação..."></textarea>
-                    <button type="submit"><i class="fa fa-paper-plane"></i></button>
-                </form>
+            {% if noticia_referencia %}
+            <div class="noticia-foco-banner">
+                <strong><i class="fas fa-bullhorn"></i> Tópico em foco</strong>
+                <span>Você está criando uma publicação sobre:</span><br>
+                <em>"{{ noticia_referencia.titulo }}"</em>
             </div>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                {% if user in comunidade.membros.all %}
+                <div class="post-card form-publicar">
+                    <form method="POST" action="{% url 'comunidade_detalhe' pk=comunidade.pk %}">
+                        {% csrf_token %}
+                        
+                        {% if noticia_referencia %}
+                            <input type="hidden" name="noticia_id_hidden" value="{{ noticia_referencia.id }}">
+                        {% endif %}
+
+                        <div class="form-publicar-avatar">{{ user.username.0|upper }}</div>
+                        <textarea name="conteudo" placeholder="Escreva sua publicação..."></textarea>
+                        <button type="submit"><i class="fa fa-paper-plane"></i></button>
+                    </form>
+                </div>
+                {% endif %}
             {% endif %}
 
             {% for publicacao in feed_publicacoes %}
@@ -126,10 +254,16 @@
                             <div class="post-info">
                                 <span class="autor">{{ publicacao.autor.username }}</span>
                                 <span class="data">{{ publicacao.data_publicacao|naturaltime }}</span>
+                                
+                                {% if publicacao.noticia_relacionada %}
+                                    <div style="font-size: 0.8rem; color: #004aad; margin-top: 2px;">
+                                        <i class="fas fa-link"></i> Sobre: <a href="{% url 'detalhe_noticia' slug=publicacao.noticia_relacionada.slug %}">{{ publicacao.noticia_relacionada.titulo|truncatechars:40 }}</a>
+                                    </div>
+                                {% endif %}
+
                             </div>
                         </div>
                         <div class="post-opcoes">
-                            <button class="btn-seguir">Seguir</button>
                             <button class="btn-opcoes"><i class="fas fa-ellipsis-h"></i></button>
                         </div>
                     </div>
@@ -210,8 +344,46 @@
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    
+    function toggleMembro(comunidadeId) {
+        const btn = document.getElementById('btn-toggle-membro');
+        const url = `/comunidade/toggle/${comunidadeId}/`; 
+        const csrftoken = getCookie('csrftoken');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Erro na requisição');
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                if (data.is_member) {
+                    // VIROU MEMBRO -> MOSTRAR BOTÃO VERMELHO "SAIR"
+                    btn.innerHTML = '<i class="fas fa-sign-out-alt"></i> <span>Sair da Comunidade</span>';
+                    btn.classList.remove('entrar');
+                    btn.classList.add('sair');
+                } else {
+                    // SAIU -> MOSTRAR BOTÃO AZUL "PARTICIPAR"
+                    btn.innerHTML = '<i class="fas fa-plus"></i> <span>Participar</span>';
+                    btn.classList.remove('sair');
+                    btn.classList.add('entrar');
+                }
+                
+                const contador = document.getElementById('contador-membros');
+                if(contador) contador.innerText = `(${data.membros_count})`;
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar. Verifique se você está logado.');
+        });
+    }
+
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -226,125 +398,104 @@ $(document).ready(function() {
         }
         return cookieValue;
     }
-    const csrftoken = getCookie('csrftoken');
 
-    
-    function handleAjaxAction(formSelector, successCallback) {
-        $(document).on('submit', formSelector, function(e) {
+    $(document).ready(function() {
+        const csrftoken = getCookie('csrftoken');
+
+        function handleAjaxAction(formSelector, successCallback) {
+            $(document).on('submit', formSelector, function(e) {
+                e.preventDefault();
+                const $form = $(this);
+                const url = $form.attr('action');
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    headers: {'X-CSRFToken': csrftoken},
+                    success: function(data) {
+                        successCallback($form, data);
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log('Erro AJAX:', errmsg);
+                        if (xhr.status === 403) {
+                             alert('Você precisa estar logado para fazer isso.');
+                        }
+                    }
+                });
+            });
+        }
+
+        handleAjaxAction('.form-ajax-acao[action*="curtir"]', function($form, data) {
+            if (data.success) {
+                const $button = $form.find('.btn-curtir');
+                $button.find('.like-count').text(data.likes_count);
+                if (data.is_liked) {
+                    $button.addClass('active');
+                } else {
+                    $button.removeClass('active');
+                }
+            }
+        }); 
+
+        handleAjaxAction('.form-ajax-acao[action*="salvar"]', function($form, data) {
+            if (data.success) {
+                const $button = $form.find('.btn-salvar');
+                const $text = $button.find('.save-text');
+                if (data.is_saved) {
+                    $button.addClass('active');
+                    $text.text('Salvo');
+                } else {
+                    $button.removeClass('active');
+                    $text.text('Salvar');
+                }
+            }
+        });
+
+        $(document).on('submit', '.form-comentario', function(e) {
             e.preventDefault();
             const $form = $(this);
             const url = $form.attr('action');
-
+            const $textarea = $form.find('textarea');
+            const $comentariosContainer = $form.closest('.comentarios-container');
+            
             $.ajax({
                 type: 'POST',
                 url: url,
+                data: $form.serialize(),
                 headers: {'X-CSRFToken': csrftoken},
                 success: function(data) {
-                    successCallback($form, data);
-                },
-                error: function(xhr, errmsg, err) {
-                    console.log('Erro AJAX:', errmsg);
-                    if (xhr.status === 403) {
-                         alert('Você precisa estar logado para fazer isso.');
+                    if (data.success) {
+                        const newCommentHtml = `
+                        <div class="comentario-item" style="animation: fadeIn 0.5s;">
+                            <div class="comentario-avatar-placeholder">${data.autor.charAt(0).toUpperCase()}</div>
+                            <div class="comentario-corpo">
+                                <span class="comentario-autor">${data.autor}</span>
+                                <span class="comentario-data">${data.data} atrás</span>
+                                <p class="comentario-texto">${data.conteudo.replace(/\n/g, "<br>")}</p>
+                            </div>
+                        </div>
+                        `;
+                        
+                        $comentariosContainer.find('.sem-comentarios-msg').remove();
+                        $form.before(newCommentHtml);
+                        $textarea.val('');
+                        
+                        const $countSpan = $form.closest('.post-card').find('.comment-count-val');
+                        $countSpan.text(data.comments_count);
+                    } else {
+                        alert('Erro ao comentar: ' + (data.error || 'Desconhecido'));
                     }
+                },
+                error: function() {
+                    alert('Você precisa estar logado para comentar.');
                 }
             });
         });
-    }
 
-    
-    handleAjaxAction('.form-ajax-acao[action*="curtir"]', function($form, data) {
-        if (data.success) {
-            const $button = $form.find('.btn-curtir');
-            $button.find('.like-count').text(data.likes_count);
-            if (data.is_liked) {
-                $button.addClass('active');
-            } else {
-                $button.removeClass('active');
-            }
-        }
-    }); 
-
-    
-    handleAjaxAction('.form-ajax-acao[action*="salvar"]', function($form, data) {
-        if (data.success) {
-            const $button = $form.find('.btn-salvar');
-            const $text = $button.find('.save-text');
-            if (data.is_saved) {
-                $button.addClass('active');
-                $text.text('Salvo');
-            } else {
-                $button.removeClass('active');
-                $text.text('Salvar');
-            }
-        }
-    });
-
-    
-    $(document).on('submit', '.form-comentario', function(e) {
-        e.preventDefault();
-        const $form = $(this);
-        const url = $form.attr('action');
-        const $textarea = $form.find('textarea');
-        const $comentariosContainer = $form.closest('.comentarios-container');
-        const $listaComentarios = $comentariosContainer.find('.comentario-item').parent();
-        
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: $form.serialize(),
-            headers: {'X-CSRFToken': csrftoken},
-            success: function(data) {
-                if (data.success) {
-                    
-                    const newCommentHtml = `
-                    <div class="comentario-item" style="animation: fadeIn 0.5s;">
-                        <div class="comentario-avatar-placeholder">${data.autor.charAt(0).toUpperCase()}</div>
-                        <div class="comentario-corpo">
-                            <span class="comentario-autor">${data.autor}</span>
-                            <span class="comentario-data">${data.data} atrás</span>
-                            <p class="comentario-texto">${data.conteudo.replace(/\n/g, "<br>")}</p>
-                        </div>
-                    </div>
-                    `;
-                    
-                    if ($listaComentarios.length > 0) {
-                        $listaComentarios.append(newCommentHtml);
-                    } else {
-                        $comentariosContainer.prepend(newCommentHtml);
-                    }
-
-                    $textarea.val('');
-                    
-                    
-                    const $countSpan = $form.closest('.post-card').find('.comment-count-val');
-                    $countSpan.text(data.comments_count);
-                    
-                    
-                    $comentariosContainer.find('.sem-comentarios-msg').remove();
-                } else {
-                    alert('Erro ao comentar: ' + (data.error || 'Desconhecido'));
-                }
-            },
-            error: function() {
-                alert('Você precisa estar logado para comentar.');
-            }
+        $(document).on('click', '.btn-comentar', function() {
+            const $input = $(this).closest('.post-card').find('.form-comentario textarea');
+            $input.focus();
         });
     });
-
-    
-    $(document).on('click', '.btn-comentar', function() {
-        const $input = $(this).closest('.post-card').find('.form-comentario textarea');
-        $input.focus();
-    });
-
-});
 </script>
-
-<style>
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
 {% endblock %}

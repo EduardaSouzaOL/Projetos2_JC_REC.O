@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/RD_compartilhar.css' %}">
     
     <style>
-        /* Banner Fixo no Final (Apenas Visual) */
         .quiz-banner-trigger {
             background: white;
             border: 1px solid #ddd;
@@ -24,7 +23,6 @@
         }
         .quiz-banner-trigger:hover { transform: scale(1.02); }
 
-        /* Modal Overlay */
         .quiz-modal-overlay {
             display: none; /* Escondido por padrão */
             position: fixed;
@@ -57,7 +55,6 @@
             cursor: pointer; color: #888;
         }
 
-        /* Opções */
         .quiz-option-label {
             display: flex; justify-content: space-between; align-items: center;
             background: white; border: 1px solid #ddd;
@@ -68,7 +65,6 @@
         
         .quiz-option-label:hover { background: #fff5f5; border-color: #ffcccc; }
 
-        /* Estados de Feedback */
         .quiz-option-label.correct {
             background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important;
         }
@@ -83,7 +79,6 @@
         .correct .fa-check { display: block; }
         .incorrect .fa-times { display: block; }
 
-        /* Botão Vermelho JC */
         .btn-jc {
             background: #e62323; color: white; border: none;
             padding: 10px 25px; border-radius: 50px; font-weight: bold;
@@ -92,6 +87,60 @@
         }
         .btn-jc:hover {
             background: #c01b1b;
+        }
+
+        .comunidade-card-trigger {
+            background: #f0f8ff; /* Azul suave */
+            border: 1px solid #cce5ff;
+            border-left: 5px solid #004aad;
+            padding: 20px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 15px;
+            transition: transform 0.2s;
+        }
+        .comunidade-card-trigger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .comunidade-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        .btn-comunidade {
+            background: #004aad;
+            color: white;
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background 0.3s;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .btn-comunidade:hover {
+            background: #003380;
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .comunidade-card-trigger {
+                flex-direction: column;
+                text-align: center;
+            }
+            .comunidade-info {
+                flex-direction: column;
+                margin-bottom: 10px;
+            }
+            .comunidade-info i {
+                margin-right: 0 !important;
+                margin-bottom: 10px;
+            }
         }
     </style>
 {% endblock %}
@@ -221,11 +270,11 @@
                 return;
             }
 
-            fetch("{% url 'jornal_commercio:finalizar_quiz' quiz_id=noticia.quiz.id %}", {
+            fetch("{% url 'finalizar_quiz' quiz_id=noticia.quiz.id %}", {
                 method: "POST",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token }}",
-                }
+                },
             })
             .then(response => {
                 if(response.ok) {
@@ -252,7 +301,7 @@
             }
 
             {% if user.is_authenticated %}
-            fetch("{% url 'jornal_commercio:salvar_resposta_quiz' %}", {
+            fetch("{% url 'salvar_resposta_quiz' %}", {
                 method: "POST",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token }}",
@@ -295,7 +344,24 @@
             </div>
         </div>
     </div>
-</div>
+    
+    {% if comunidade_relacionada %}
+    <div class="comunidade-card-trigger">
+        <div class="comunidade-info">
+            <i class="fas fa-users" style="font-size: 2rem; color: #004aad; margin-right: 15px;"></i>
+            <div>
+                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Comunidade de {{ noticia.get_categoria_display }}</h3>
+                <p style="margin: 5px 0 0; color: #666; font-size: 0.9rem;">
+                    O que você achou dessa notícia? Comente e debata com outros leitores na nossa comunidade.
+                </p>
+            </div>
+        </div>
+        <a href="{% url 'comunidade_detalhe' pk=comunidade_relacionada.pk %}?noticia_id={{ noticia.id }}" class="btn-comunidade">
+            Participar da Discussão
+        </a>
+    </div>
+    {% endif %}
+    </div>
 
 <section class="nossos-produtos-section">
     <h2 class="section-title">Nossos Produtos</h2>
@@ -317,7 +383,7 @@
         <div class="listagem_relacionadas">
             {% for noticia in noticias_relacionadas %}
             <article class="news-card">
-                <a href="{% url 'jornal_commercio:detalhe_noticia' slug=noticia.slug %}"> 
+                <a href="{% url 'detalhe_noticia' slug=noticia.slug %}"> 
                     {% if noticia.imagem_principal %}
                         <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
                     {% else %}
@@ -325,7 +391,7 @@
                     {% endif %}
                 </a>
                 <span class="category-tag">{{ noticia.get_categoria_display }}</span>
-                <h4><a href="{% url 'jornal_commercio:detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
+                <h4><a href="{% url 'detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
             </article>
             {% endfor %}
         </div>

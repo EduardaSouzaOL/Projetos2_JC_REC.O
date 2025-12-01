@@ -134,7 +134,8 @@ class Comunidade(models.Model):
         max_length=50,
         choices=CATEGORIA_CHOICES,
         default='GERAL',
-        verbose_name="Categoria"
+        verbose_name="Categoria",
+        unique=True
     )
 
     criador = models.ForeignKey(
@@ -192,6 +193,15 @@ class Publicacao(models.Model):
         settings.AUTH_USER_MODEL,
         related_name="publicacoes_salvas",
         blank=True
+    )
+    
+    noticia_relacionada = models.ForeignKey(
+        Noticia,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="publicacoes_comunidade",
+        verbose_name="Notícia Relacionada"
     )
     
     class Meta:
