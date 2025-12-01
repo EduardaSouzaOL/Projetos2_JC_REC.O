@@ -4,7 +4,10 @@ import os
 from django.conf import settings
 from .models import Quiz, Pergunta, Opcao
 
-GENAI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDmJFG5prWjP2w1WGd48t6LsobxAWnkqCc")
+GENAI_API_KEY = os.getenv("GEMINI_API_KEY") 
+
+if not GENAI_API_KEY:
+    print("⚠️  AVISO: GEMINI_API_KEY não encontrada no arquivo .env")
 
 def gerar_quiz_com_gemini(noticia_obj):
 
