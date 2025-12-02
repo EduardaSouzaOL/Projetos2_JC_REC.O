@@ -1,225 +1,327 @@
-    {% load static %}
-    <!DOCTYPE html>
-    <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Jornal do Commercio{% endblock %}</title>
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Jornal do Commercio{% endblock %}</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'jornal_commercio/css/style.css' %}">
+    
+    <style>
+        /* Ajuste do container da navegação do topo para alinhar itens */
+        .top-nav-left ul {
+            display: flex;
+            align-items: center; /* Alinha verticalmente no centro */
+            gap: 25px; /* Espaço entre EDIÇÃO DO DIA e ASSUNTOS */
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        /* Estilo padrão para os links do topo */
+        .nav-link-top {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Espaço entre texto e seta */
+            padding: 10px 0; /* Área de clique */
+            cursor: pointer;
+        }
+
+        /* Container do Dropdown (Pai) */
+        .nav-item-assuntos {
+            position: relative; /* Âncora para o menu absoluto */
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        /* O Menu Suspenso (A caixa cinza) */
+        ul.dropdown-menu {
+            display: none; /* Começa escondido */
+            position: absolute;
+            top: 100%; /* Logo abaixo do pai */
+            left: 50%;
+            transform: translateX(-50%); /* Centraliza */
+            
+            /* Layout Vertical */
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            gap: 0;
+            
+            /* Visual do Wireframe */
+            background-color: #d9d9d9; /* Cinza */
+            border: 1px solid #000000; /* Borda preta */
+            border-radius: 12px;       /* Cantos arredondados */
+            min-width: 160px;          /* Largura fixa */
+            z-index: 9999;             /* Fica na frente de tudo */
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+        }
+
+        /* AÇÃO: Mostrar ao passar o mouse */
+        .nav-item-assuntos:hover .dropdown-menu {
+            display: flex;
+        }
+
+        /* Linhas da lista */
+        ul.dropdown-menu li {
+            width: 100%;
+            border-bottom: 1px solid #000; /* Linha preta */
+            list-style: none;
+        }
         
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <link rel="stylesheet" href="{% static 'jornal_commercio/css/style.css' %}">
+        ul.dropdown-menu li:last-child {
+            border-bottom: none; /* Remove borda do último */
+        }
+
+        /* Links dentro do Dropdown */
+        ul.dropdown-menu li a {
+            display: block;
+            padding: 12px 0;
+            color: #000000 !important; /* Texto Preto */
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            background: transparent;
+        }
+
+        /* Hover cinza */
+        ul.dropdown-menu li a:hover {
+            background-color: #bfbfbf;
+        }
         
-        {% block styles %}{% endblock %}
-    </head>
-    <body>
-        <header class="top-header">
-        <div class="container">
-            <nav class="top-nav-left">
-                <ul>
-                    <li><a href="#">EDIÇÃO DO DIA</a></li>
-                    <li><a href="#">ASSUNTOS</a></li>
-                </ul>
-            </nav>
-            <div class="logo-container">
-                <a href="/">
-                    <img src="{% static 'jornal_commercio/images/logo_jc.png' %}" alt="Logo JC" height="35">
-                </a>
-            </div>
-            <div class="header-icons">
-                <button id="open-feedback-modal" class="header-icon-btn" aria-label="Enviar Feedback">
-                    <img src="{% static 'jornal_commercio/images/notification.png' %}" alt="Notificações">
-                </button>
-                <a href="#" aria-label="Buscar">
-                    <img src="{% static 'jornal_commercio/images/search.png' %}" alt="Buscar">
-                </a>
+        /* Arredondamento no hover */
+        ul.dropdown-menu li:first-child a:hover { border-radius: 11px 11px 0 0; }
+        ul.dropdown-menu li:last-child a:hover { border-radius: 0 0 11px 11px; }
 
-                {% if user.is_authenticated %}
-                    <a href="{% url 'usuario:perfil' %}" aria-label="Perfil de Usuário">
-                        <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
-                    </a>
-                    <form id="logout-form" method="POST" action="{% url 'usuario:logout' %}" style="display: contents;">
-                        {% csrf_token %}
-                        <a href="#" onclick="document.getElementById('logout-form').submit(); return false;" aria-label="Sair" style="color: #ffffffff; text-decoration: none; margin-left: 10px; font-weight: 500; font-size: 14px;">Sair</a>
-                    </form>
-
-                {% else %}
-                    <a href="{% url 'usuario:login' %}" aria-label="Login">
-                        <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-        </header>
-
-        <nav class="main-nav">
-            <div class="container">
-                <ul>
-                    <li><a href="#">NOTÍCIAS DO DIA</a></li>
-                    <li><a href="#">COLUNISTAS</a></li>
-                    <li><a href="#">NOTÍCIAS DE PE</a></li>
-                    <li><a href="{% url 'comunidades_lista' %}">COMUNIDADES</a></li>
-                    <li><a href="#">RECALL DA MARCA</a></li>
-                    <li><a href="#">ANUNCIE AQUI</a></li>
-                </ul>
-            </div>
-        </nav>
-        {% if messages %}
-            <ul class="messages-container">
-                {% for message in messages %}
-                    <li class="message {{ message.tags }}">
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        <main>
-            {% block content %}
-            {% endblock content %}
-        </main>
-
-        <footer class="site-footer">
-            <div class="container">
-                <div class="footer-column">
-                    <img src="{% static 'jornal_commercio/images/logo_jc.png' %}" alt="Logo JC" class="footer-logo" height="45" width="81.2">
-                    <a href="{% url 'usuario:newsletter_page' %}">Newsletter</a>
-                    <a href="#">Quem somos nós</a>
-                    <a href="#">FAQ</a>
-                </div>
-                <div class="footer-column">
-                    <h4>OUÇA AGORA</h4>
-                    <a href="#">Rádio Jornal</a>
-                    <a href="#">TV Jornal</a>
-                </div>
-                <div class="footer-column">
-                    <h4>SIGA O JC</h4>
-                    <div class="social-icons">
-                        <a href="https://www.youtube.com/c/TVJCPE/videos" aria-label="YouTube">
-                            <img src="{% static 'jornal_commercio/images/youtube.png' %}" alt="Buscar">
-                        </a>
-                        <a href="https://www.instagram.com/jc_pe/?hl=pt" aria-label="Instagram">
-                            <img src="{% static 'jornal_commercio/images/instagram.png' %}" alt="Buscar">
-                        </a>
-                        <a href="https://x.com/jc_pe" aria-label="X/Twitter">
-                            <img src="{% static 'jornal_commercio/images/twitter.png' %}" alt="Buscar">
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <div id="feedback-modal-overlay" class="modal-overlay">
-            <div class="modal-content">
-                <button id="close-feedback-modal" class="modal-close">&times;</button>
-                <h3>Envie seu Feedback</h3>
-                <p>Gostou do site? Tem sugestões? Nos diga!</p>
+        /* Setinha no topo */
+        ul.dropdown-menu::before {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 6px 6px 6px;
+            border-style: solid;
+            border-color: transparent transparent #000 transparent;
+        }
+    </style>
+    
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <header class="top-header">
+    <div class="container">
+        <nav class="top-nav-left">
+            <ul>
+                <li>
+                    <a href="#" class="nav-link-top">EDIÇÃO DO DIA</a>
+                </li>
                 
-                <div id="form-message-box" class="form-message"></div>
+                <li class="nav-item-assuntos">
+                    <a href="#" class="nav-link-top">
+                        ASSUNTOS <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                    </a>
+                    
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Política</a></li>
+                        <li><a href="#">Economia</a></li>
+                        <li><a href="#">Esporte</a></li>
+                        <li><a href="#">Entretenimento</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="logo-container">
+            <a href="/">
+                <img src="{% static 'jornal_commercio/images/logo_jc.png' %}" alt="Logo JC" height="35">
+            </a>
+        </div>
+        
+        <div class="header-icons">
+            <button id="open-feedback-modal" class="header-icon-btn" aria-label="Enviar Feedback">
+                <img src="{% static 'jornal_commercio/images/notification.png' %}" alt="Notificações">
+            </button>
+            <a href="#" aria-label="Buscar">
+                <img src="{% static 'jornal_commercio/images/search.png' %}" alt="Buscar">
+            </a>
 
-                <form id="modal-feedback-form" data-url="{% url 'salvar_feedback' %}">
+            {% if user.is_authenticated %}
+                <a href="{% url 'usuario:perfil' %}" aria-label="Perfil de Usuário">
+                    <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
+                </a>
+                <form id="logout-form" method="POST" action="{% url 'usuario:logout' %}" style="display: contents;">
                     {% csrf_token %}
-                    
-                    <label for="{{ global_feedback_form.email.id_for_label }}">Email:</label>
-                    {{ global_feedback_form.email }}
-
-                    <label for="{{ global_feedback_form.mensagem.id_for_label }}">Mensagem:</label>
-                    {{ global_feedback_form.mensagem }}
-                    
-                    <button type="submit">Enviar</button>
+                    <a href="#" onclick="document.getElementById('logout-form').submit(); return false;" aria-label="Sair" style="color: #ffffffff; text-decoration: none; margin-left: 10px; font-weight: 500; font-size: 14px;">Sair</a>
                 </form>
+
+            {% else %}
+                <a href="{% url 'usuario:login' %}" aria-label="Login">
+                    <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="container">
+            <ul>
+                <li><a href="#">NOTÍCIAS DO DIA</a></li>
+                <li><a href="#">COLUNISTAS</a></li>
+                <li><a href="#">NOTÍCIAS DE PE</a></li>
+                <li><a href="{% url 'comunidades_lista' %}">COMUNIDADES</a></li>
+                <li><a href="#">RECALL DA MARCA</a></li>
+                <li><a href="https://ads.sjcc.com.br/" target="_blank" rel="noopener noreferrer">ANUNCIE AQUI</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    {% if messages %}
+        <ul class="messages-container">
+            {% for message in messages %}
+                <li class="message {{ message.tags }}">
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-column">
+                <img src="{% static 'jornal_commercio/images/logo_jc.png' %}" alt="Logo JC" class="footer-logo" height="45" width="81.2">
+                <a href="{% url 'usuario:newsletter_page' %}">Newsletter</a>
+                <a href="#">Quem somos nós</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="footer-column">
+                <h4>OUÇA AGORA</h4>
+                <a href="#">Rádio Jornal</a>
+                <a href="#">TV Jornal</a>
+            </div>
+            <div class="footer-column">
+                <h4>SIGA O JC</h4>
+                <div class="social-icons">
+                    <a href="https://www.youtube.com/c/TVJCPE/videos" aria-label="YouTube">
+                        <img src="{% static 'jornal_commercio/images/youtube.png' %}" alt="Buscar">
+                    </a>
+                    <a href="https://www.instagram.com/jc_pe/?hl=pt" aria-label="Instagram">
+                        <img src="{% static 'jornal_commercio/images/instagram.png' %}" alt="Buscar">
+                    </a>
+                    <a href="https://x.com/jc_pe" aria-label="X/Twitter">
+                        <img src="{% static 'jornal_commercio/images/twitter.png' %}" alt="Buscar">
+                    </a>
+                </div>
             </div>
         </div>
+    </footer>
 
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Elementos do Modal
-            const modalOverlay = document.getElementById('feedback-modal-overlay');
-            const openBtn = document.getElementById('open-feedback-modal'); // <-- GATILHO
-            const closeBtn = document.getElementById('close-feedback-modal');
+    <div id="feedback-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="close-feedback-modal" class="modal-close">&times;</button>
+            <h3>Envie seu Feedback</h3>
+            <p>Gostou do site? Tem sugestões? Nos diga!</p>
+            <div id="form-message-box" class="form-message"></div>
+            <form id="modal-feedback-form" data-url="{% url 'salvar_feedback' %}">
+                {% csrf_token %}
+                <label for="{{ global_feedback_form.email.id_for_label }}">Email:</label>
+                {{ global_feedback_form.email }}
+                <label for="{{ global_feedback_form.mensagem.id_for_label }}">Mensagem:</label>
+                {{ global_feedback_form.mensagem }}
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
 
-            // 1. LÓGICA PARA ABRIR E FECHAR O MODAL
-            
-            if (openBtn) {
-                openBtn.addEventListener('click', function() {
-                    modalOverlay.style.display = 'flex';
-                });
-            }
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modalOverlay = document.getElementById('feedback-modal-overlay');
+        const openBtn = document.getElementById('open-feedback-modal');
+        const closeBtn = document.getElementById('close-feedback-modal');
 
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function() {
-                    modalOverlay.style.display = 'none';
-                });
-            }
-
-            window.addEventListener('click', function(e) {
-                if (e.target === modalOverlay) {
-                    modalOverlay.style.display = 'none';
-                }
+        if (openBtn) {
+            openBtn.addEventListener('click', function() {
+                modalOverlay.style.display = 'flex';
             });
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                modalOverlay.style.display = 'none';
+            });
+        }
+        window.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
 
+        const feedbackForm = document.getElementById('modal-feedback-form');
+        const messageBox = document.getElementById('form-message-box');
 
-            // 2. LÓGICA PARA ENVIAR O FORMULÁRIO (AJAX)
-            
-            const feedbackForm = document.getElementById('modal-feedback-form');
-            const messageBox = document.getElementById('form-message-box');
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', function(e) {
+                e.preventDefault(); 
+                const form = this;
+                const formData = new FormData(form);
+                const url = form.getAttribute('data-url');
+                
+                messageBox.style.display = 'none';
+                messageBox.textContent = '';
+                messageBox.className = 'form-message';
 
-            if (feedbackForm) {
-                feedbackForm.addEventListener('submit', function(e) {
-                    e.preventDefault(); 
-                    
-                    const form = this;
-                    const formData = new FormData(form);
-                    const url = form.getAttribute('data-url');
-                    
-                    messageBox.style.display = 'none';
-                    messageBox.textContent = '';
-                    messageBox.className = 'form-message';
-
-                    fetch(url, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRFToken': formData.get('csrfmiddlewaretoken') 
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-CSRFToken': formData.get('csrfmiddlewaretoken') }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        form.reset(); 
+                        messageBox.textContent = data.message;
+                        messageBox.classList.add('success');
+                        messageBox.style.display = 'block';
+                        setTimeout(() => {
+                            modalOverlay.style.display = 'none';
+                            messageBox.style.display = 'none';
+                        }, 2500);
+                    } else {
+                        let errorMsg = 'Ocorreu um erro.';
+                        if (data.errors) {
+                            const firstErrorKey = Object.keys(data.errors)[0];
+                            errorMsg = data.errors[firstErrorKey][0].message;
                         }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            form.reset(); 
-                            messageBox.textContent = data.message;
-                            messageBox.classList.add('success');
-                            messageBox.style.display = 'block';
-                            
-                            setTimeout(() => {
-                                modalOverlay.style.display = 'none';
-                                messageBox.style.display = 'none';
-                            }, 2500);
-
-                        } else {
-                            let errorMsg = 'Ocorreu um erro. Verifique os campos.';
-                            if (data.errors) {
-                                const firstErrorKey = Object.keys(data.errors)[0];
-                                errorMsg = data.errors[firstErrorKey][0].message;
-                            }
-                            messageBox.textContent = errorMsg;
-                            messageBox.classList.add('error');
-                            messageBox.style.display = 'block';
-                        }
-                    })
-                    .catch(error => {
-                        messageBox.textContent = 'Erro de conexão. Tente novamente.';
+                        messageBox.textContent = errorMsg;
                         messageBox.classList.add('error');
                         messageBox.style.display = 'block';
-                    });
+                    }
+                })
+                .catch(error => {
+                    messageBox.textContent = 'Erro de conexão.';
+                    messageBox.classList.add('error');
+                    messageBox.style.display = 'block';
                 });
-            }
-
-        });
-        </script>
+            });
+        }
+    });
+    </script>
 
     {% block scripts %}
     {% endblock scripts %}
 
-    </body>
-    </html>
+</body>
+</html>
