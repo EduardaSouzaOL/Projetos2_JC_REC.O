@@ -98,6 +98,8 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 </details>
 
+<details>
+
 <summary><h2><strong>Semana 13</strong></h2></summary>
 
 ## Readme do projeto
@@ -108,7 +110,7 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 </details>
 
-</details>
+<details>
 
 <summary><h2><strong>Semana 14</strong></h2></summary>
 
@@ -117,12 +119,11 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
-
 </details>
 
-</details>
+<details>
 
-<summary><h2><strong>Semana 13</strong></h2></summary>
+<summary><h2><strong>Semana 15</strong></h2></summary>
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
@@ -132,6 +133,32 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 </details>
 
+<details>
+
+<summary><h2><strong>Semana 16</strong></h2></summary>
+
+## Readme do projeto
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Github/Bug tracker
+## Screencasts
+[Screencast do Deploy e Build](https://youtu.be/IvP5mJcLpW0?si=DJ59qH_hepAUvUdo)
+[Screencast com testes automatizados](https://youtu.be/mQkUSTYzLEo?si=DxFpF0FENEtZR4bc)
+<img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
+
+
+</details>
+
+<details>
+
+<summary><h2><strong>Semana 17</strong></h2></summary>
+
+## Readme do projeto
+[Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+## Github/Bug tracker 
+<img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
+
+
+</details>
 
 
 ## Equipe
