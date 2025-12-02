@@ -61,8 +61,7 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
-## Relatório em par
-[Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
+
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/5acb7130-898b-40ae-862a-56fa4c8dde4a" width="800" height="800">
 
@@ -74,8 +73,7 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
-## Relatório em par
-[Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
+
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/5acb7130-898b-40ae-862a-56fa4c8dde4a" width="800" height="800">
 
@@ -91,10 +89,18 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
-## Relatório em par
-[Relatório em par](https://docs.google.com/document/d/1pkSo2CxC9ket5Wc5D7Jd4AgyTc_JQGDuPIUWokfuXmE/edit?usp=sharing)
+
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/894d4dbe-e701-433f-883c-10b5030a7a95" width="800" height="800">
+
+## Atualização de models.py
+[Models.py](https://docs.google.com/document/d/1eSmwrPEf1FKEVPd2q_7RvG8ga6rGxcNnMXziCqjlOXk/edit?tab=t.0#heading=h.opjurt3ud2wo)
+
+## Implementação de testes automatizados para as histórias anteriores
+<img  src="LINK_AQUI" width="800" height="800">
+
+## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados.
+<img  src="LINK_AQUI" width="800" height="800">
 
 </details>
 
@@ -104,9 +110,13 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
+## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados.
+
+<img  src="LINK_AQUI" height="800">
 
 </details>
 
@@ -116,8 +126,15 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
+
+## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados.
+<img  src="LINK_AQUI" height="800">
+
+## Implementação de CI/CD com build e deployment automatizado (pipeline criada no Github)
+<img  src="LINK_AQUI" height="800">
 
 </details>
 
@@ -127,9 +144,15 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
+## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados.
+<img  src="LINK_AQUI" height="800">
+
+## Criação (versão 1) do relatório da programação em PAR
+[Relatório em par](https://docs.google.com/document/d/1t9jvFYmry2S329ChkxpLAz1luDA3DE8hXnyaC81eKEg/edit?usp=sharing)
 
 </details>
 
@@ -139,12 +162,17 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+
 ## Github/Bug tracker
-## Screencasts
-[Screencast do Deploy e Build](https://youtu.be/IvP5mJcLpW0?si=DJ59qH_hepAUvUdo)
-[Screencast com testes automatizados](https://youtu.be/mQkUSTYzLEo?si=DxFpF0FENEtZR4bc)
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
+## Screencasts
+[Screencast do Deploy e Build](https://youtu.be/IvP5mJcLpW0?si=DJ59qH_hepAUvUdo)
+
+[Screencast com testes automatizados](https://youtu.be/mQkUSTYzLEo?si=DxFpF0FENEtZR4bc)
+
+## Pipeline CI / CD no GitHub alterada com adição dos testes automatizados
+<img  src="LINK_AQUI" height="800">
 
 </details>
 
@@ -154,9 +182,18 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 
 ## Readme do projeto
 [Readme](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O)
+
 ## Github/Bug tracker 
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
+## Documentação clara e objetiva conduzindo qualquer pessoa a montar o ambiente corretamente e contribuir com o projeto.
+[Documentação](LINK_AQUI)
+
+## Finalização do relatório da programação em PAR.
+[Relatório](https://docs.google.com/document/d/1t9jvFYmry2S329ChkxpLAz1luDA3DE8hXnyaC81eKEg/edit?tab=t.0#heading=h.w0djdfmymfta)
+
+## Criação de usuários na aplicação para uso dos avaliadores para fins de testes.
+<img  src="LINK_AQUI" height="800">
 
 </details>
 
