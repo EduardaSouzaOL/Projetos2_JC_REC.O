@@ -25,7 +25,6 @@ CATEGORIA_CHOICES = [
 ]
 
 class Noticia(models.Model):
-    
     titulo = models.CharField(
         max_length=200,
         blank=False,
@@ -165,7 +164,6 @@ class Comunidade(models.Model):
 
 
 class Publicacao(models.Model):
-
     comunidade = models.ForeignKey(
         Comunidade, 
         on_delete=models.CASCADE,
@@ -214,7 +212,6 @@ class Publicacao(models.Model):
 
 
 class Comentario(models.Model):
-
     publicacao = models.ForeignKey(
         Publicacao, 
         on_delete=models.CASCADE,
@@ -314,7 +311,6 @@ class Pergunta(models.Model):
 
 
 class Opcao(models.Model):
-
     pergunta = models.ForeignKey(
         Pergunta,
         on_delete=models.CASCADE,
@@ -327,7 +323,6 @@ class Opcao(models.Model):
         return f"({'X' if self.correta else ' '}) {self.texto}"
 
 class TentativaQuiz(models.Model):
-
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -378,19 +373,37 @@ class RespostaUsuario(models.Model):
         return f"Resposta de {self.tentativa.usuario} para {self.pergunta.id}"
 
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# --- SIGNALS ---
 
 @receiver(post_save, sender=Noticia)
 def gerar_quiz_automatico(sender, instance, created, **kwargs):
+    """
+    Sinal que dispara a criação do Quiz via IA em uma thread separada
+    quando uma nova notícia é criada.
+    """
     if created:
         print(f"--- GATILHO: Notícia '{instance.titulo}' criada. Iniciando geração de Quiz com IA... ---")
-        
-@receiver(post_save, sender=Noticia)
-def gerar_quiz_automatico(sender, instance, created, **kwargs):
+        try:
+            # Importar aqui para evitar importação circular se o service usar models
+            from .ai_service import gerar_quiz_com_gemini
+            
+            thread = threading.Thread(target=gerar_quiz_com_gemini, args=(instance,))
+            thread.start()
+        except ImportError:
+            print("Erro: ai_service não encontrado ou erro na importação.")
+        except Exception as e:
+            print(f"Erro ao disparar thread de IA: {e}")
 
-    if created:
-        from .ai_service import gerar_quiz_com_gemini
-        
-        thread = threading.Thread(target=gerar_quiz_com_gemini, args=(instance,))
-        thread.start()
+class Edicao(models.Model):
+    titulo = models.CharField(max_length=200, verbose_name="Título da Manchete")
+    imagem_capa = models.ImageField(upload_to='edicoes/', verbose_name="Imagem da Capa")
+    link_leitura = models.URLField(verbose_name="Link para Leitura (PDF ou Site)")
+    data_publicacao = models.DateField(default=timezone.now, verbose_name="Data da Edição")
+
+    class Meta:
+        verbose_name = "Edição do Dia"
+        verbose_name_plural = "Edições do Dia"
+        ordering = ['-data_publicacao']
+
+    def __str__(self):
+        return f"Edição de {self.data_publicacao.strftime('%d/%m/%Y')}"
