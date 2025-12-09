@@ -14,4 +14,6 @@ urlpatterns = [
     path('comunidades/<int:pk>/toggle_membro/', views.toggle_membro, name='toggle_membro'),
     path('api/salvar-quiz/', views.salvar_resposta_quiz, name='salvar_resposta_quiz'),
     path('api/finalizar-quiz/<int:quiz_id>/', views.finalizar_quiz, name='finalizar_quiz'),
+    path('jc-quest/', views.quiz_hub, name='quiz_hub'),
+    path('jc-quest/jogar/<int:quiz_id>/', views.quiz_play, name='quiz_play'),
 ]

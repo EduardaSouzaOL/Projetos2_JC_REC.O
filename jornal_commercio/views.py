@@ -9,7 +9,7 @@ from django.urls import reverse
 from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
 from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
@@ -340,3 +340,30 @@ def criar_admin_temporario(request):
         return HttpResponse("<h1>SUCESSO!</h1><p>Usuário: <b>admin</b></p><p>Senha: <b>Admin12345!</b></p>")
     except Exception as e:
         return HttpResponse(f"<h1>ERRO:</h1> <p>{str(e)}</p>")
+
+def quiz_hub(request):
+    quizzes = Quiz.objects.all().order_by('-data_criacao')
+    
+    pontos_usuario = 0
+    if request.user.is_authenticated:
+        total = TentativaQuiz.objects.filter(usuario=request.user, concluido=True).aggregate(Sum('pontuacao'))
+        pontos_usuario = total['pontuacao__sum'] or 0
+
+    return render(request, 'jornal_commercio/quiz_hub.html', {
+        'quizzes': quizzes,
+        'pontos_usuario': pontos_usuario
+    })
+
+def quiz_play(request, quiz_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    
+    respostas_ids = []
+    if request.user.is_authenticated:
+        tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz=quiz).first()
+        if tentativa:
+            respostas_ids = list(tentativa.respostas.values_list('opcao_escolhida_id', flat=True))
+
+    return render(request, 'jornal_commercio/quiz_play.html', {
+        'quiz': quiz,
+        'respostas_ids': respostas_ids
+    })

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ quiz.titulo }} - Jogar{% endblock %}
+
+{% block styles %}
+<style>
+    body { background-color: #f4f4f4; }
+
+    .play-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .play-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .jc-quest-logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        border-bottom: 3px solid #e62323;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    /* BLOCO DA PERGUNTA */
+    .question-block {
+        margin-bottom: 60px; /* Espaço entre perguntas */
+    }
+
+    .question-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 25px;
+    }
+    .question-number { margin-right: 10px; }
+
+    /* CARD BRANCO DA PERGUNTA */
+    .question-card {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .question-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    /* OPÇÕES */
+    .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .option-btn {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: left;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .option-btn:hover {
+        border-color: #999;
+        transform: translateY(-2px);
+    }
+
+    /* ESTADOS DE RESPOSTA */
+    .option-btn.correct {
+        background-color: #2ecc71 !important;
+        color: white !important;
+        border-color: #27ae60 !important;
+    }
+    .option-btn.incorrect {
+        background-color: #e74c3c !important;
+        color: white !important;
+        border-color: #c0392b !important;
+    }
+    .option-btn.disabled {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .feedback-icon { display: none; font-size: 1.2rem; }
+    .correct .fa-check { display: block; }
+    .incorrect .fa-times { display: block; }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="play-container">
+    
+    <div class="play-header">
+        <span class="jc-quest-logo">JC QUEST</span>
+        <h2>{{ quiz.titulo|default:quiz.noticia.titulo }}</h2>
+    </div>
+
+    {% for pergunta in quiz.perguntas.all %}
+    <div class="question-block" id="pergunta-block-{{ pergunta.id }}">
+        
+        <h3 class="question-title">
+            <span class="question-number">{{ forloop.counter }}.</span>
+            {{ pergunta.texto }}
+        </h3>
+
+        <div class="question-card">
+            {% if quiz.noticia.imagem_principal %}
+                <img src="{{ quiz.noticia.imagem_principal.url }}" class="question-image" alt="Imagem ilustrativa">
+            {% endif %}
+
+            <div class="options-list" id="pergunta-{{ pergunta.id }}">
+                {% for opcao in pergunta.opcoes.all %}
+                <div class="option-btn 
+                        {% if opcao.id in respostas_ids %}
+                            {% if opcao.correta %}correct{% else %}incorrect{% endif %} disabled
+                        {% endif %}"
+                     onclick="verificarResposta(this, '{{ opcao.id }}', '{{ opcao.correta|lower }}', {{ pergunta.id }})">
+                    
+                    <span>
+                        <strong style="margin-right: 8px;">{{ forloop.counter|slugify }})</strong> 
+                        {{ opcao.texto }}
+                    </span>
+
+                    <i class="fas fa-check feedback-icon"></i>
+                    <i class="fas fa-times feedback-icon"></i>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function verificarResposta(element, opcaoId, isCorrect, perguntaId) {
+        if (element.classList.contains('disabled')) return;
+        
+        // Bloqueia outras opções da mesma pergunta
+        const parent = document.getElementById('pergunta-' + perguntaId);
+        const siblings = parent.querySelectorAll('.option-btn');
+        siblings.forEach(el => el.classList.add('disabled'));
+
+        // Feedback Visual
+        if (isCorrect === 'true') {
+            element.classList.add('correct');
+        } else {
+            element.classList.add('incorrect');
+        }
+
+        // Salva no banco via AJAX
+        {% if user.is_authenticated %}
+        fetch("{% url 'salvar_resposta_quiz' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ opcao_id: opcaoId })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Resposta salva"))
+        .catch(error => console.error("Erro ao salvar:", error));
+        {% else %}
+        alert("Faça login para salvar seus pontos!");
+        {% endif %}
+    }
+</script>
+{% endblock %}
