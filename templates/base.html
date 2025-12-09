@@ -32,6 +32,13 @@
             padding: 10px 0; /* Área de clique */
             cursor: pointer;
         }
+        
+        .main-nav ul {
+            justify-content: space-between;
+        }
+        .main-nav a {
+            width: 200px;
+        }
 
         /* --- Botão Hambúrguer na Navbar --- */
         .nav-item-hamburger {
@@ -40,6 +47,7 @@
         }
         .nav-item-hamburger a {
             font-size: 18px; /* Tamanho do ícone */
+            width: 60px;
         }
 
         /* --- Sidebar e Overlay --- */
@@ -203,12 +211,10 @@
     <nav class="main-nav">
         <div class="container">
             <ul>
-                <li><a href="#">NOTÍCIAS DO DIA</a></li>
+                <li><a href="#">MATÉRIAS</a></li>
                 <li><a href="#">COLUNISTAS</a></li>
-                <li><a href="#">NOTÍCIAS DE PE</a></li>
+                <li><a href="#">JC QUEST</a></li>
                 <li><a href="{% url 'comunidades_lista' %}">COMUNIDADES</a></li>
-                <li><a href="#">RECALL DA MARCA</a></li>
-                <li><a href="https://ads.sjcc.com.br/" target="_blank" rel="noopener noreferrer">ANUNCIE AQUI</a></li>
                 <li class="nav-item-hamburger">
                     <a href="#" id="menu-toggle" aria-label="Abrir Menu">
                         <i class="fas fa-bars"></i>
@@ -303,15 +309,15 @@
                 <li><a href="#">Comércio</a></li>
                 <li><a href="#">Social</a></li>
                 <h3>NOSSOS PRODUTOS</h3>
-                <li><a href="/">NE10 Interior</a></li>
-                <li><a href="/">Rádio Jornal</a></li>
-                <li><a href="/">TV Jornal</a></li>
-                <li><a href="/">Blog do Torcedor</a></li>
-                <li><a href="/">Social1</a></li>
-                <li><a href="/">Receita da Boa</a></li>
+                <li><a href="#">NE10 Interior</a></li>
+                <li><a href="#">Rádio Jornal</a></li>
+                <li><a href="#">TV Jornal</a></li>
+                <li><a href="#">Blog do Torcedor</a></li>
+                <li><a href="#">Social1</a></li>
+                <li><a href="#">Receita da Boa</a></li>
                 <h3>MAIS</h3>
-                <li><a href="/">Recall de Marcas</a></li>
-                <li><a href="/">Anuncie aqui</a></li>
+                <li><a href="#">Recall de Marcas</a></li>
+                <li><a href="https://ads.sjcc.com.br/" target="_blank" rel="noopener noreferrer">Anuncie aqui</a></li>
             </ul>
         </div>
     </aside>
