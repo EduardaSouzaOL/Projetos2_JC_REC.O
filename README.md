@@ -1,4 +1,4 @@
-<img src="https://github.com/user-attachments/assets/fa630238-b742-4dc6-b764-6cab4d6ae9fa" width="900" height="900" alt="Logo JC REC.O">
+![Image](https://github.com/user-attachments/assets/7a73cffb-b8ce-4738-8a0d-00e54d101d26)
 
   # 📰 JC REC.O - Sistema de Recomendação
 
