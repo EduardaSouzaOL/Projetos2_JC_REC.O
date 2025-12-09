@@ -33,86 +33,6 @@
             cursor: pointer;
         }
 
-        /* Container do Dropdown (Pai) */
-        .nav-item-assuntos {
-            position: relative; /* Âncora para o menu absoluto */
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        /* O Menu Suspenso (A caixa cinza) */
-        ul.dropdown-menu {
-            display: none; /* Começa escondido */
-            position: absolute;
-            top: 100%; /* Logo abaixo do pai */
-            left: 50%;
-            transform: translateX(-50%); /* Centraliza */
-            
-            /* Layout Vertical */
-            flex-direction: column;
-            margin: 0;
-            padding: 0;
-            gap: 0;
-            
-            /* Visual do Wireframe */
-            background-color: #d9d9d9; /* Cinza */
-            border: 1px solid #000000; /* Borda preta */
-            border-radius: 12px;       /* Cantos arredondados */
-            min-width: 160px;          /* Largura fixa */
-            z-index: 9999;             /* Fica na frente de tudo */
-            box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
-        }
-
-        /* AÇÃO: Mostrar ao passar o mouse */
-        .nav-item-assuntos:hover .dropdown-menu {
-            display: flex;
-        }
-
-        /* Linhas da lista */
-        ul.dropdown-menu li {
-            width: 100%;
-            border-bottom: 1px solid #000; /* Linha preta */
-            list-style: none;
-        }
-        
-        ul.dropdown-menu li:last-child {
-            border-bottom: none; /* Remove borda do último */
-        }
-
-        /* Links dentro do Dropdown */
-        ul.dropdown-menu li a {
-            display: block;
-            padding: 12px 0;
-            color: #000000 !important; /* Texto Preto */
-            text-align: center;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            background: transparent;
-        }
-
-        /* Hover cinza */
-        ul.dropdown-menu li a:hover {
-            background-color: #bfbfbf;
-        }
-        
-        /* Arredondamento no hover */
-        ul.dropdown-menu li:first-child a:hover { border-radius: 11px 11px 0 0; }
-        ul.dropdown-menu li:last-child a:hover { border-radius: 0 0 11px 11px; }
-
-        /* Setinha no topo */
-        ul.dropdown-menu::before {
-            content: "";
-            position: absolute;
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 0 6px 6px 6px;
-            border-style: solid;
-            border-color: transparent transparent #000 transparent;
-        }
-
         /* --- Botão Hambúrguer na Navbar --- */
         .nav-item-hamburger {
             flex-grow: 0 !important; /* Impede que o botão estique igual aos outros itens */
@@ -233,7 +153,7 @@
                     <a href="#" class="nav-link-top">EDIÇÃO DO DIA</a>
                 </li>
                 
-                <li class="nav-item-assuntos">
+                {% comment %} <li class="nav-item-assuntos">
                     <a href="#" class="nav-link-top">
                         ASSUNTOS <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </a>
@@ -244,7 +164,7 @@
                         <li><a href="#">Esporte</a></li>
                         <li><a href="#">Entretenimento</a></li>
                     </ul>
-                </li>
+                </li> {% endcomment %}
             </ul>
         </nav>
         
