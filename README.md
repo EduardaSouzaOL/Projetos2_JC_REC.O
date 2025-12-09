@@ -97,11 +97,10 @@ O Problema - > Redução da permanência dos usuários no site, tanto no consumo
 [Models.py](https://docs.google.com/document/d/1eSmwrPEf1FKEVPd2q_7RvG8ga6rGxcNnMXziCqjlOXk/edit?tab=t.0#heading=h.opjurt3ud2wo)
 
 ## Implementação de testes automatizados para as histórias anteriores
-<img src="https://lh3.googleusercontent.com/sitesv/AAzXCkcmTry_ZooE3J9Jj4hDsE_Kp6_xt9r0G8150ew2FBNftNkecqNjh6juISggURIdUDbFvyMqC95iX2e2okkSxfPrJNDKS2H09OETCudfw8r0mErv8WwsBjmSQy44sBZ2Bq5mbfQ07oofm3twGpdlVgdyuq_T1C08MGOFBxeKZJwUfPnR2ggzVzfFdv77bPtJu18mBdQO_-9h2daPXvyYLJ1ER10X9jf_U3uZ_Xw=w1280" width="800" height="800">
+![Image](https://github.com/user-attachments/assets/ddf55795-dc46-4649-9dd2-e71faf5c30b0)
 
 ## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados. 
-<img  
-src="https://lh3.googleusercontent.com/sitesv/AAzXCkepAIJWNz6lPUnipv4L_pD1bqtT1L8Wr9ByyjMS3I3pFsELhpK-hu_01rgU9pMkO11bxp7YutAL3V7wv2c4tz_FVnGxI9rHaDxn577ql29F17ioKDXUv3JSzeyer28MWHZ5RB7W07bm1H4xUUboi0rDaxMBVewPdZoG6SL6R94WH_MzjtqOUUyWjE57DYZJz4_l-aC4UZkRTd9a6Tz8_rCi0xnRn4MDgT6UcVc=w1280" width="800" height="800">
+![Image](https://github.com/user-attachments/assets/cbf43b0e-36f4-4a7e-b5fc-b15742109300)
 
 </details>
 
@@ -116,8 +115,7 @@ src="https://lh3.googleusercontent.com/sitesv/AAzXCkepAIJWNz6lPUnipv4L_pD1bqtT1L
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
 ## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados.
-<img  src="https://lh3.googleusercontent.com/sitesv/AAzXCkfyLBsnnA4jJJnzqGQmAzCPGUmiGVGMvaBO1QmXHvgipc9lWQWcxS3M3T8XJoiPukRFBnssY-fc6xRkLYFqny2foxcpkfpC1IT-VwJ-VCT2qZWhVKnYuTBUUifbslFu0rqnwvq9tSywN8gtJk7odJ9eVOaQHO4vvP-dRKmhgnnIoI9Eh-ol8amaOVe6tOmp4R0hEmI8Vex7-reKWgGHGhEQ2bkauh9pmwwokng=w1280" height="800">
-
+![Image](https://github.com/user-attachments/assets/a946dc07-12dd-4093-8a2f-bb18a8968a39)
 </details>
 
 <details>
@@ -131,10 +129,10 @@ src="https://lh3.googleusercontent.com/sitesv/AAzXCkepAIJWNz6lPUnipv4L_pD1bqtT1L
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
 ## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados.
-<img  src="https://lh3.googleusercontent.com/sitesv/AAzXCketfvKvS9cDl99Fj-KA5LxK9V6rnqr4ldKYHpAT6VRT8leXozj9j8iuX1S87jtyjSjHFJa2LNyYwxP4_68vDVwPcaVDjJZhArOwPdVTFlVAvIe_K59_r6fKMwi9geE6BxOigw-tlm18hAimNeNxmxOQoKvx3N44InGE1mZVXPdev3k2P44A18EGDwobXMz-6kanlsoBhjSJE92oEHydEPJgZjUpUV-c3peeMFM=w1280" height="800">
+<img width="1280" height="719" alt="Image" src="https://github.com/user-attachments/assets/41723aaa-17b1-42cd-8e5f-d30a4fd9f5ce" />
 
 ## Implementação de CI/CD com build e deployment automatizado (pipeline criada no Github)
-<img  src="https://lh3.googleusercontent.com/sitesv/AAzXCkcWG3_y4Kf4XdV_6D32qapred0wT9wk5FGZgoqJJLzBAHU-cMo2LjKzO6hbUwuDbNrtqmPLhpXN5tvmTHkUeMdOFd7WVcrZk_ysX66mamB1KDoe6ycBcx4ALcR6SS3SAMBz6XyjsNGA2XEMqGN965_0wMWn1kFeDu_5n9mC2ODqSy_jz1aSJT-J3-P7tiZDkirglq2POGDlNr74ABN_AW_WaepCYbwiKdoET9g=w1280" height="800">
+<img width="1280" height="719" alt="Image" src="https://github.com/user-attachments/assets/41723aaa-17b1-42cd-8e5f-d30a4fd9f5ce" />
 
 </details>
 
@@ -149,7 +147,7 @@ src="https://lh3.googleusercontent.com/sitesv/AAzXCkepAIJWNz6lPUnipv4L_pD1bqtT1L
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 
 ## Implementação e deployment de (pelo menos) 1 nova história de usuário, com uso de testes automatizados.
-<img  src="https://lh3.googleusercontent.com/sitesv/AAzXCketfvKvS9cDl99Fj-KA5LxK9V6rnqr4ldKYHpAT6VRT8leXozj9j8iuX1S87jtyjSjHFJa2LNyYwxP4_68vDVwPcaVDjJZhArOwPdVTFlVAvIe_K59_r6fKMwi9geE6BxOigw-tlm18hAimNeNxmxOQoKvx3N44InGE1mZVXPdev3k2P44A18EGDwobXMz-6kanlsoBhjSJE92oEHydEPJgZjUpUV-c3peeMFM=w1280" height="800">
+<img width="1280" height="719" alt="Image" src="https://github.com/user-attachments/assets/41723aaa-17b1-42cd-8e5f-d30a4fd9f5ce" />
 
 ## Criação (versão 1) do relatório da programação em PAR
 [Relatório em par](https://docs.google.com/document/d/1t9jvFYmry2S329ChkxpLAz1luDA3DE8hXnyaC81eKEg/edit?usp=sharing)
@@ -172,7 +170,6 @@ src="https://lh3.googleusercontent.com/sitesv/AAzXCkepAIJWNz6lPUnipv4L_pD1bqtT1L
 [Screencast com testes automatizados](https://youtu.be/mQkUSTYzLEo?si=DxFpF0FENEtZR4bc)
 
 ## Pipeline CI / CD no GitHub alterada com adição dos testes automatizados
-<img  src="LINK_AQUI" height="800">
 
 </details>
 
@@ -193,7 +190,6 @@ src="https://lh3.googleusercontent.com/sitesv/AAzXCkepAIJWNz6lPUnipv4L_pD1bqtT1L
 [Relatório](https://docs.google.com/document/d/1t9jvFYmry2S329ChkxpLAz1luDA3DE8hXnyaC81eKEg/edit?tab=t.0#heading=h.w0djdfmymfta)
 
 ## Criação de usuários na aplicação para uso dos avaliadores para fins de testes.
-<img  src="LINK_AQUI" height="800">
 
 </details>
 
