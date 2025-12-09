@@ -1,6 +1,10 @@
 <img  src="https://github.com/user-attachments/assets/fa630238-b742-4dc6-b764-6cab4d6ae9fa" width="900" height="900">
 
-# REC.O
+# 📰 JC REC.O - Projeto de Recomendação e Notícias
+![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
+![Badge License](http://img.shields.io/static/v1?label=LICENSE&message=MIT&color=BLUE&style=for-the-badge)
+
+
 Estudantes de Design e Ciência da Computação, que surge pela necessidade de proporcionar melhores soluções digitais para marcas que querem se destacar. Por isso, criamos a  REC.O, uma organização que analisa serviços digitais e, a partir de estudos através do usuário e do cenário mercadológico, provemos novas soluções e possíveis melhorias à sua empresa.
 
 Projeto desenvolvido em **Python**, com a framework **Django** para resolver pontos de atrito na experiência do usuário, como a jornada longa até o conteúdo desejado e um layout pouco convidativo.
@@ -12,6 +16,46 @@ Projeto desenvolvido em **Python**, com a framework **Django** para resolver pon
 Conhecido também como JC, é um dos veículos de imprensa mais tradicionais do Brasil e ocupa um lugar central no cenário midiático de Pernambuco.
 
 O Problema - > Redução da permanência dos usuários no site, tanto no consumo de notícias quanto na frequência de acessos diários.
+
+## 🚀 Funcionalidades
+
+- [x] **Funcionalidade 1:** [Ex: Cadastro e Login de usuários]
+- [x] **Funcionalidade 2:** [Ex: Listagem de notícias recentes]
+- [x] **Funcionalidade 3:** [Ex: Sistema de recomendação baseado em tags]
+- [x] **Funcionalidade 4:** [Ex: Comunidades]
+- [x] **Funcionalidade 5:** [Ex: Quizzes para notícias]
+- [x] **Funcionalidade 6:** [Ex: Dashboard]
+- [x] **Funcionalidade 7:** [Ex: Perfil]
+
+
+## ⚙️ Pré-requisitos
+
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+[Git](https://git-scm.com), [Linguagem utilizada, ex: Python 3.11].
+Além disso, é bom ter um editor para trabalhar com o código como o [VSCode](https://code.visualstudio.com/).
+
+---
+
+## 🔧 Instalação e Execução
+
+Siga os passos abaixo para rodar o projeto localmente:
+
+### 1. Clone o repositório
+```bash
+git clone [https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O.git](https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O.git)
+````
+### 2. Acesse a pasta do projeto
+```bash
+cd Projetos2_JC_REC.O
+````
+### 3. Crie e ative o ambiente virtual
+# Windows
+python -m venv venv
+.\venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+
 
 
 ## Acesso ao site do projeto
