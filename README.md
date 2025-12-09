@@ -97,16 +97,6 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-## Deploy Azure
-[Acesse ao site](https://projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net/)
-
-## Acesso ao site do projeto
- [Site REC.O](https://sites.google.com/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/19KdY7mc0QfeCC3Vyn48laGZW0uUeZV2J/edit)
-
-
-## Acesso a admin
-<img  src="https://github.com/user-attachments/assets/b76f2410-fb73-4c55-a957-e9f657a4c4b7" width="800" height="800">
-
 ## Github/Bug tracker 
 <details>
 <img  src="https://github.com/user-attachments/assets/5acb7130-898b-40ae-862a-56fa4c8dde4a" width="800" height="800">
