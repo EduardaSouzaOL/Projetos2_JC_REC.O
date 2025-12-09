@@ -49,10 +49,10 @@ git clone [https://github.com/EduardaSouzaOL/Projetos2_JC_REC.O.git](https://git
 cd Projetos2_JC_REC.O
 ````
 ### 3. Crie e ative o ambiente virtual
-# Windows
+### Windows
 python -m venv venv
 .\venv\Scripts\activate
-# Linux/Mac
+### Linux/Mac
 source venv/bin/activate
 
 
