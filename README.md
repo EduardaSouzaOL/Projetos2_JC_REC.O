@@ -104,9 +104,27 @@ source venv/bin/activate
 <img  src="https://github.com/user-attachments/assets/42c78532-e676-4d1f-9235-18f5db300ec0" height="800">
 </details>
 
-## Documentação clara e objetiva conduzindo qualquer pessoa a montar o ambiente corretamente e contribuir com o projeto.
-[Documentação](LINK_AQUI)
+---
 
+## 🤝 Como Contribuir
+
+Ficamos felizes com o interesse em contribuir! Para manter a qualidade do código e o funcionamento dos nossos pipelines de CI/CD, siga os passos abaixo:
+
+### 1. Processo de Desenvolvimento
+1.  **Verifique as Issues:** Antes de começar, veja se já existe uma *issue* aberta para a tarefa ou crie uma nova para discussão.
+2.  **Fork & Branch:** Faça um fork do projeto e crie uma branch para sua feature:
+    ```bash
+    git checkout -b feature/nome-da-sua-feature
+    # ou para correções
+    git checkout -b fix/nome-da-correcao
+    ```
+
+### 2. Testes (Obrigatório)
+Como possuímos testes automatizados no GitHub Actions, é **crucial** que você rode os testes localmente antes de enviar suas alterações:
+
+```bash
+python manage.py test
+```
 
 ## Equipe
 ### Ciência da Computação
