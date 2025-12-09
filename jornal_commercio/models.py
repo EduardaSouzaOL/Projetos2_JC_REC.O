@@ -186,13 +186,13 @@ class Publicacao(models.Model):
         related_name="publicacoes_curtidas",
         blank=True
     )
-    
+
     descurtidas = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="publicacoes_descurtidas",
         blank=True
     )
-
+    
     salvo_por = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="publicacoes_salvas",
@@ -355,6 +355,7 @@ class TentativaQuiz(models.Model):
         status = "Concluído" if self.concluido else "Em andamento"
         return f"{self.usuario} - {self.quiz} ({status})"
 
+
 class RespostaUsuario(models.Model):
     tentativa = models.ForeignKey(
         TentativaQuiz,
@@ -377,22 +378,18 @@ class RespostaUsuario(models.Model):
     def __str__(self):
         return f"Resposta de {self.tentativa.usuario} para {self.pergunta.id}"
 
-
 @receiver(post_save, sender=Noticia)
 def gerar_quiz_automatico(sender, instance, created, **kwargs):
-
     if created:
         print(f"--- GATILHO: Notícia '{instance.titulo}' criada. Iniciando geração de Quiz com IA... ---")
         try:
             from .ai_service import gerar_quiz_com_gemini
-            
             thread = threading.Thread(target=gerar_quiz_com_gemini, args=(instance,))
             thread.start()
         except ImportError:
             print("Erro: ai_service não encontrado ou erro na importação.")
         except Exception as e:
             print(f"Erro ao disparar thread de IA: {e}")
-
 class Edicao(models.Model):
     titulo = models.CharField(max_length=200, verbose_name="Título Principal")
     imagem_capa = models.ImageField(upload_to='edicoes/', verbose_name="Imagem da Capa")
