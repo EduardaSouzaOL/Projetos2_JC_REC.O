@@ -6,105 +6,6 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/comunidade_detalhe.css' %}">
-    
-    <style>
-        /* --- ESTILOS ESPECÍFICOS PARA CORRIGIR OS BOTÕES --- */
-
-        /* Container para alinhar Reportar e Sair lado a lado */
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        /* Estilo do Botão Reportar (Restaurado) */
-        .btn-reportar {
-            background: white;
-            border: 1px solid #ccc;
-            color: #555;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-        .btn-reportar:hover {
-            background-color: #f0f2f5;
-            color: #333;
-        }
-
-        /* Estilo do Botão de Ação (Participar/Sair) */
-        .btn-toggle-membro {
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: inherit;
-        }
-
-        /* ESTADO: NÃO É MEMBRO (Botão Azul) */
-        .btn-toggle-membro.entrar {
-            background-color: #004aad;
-            color: white;
-        }
-        .btn-toggle-membro.entrar:hover {
-            background-color: #003380;
-        }
-
-        /* ESTADO: JÁ É MEMBRO (Botão Vermelho para Sair) */
-        .btn-toggle-membro.sair {
-            background-color: #dc3545 !important; /* Vermelho forte */
-            color: white !important;
-            border: 1px solid #dc3545;
-        }
-        .btn-toggle-membro.sair:hover {
-            background-color: #bb2d3b !important; /* Vermelho mais escuro no hover */
-        }
-        
-        /* Garante que o ícone fique branco no botão sair */
-        .btn-toggle-membro.sair i {
-            color: white !important;
-        }
-
-        /* Banner de Tópico em Foco */
-        .noticia-foco-banner {
-            background-color: #f0f7ff;
-            border-left: 5px solid #004aad;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            animation: slideDown 0.5s ease;
-        }
-        .noticia-foco-banner strong {
-            color: #004aad;
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-        .noticia-foco-banner em {
-            font-size: 1.1rem;
-            color: #333;
-            font-style: normal;
-            font-weight: 600;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
 {% endblock %}
 
 {% block content %}
@@ -149,7 +50,7 @@
                         {% endif %}
                     </button>
                 </div>
-                </div>
+            </div>
         </div>
     </header>
 
@@ -207,7 +108,7 @@
                             </a>
                         </li>
                     {% empty %}
-                        <li>Não há notícias.</li>
+                        <li>Não há notícias desta categoria.</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -280,14 +181,20 @@
                                 <span class="like-count">{{ publicacao.curtidas.count }}</span>
                             </button>
                         </form>
-                        <button class="acao-btn btn-dislike" disabled>
-                            <i class="far fa-thumbs-down"></i>
-                            <span>0</span>
-                        </button>
+                        
+                        <form class="form-ajax-acao" method="POST" action="{% url 'descurtir_publicacao' pk=publicacao.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="acao-btn btn-dislike {% if user in publicacao.descurtidas.all %}active{% endif %}">
+                                <i class="far fa-thumbs-down"></i>
+                                <span class="dislike-count">{{ publicacao.descurtidas.count }}</span>
+                            </button>
+                        </form>
+
                         <button class="acao-btn btn-comentar">
                             <i class="far fa-comment"></i>
                             <span class="comment-count-val">{{ publicacao.comentarios.count }}</span>
                         </button>
+                        
                         <form class="form-ajax-acao" method="POST" action="{% url 'salvar_publicacao' pk=publicacao.pk %}">
                             {% csrf_token %}
                             <button type="submit" class="acao-btn btn-salvar {% if user in publicacao.salvo_por.all %}active{% endif %}">
@@ -363,12 +270,10 @@
         .then(data => {
             if (data.success) {
                 if (data.is_member) {
-                    // VIROU MEMBRO -> MOSTRAR BOTÃO VERMELHO "SAIR"
                     btn.innerHTML = '<i class="fas fa-sign-out-alt"></i> <span>Sair da Comunidade</span>';
                     btn.classList.remove('entrar');
                     btn.classList.add('sair');
                 } else {
-                    // SAIU -> MOSTRAR BOTÃO AZUL "PARTICIPAR"
                     btn.innerHTML = '<i class="fas fa-plus"></i> <span>Participar</span>';
                     btn.classList.remove('sair');
                     btn.classList.add('entrar');
@@ -425,14 +330,24 @@
             });
         }
 
-        handleAjaxAction('.form-ajax-acao[action*="curtir"]', function($form, data) {
+        handleAjaxAction('.form-ajax-acao[action*="curtir"], .form-ajax-acao[action*="descurtir"]', function($form, data) {
             if (data.success) {
-                const $button = $form.find('.btn-curtir');
-                $button.find('.like-count').text(data.likes_count);
+                const $card = $form.closest('.post-acoes');
+                
+                const $btnLike = $card.find('.btn-curtir');
+                $btnLike.find('.like-count').text(data.likes_count);
                 if (data.is_liked) {
-                    $button.addClass('active');
+                    $btnLike.addClass('active');
                 } else {
-                    $button.removeClass('active');
+                    $btnLike.removeClass('active');
+                }
+
+                const $btnDislike = $card.find('.btn-dislike');
+                $btnDislike.find('.dislike-count').text(data.dislikes_count);
+                if (data.is_disliked) {
+                    $btnDislike.addClass('active');
+                } else {
+                    $btnDislike.removeClass('active');
                 }
             }
         }); 

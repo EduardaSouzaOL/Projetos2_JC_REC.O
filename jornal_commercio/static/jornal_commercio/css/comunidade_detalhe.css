@@ -72,6 +72,17 @@
     display: flex;
     gap: 20px;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+@media (min-width: 768px) {
+    .header-buttons { margin-top: 0; }
 }
 
 .info-bloco {
@@ -91,7 +102,73 @@
     color: #333;
 }
 
-/* --- FILTROS & BUSCA (Se usado em listagens) --- */
+/* --- BOTÕES DO CABEÇALHO (REPORTAR/PARTICIPAR) --- */
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 5px;
+}
+
+/* Botão Reportar */
+.btn-reportar {
+    background: transparent;
+    border: 1px solid #ccc;
+    color: #666;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+.btn-reportar:hover {
+    background: #f0f2f5;
+    border-color: #999;
+    color: #333;
+}
+
+/* Botão Participar/Sair */
+.btn-toggle-membro {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+
+.btn-toggle-membro i {
+    color: inherit;
+}
+
+/* Estado: Não é membro (Azul) */
+.btn-toggle-membro.entrar {
+    background-color: #004aad;
+    color: white;
+}
+.btn-toggle-membro.entrar:hover {
+    background-color: #003380;
+}
+
+/* Estado: Já é membro (Vermelho) */
+.btn-toggle-membro.sair {
+    background-color: #e74c3c !important;
+    color: white !important;
+}
+.btn-toggle-membro.sair:hover {
+    background-color: #c0392b !important;
+}
+
+/* --- FILTROS --- */
 .comunidades-filtros {
     display: flex;
     justify-content: space-between;
@@ -316,6 +393,30 @@
     gap: 20px;
 }
 
+/* Banner de Tópico em Foco */
+.noticia-foco-banner {
+    background-color: #f0f7ff;
+    border-left: 5px solid #004aad;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    animation: slideDown 0.5s ease;
+}
+.noticia-foco-banner strong {
+    color: #004aad;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+.noticia-foco-banner em {
+    font-size: 1.1rem;
+    color: #333;
+    font-style: normal;
+    font-weight: 600;
+}
+
 /* Formulário de Publicação */
 .form-publicar {
     display: flex;
@@ -417,16 +518,6 @@
     gap: 10px;
 }
 
-.btn-seguir {
-    background: transparent;
-    color: #004aad;
-    border: 1px solid #004aad;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-}
 .btn-opcoes {
     background: transparent;
     border: none;
@@ -451,6 +542,7 @@
     margin-bottom: 15px;
 }
 
+/* === CORREÇÃO DOS BOTÕES DE AÇÃO === */
 .acao-btn {
     flex-grow: 1;
     background: transparent;
@@ -469,8 +561,22 @@
 }
 
 .acao-btn:hover { background: #f0f2f5; }
-.acao-btn.active { color: #004aad; }
-.acao-btn.btn-dislike { cursor: not-allowed; opacity: 0.6; }
+
+/* Estados Ativos */
+.acao-btn.active.btn-curtir { color: #004aad; }
+.acao-btn.active.btn-curtir i { font-weight: 900; }
+
+.acao-btn.active.btn-dislike { color: #dc3545; }
+.acao-btn.active.btn-dislike i { font-weight: 900; }
+
+.acao-btn.active.btn-salvar { color: #004aad; }
+.acao-btn.active.btn-salvar i { font-weight: 900; }
+
+/* Garante que o dislike não esteja bloqueado */
+.acao-btn.btn-dislike { 
+    cursor: pointer !important; 
+    opacity: 1 !important;
+}
 
 /* Comentários */
 .comentarios-container {
@@ -482,6 +588,7 @@
 .comentario-item {
     display: flex;
     gap: 10px;
+    animation: fadeIn 0.3s ease;
 }
 
 .comentario-avatar-placeholder {
@@ -555,47 +662,6 @@
     margin: 10px 0;
 }
 
-/* --- BANNER DE TÓPICO (CSS Extra) --- */
-.noticia-foco-banner {
-    background-color: #f0f7ff;
-    border-left: 5px solid #004aad;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    animation: slideDown 0.5s ease;
-}
-.noticia-foco-banner strong {
-    color: #004aad;
-    display: block;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-}
-.noticia-foco-banner em {
-    font-size: 1.1rem;
-    color: #333;
-    font-style: normal;
-    font-weight: 600;
-}
-
-/* --- BOTÕES EXTRA --- */
-.btn-toggle-membro {
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.btn-toggle-membro.entrar { background-color: #004aad; color: white; }
-.btn-toggle-membro.entrar:hover { background-color: #003380; }
-.btn-toggle-membro.sair { background-color: #e74c3c; color: white; }
-.btn-toggle-membro.sair:hover { background-color: #c0392b; }
-
 /* --- ANIMAÇÕES --- */
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-10px); }
@@ -610,94 +676,14 @@
 @media (max-width: 992px) {
     .detalhe-grid { grid-template-columns: 1fr; }
     .detalhe-sidebar-esq { order: 1; }
-    .comunidade-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
     .header-info-container { flex-direction: column; align-items: flex-start; }
     .header-info-dir { width: 100%; justify-content: space-between; }
-    .comunidades-filtros { flex-direction: column; gap: 1rem; }
-    .filtro-abas { order: 1; }
-    .filtro-busca { order: 0; max-width: 100%; }
-    .comunidade-grid { grid-template-columns: 1fr; }
-}
-
-/* Em comunidade_detalhe.css */
-
-.header-info-dir {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-wrap: wrap; /* Garante que quebre linha em telas menores se precisar */
-}
-
-/* Novo container para alinhar os botões */
-.header-buttons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 10px; /* Espaço em telas menores */
-}
-
-@media (min-width: 768px) {
-    .header-buttons {
-        margin-top: 0; /* Remove espaço em telas maiores */
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 15px;
     }
-}
-
-/* Estilo do Botão Reportar */
-.btn-reportar {
-    background: transparent;
-    border: 1px solid #ccc;
-    color: #666;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.2s;
-    font-family: inherit;
-}
-.btn-reportar:hover {
-    background: #f0f2f5;
-    border-color: #999;
-    color: #333;
-}
-
-/* Estilos dos Botões de Ação (Participar/Sair) */
-.btn-toggle-membro {
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: inherit;
-}
-
-.btn-toggle-membro i {
-    color: inherit; /* Ícone pega a cor do texto */
-}
-
-.btn-toggle-membro.entrar {
-    background-color: #004aad;
-    color: white;
-}
-.btn-toggle-membro.entrar:hover {
-    background-color: #003380;
-}
-
-/* Forçando o estilo vermelho para "Sair" */
-.btn-toggle-membro.sair {
-    background-color: #e74c3c !important;
-    color: white !important;
-}
-.btn-toggle-membro.sair:hover {
-    background-color: #c0392b !important;
 }

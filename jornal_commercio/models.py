@@ -186,6 +186,12 @@ class Publicacao(models.Model):
         related_name="publicacoes_curtidas",
         blank=True
     )
+    
+    descurtidas = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="publicacoes_descurtidas",
+        blank=True
+    )
 
     salvo_por = models.ManyToManyField(
         settings.AUTH_USER_MODEL,

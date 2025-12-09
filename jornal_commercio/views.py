@@ -133,7 +133,10 @@ class ComunidadeDetailView(DetailView):
         
         context['destaques'] = todas_as_publicacoes.filter(is_destaque=True)[:10]
         context['feed_publicacoes'] = todas_as_publicacoes
-        context['noticias_servicos'] = Noticia.objects.all().order_by('-data_publicacao')[:10]
+        
+        context['noticias_servicos'] = Noticia.objects.filter(
+            categoria=comunidade.categoria
+        ).order_by('-data_publicacao')[:10]
         
         context['form_publicacao'] = PublicacaoForm()
         
@@ -171,7 +174,6 @@ class ComunidadeDetailView(DetailView):
         
 @login_required
 def curtir_publicacao(request, pk):
-    
     if request.method == 'POST':
         publicacao = get_object_or_404(Publicacao, pk=pk)
         user = request.user
@@ -184,15 +186,43 @@ def curtir_publicacao(request, pk):
         else:
             publicacao.curtidas.add(user)
             is_liked = True
+            if user in publicacao.descurtidas.all():
+                publicacao.descurtidas.remove(user)
             
-        response_data = {
+        return JsonResponse({
             'success': True,
             'is_liked': is_liked,
-            'likes_count': publicacao.curtidas.count()
-        }
+            'likes_count': publicacao.curtidas.count(),
+            'is_disliked': False,
+            'dislikes_count': publicacao.descurtidas.count() 
+        })
+    else:
+        return HttpResponseForbidden("Ação não permitida.")
+
+@login_required
+def descurtir_publicacao(request, pk):
+    if request.method == 'POST':
+        publicacao = get_object_or_404(Publicacao, pk=pk)
+        user = request.user
         
-        return JsonResponse(response_data)
-    
+        is_disliked = False
+        
+        if user in publicacao.descurtidas.all():
+            publicacao.descurtidas.remove(user)
+            is_disliked = False
+        else:
+            publicacao.descurtidas.add(user)
+            is_disliked = True
+            if user in publicacao.curtidas.all():
+                publicacao.curtidas.remove(user)
+            
+        return JsonResponse({
+            'success': True,
+            'is_disliked': is_disliked,
+            'dislikes_count': publicacao.descurtidas.count(),
+            'is_liked': False,
+            'likes_count': publicacao.curtidas.count() 
+        })
     else:
         return HttpResponseForbidden("Ação não permitida.")
     
