@@ -10,6 +10,8 @@ from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
 from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta
 from django.db.models import Q, Count
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 
 def home(request):
     
@@ -297,3 +299,14 @@ def finalizar_quiz(request, quiz_id):
             return JsonResponse({'status': 'ok', 'message': 'Quiz concluído!'})
             
     return JsonResponse({'status': 'erro'}, status=400)
+
+def criar_admin_temporario(request):
+    try:
+        if User.objects.filter(username='admin').exists():
+            return HttpResponse("O usuário 'admin' já existe! Tente logar.")
+        
+        User.objects.create_superuser('admin', 'admin@example.com', 'Admin12345!')
+        
+        return HttpResponse("<h1>SUCESSO!</h1><p>Usuário: <b>admin</b></p><p>Senha: <b>Admin12345!</b></p>")
+    except Exception as e:
+        return HttpResponse(f"<h1>ERRO:</h1> <p>{str(e)}</p>")
