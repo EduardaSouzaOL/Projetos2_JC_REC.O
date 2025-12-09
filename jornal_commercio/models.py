@@ -349,7 +349,6 @@ class TentativaQuiz(models.Model):
         status = "Concluído" if self.concluido else "Em andamento"
         return f"{self.usuario} - {self.quiz} ({status})"
 
-
 class RespostaUsuario(models.Model):
     tentativa = models.ForeignKey(
         TentativaQuiz,
@@ -373,18 +372,12 @@ class RespostaUsuario(models.Model):
         return f"Resposta de {self.tentativa.usuario} para {self.pergunta.id}"
 
 
-# --- SIGNALS ---
-
 @receiver(post_save, sender=Noticia)
 def gerar_quiz_automatico(sender, instance, created, **kwargs):
-    """
-    Sinal que dispara a criação do Quiz via IA em uma thread separada
-    quando uma nova notícia é criada.
-    """
+
     if created:
         print(f"--- GATILHO: Notícia '{instance.titulo}' criada. Iniciando geração de Quiz com IA... ---")
         try:
-            # Importar aqui para evitar importação circular se o service usar models
             from .ai_service import gerar_quiz_com_gemini
             
             thread = threading.Thread(target=gerar_quiz_com_gemini, args=(instance,))
