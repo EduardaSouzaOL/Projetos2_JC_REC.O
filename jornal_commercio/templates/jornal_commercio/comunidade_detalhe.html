@@ -60,7 +60,7 @@
             <div class="widget-card">
                 <h3>Destaques</h3>
                 <ul class="lista-destaques-membros">
-                    {% comment %} {% for destaque in destaques %}
+                    {% for destaque in destaques %}
                         <li>
                             <div class="item-avatar-placeholder">{{ destaque.autor.username.0|upper }}</div>
                             <div class="item-info">
@@ -71,8 +71,7 @@
                         </li>
                     {% empty %}
                         <li>Não há destaques.</li>
-                    {% endfor %} {% endcomment %}
-                    <li>Não há destaques.</li>
+                    {% endfor %}
                 </ul>
             </div>
             
