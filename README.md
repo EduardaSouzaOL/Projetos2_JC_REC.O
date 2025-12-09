@@ -58,6 +58,7 @@ Links para artefatos, relatórios e documentos acadêmicos do desenvolvimento:
 * 🖥️ **Site do Projeto (Portfólio):** [Acessar Google Sites](https://sites.google.com/d/1H1WAQs5YY0CATvldSltNKSlR4M0-yEW2/p/19KdY7mc0QfeCC3Vyn48laGZW0uUeZV2J/edit)
 
 ### Desenvolvimento Técnico
+* 📄 **Guia de Instalação e Contribuição:** [Acessar Guia](https://docs.google.com/document/d/1L5GVNCLkyL-R1sbue_K0gSEqGio0xELdfK-6sYIzKw8/edit?usp=sharing)
 * 🐍 **Modelagem de Dados (models.py - Parte 1):** [Ver Documento](https://docs.google.com/document/d/1eSmwrPEf1FKEVPd2q_7RvG8ga6rGxcNnMXziCqjlOXk/edit?usp=sharing)
 * 🐍 **Atualização de Models:** [Ver Alterações](https://docs.google.com/document/d/1eSmwrPEf1FKEVPd2q_7RvG8ga6rGxcNnMXziCqjlOXk/edit?tab=t.0#heading=h.opjurt3ud2wo)
 * 📹 **Screencast - Deploy e Build:** [Assistir no YouTube](https://youtu.be/IvP5mJcLpW0?si=DJ59qH_hepAUvUdo)
