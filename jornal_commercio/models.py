@@ -377,10 +377,6 @@ class RespostaUsuario(models.Model):
     def __str__(self):
         return f"Resposta de {self.tentativa.usuario} para {self.pergunta.id}"
 
-
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
 @receiver(post_save, sender=Noticia)
 def gerar_quiz_automatico(sender, instance, created, **kwargs):
     if created:
