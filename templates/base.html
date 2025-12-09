@@ -112,6 +112,114 @@
             border-style: solid;
             border-color: transparent transparent #000 transparent;
         }
+
+        /* --- Botão Hambúrguer na Navbar --- */
+        .nav-item-hamburger {
+            flex-grow: 0 !important; /* Impede que o botão estique igual aos outros itens */
+            width: 60px; /* Largura fixa para o botão */
+        }
+        .nav-item-hamburger a {
+            font-size: 18px; /* Tamanho do ícone */
+        }
+
+        /* --- Sidebar e Overlay --- */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5); /* Fundo escuro transparente */
+            z-index: 9998; /* Fica abaixo da sidebar, mas acima do site */
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            right: -300px; /* Começa escondido fora da tela à direita */
+            width: 300px;
+            height: 100%;
+            background: #ffffff;
+            z-index: 9999;
+            transition: right 0.3s ease-in-out; /* Animação suave */
+            box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.active {
+            right: 0; /* Entra na tela */
+        }
+
+        /* --- Estilo Interno da Sidebar --- */
+        .sidebar-header {
+            background-color: #D9232D;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .close-sidebar {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+            padding-top: 0px;
+            overflow-y: auto;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-links li {
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-links a {
+            display: block;
+            padding: 10px 0;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .sidebar-links a:hover {
+            color: #D9232D;
+            padding-left: 5px; /* Pequeno movimento ao passar o mouse */
+        }
+
+        .sidebar-links h3 {
+            font-size: 18px;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            color: #000000;
+        }
+
     </style>
     
     {% block styles %}{% endblock %}
@@ -181,6 +289,11 @@
                 <li><a href="{% url 'comunidades_lista' %}">COMUNIDADES</a></li>
                 <li><a href="#">RECALL DA MARCA</a></li>
                 <li><a href="https://ads.sjcc.com.br/" target="_blank" rel="noopener noreferrer">ANUNCIE AQUI</a></li>
+                <li class="nav-item-hamburger">
+                    <a href="#" id="menu-toggle" aria-label="Abrir Menu">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -247,8 +360,68 @@
         </div>
     </div>
 
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="sidebar-menu" class="sidebar-menu">
+        <div class="sidebar-header">
+            <h3>MENU</h3>
+            <button id="close-sidebar" class="close-sidebar">&times;</button>
+        </div>
+        <div class="sidebar-content">
+            <ul class="sidebar-links">
+                <h3>ASSUNTOS</h3>
+                <li><a href="/">Geral</a></li>
+                <li><a href="#">Mundo</a></li>
+                <li><a href="#">Cidades</a></li>
+                <li><a href="#">Política</a></li>
+                <li><a href="#">Educação</a></li>
+                <li><a href="#">Esportes</a></li>
+                <li><a href="#">Saúde e Bem-Estar</a></li>
+                <li><a href="#">Mobilidade</a></li>
+                <li><a href="#">Cultura</a></li>
+                <li><a href="#">Entretenimento</a></li>
+                <li><a href="#">Economia</a></li>
+                <li><a href="#">Comércio</a></li>
+                <li><a href="#">Social</a></li>
+                <h3>NOSSOS PRODUTOS</h3>
+                <li><a href="/">NE10 Interior</a></li>
+                <li><a href="/">Rádio Jornal</a></li>
+                <li><a href="/">TV Jornal</a></li>
+                <li><a href="/">Blog do Torcedor</a></li>
+                <li><a href="/">Social1</a></li>
+                <li><a href="/">Receita da Boa</a></li>
+                <h3>MAIS</h3>
+                <li><a href="/">Recall de Marcas</a></li>
+                <li><a href="/">Anuncie aqui</a></li>
+            </ul>
+        </div>
+    </aside>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        /* --- Lógica da Sidebar --- */
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('sidebar-overlay');
+        const btnCloseSidebar = document.getElementById('close-sidebar'); // Renomeado
+
+        function openSidebar(e) {
+            if(e) e.preventDefault();
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+        if (btnCloseSidebar) btnCloseSidebar.addEventListener('click', closeSidebar); // Atualizado
+        if (overlay) overlay.addEventListener('click', closeSidebar);
+
+        
         const modalOverlay = document.getElementById('feedback-modal-overlay');
         const openBtn = document.getElementById('open-feedback-modal');
         const closeBtn = document.getElementById('close-feedback-modal');
