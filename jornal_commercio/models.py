@@ -394,7 +394,7 @@ def gerar_quiz_automatico(sender, instance, created, **kwargs):
             print(f"Erro ao disparar thread de IA: {e}")
 
 class Edicao(models.Model):
-    titulo = models.CharField(max_length=200, verbose_name="Título da Manchete")
+    titulo = models.CharField(max_length=200, verbose_name="Título Principal")
     imagem_capa = models.ImageField(upload_to='edicoes/', verbose_name="Imagem da Capa")
     link_leitura = models.URLField(verbose_name="Link para Leitura (PDF ou Site)")
     data_publicacao = models.DateField(default=timezone.now, verbose_name="Data da Edição")

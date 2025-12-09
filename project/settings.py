@@ -13,10 +13,7 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 AZURE_HOST = 'projetoreco-c4cshwbxg6evb8af.brazilsouth-01.azurewebsites.net'
 
-if DEBUG:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', AZURE_HOST]
-else:
-    ALLOWED_HOSTS = [AZURE_HOST]
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
