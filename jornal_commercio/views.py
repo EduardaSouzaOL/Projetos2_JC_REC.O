@@ -8,8 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
-from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta, HistoricoLeitura
+from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta, HistoricoLeitura, Anuncio
 from django.db.models import Q, Count, Sum
+from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
@@ -23,12 +24,19 @@ def home(request):
     destaques_secundarios = todas_noticias[1:5]
 
     feedbacks_recentes = Feedback.objects.all().order_by('-id')[:5] 
+    
+    ad_home_meio_1 = get_anuncio_valido('HOME_MEIO_1')
+    ad_home_meio_2 = get_anuncio_valido('HOME_MEIO_2')
+    ad_home_meio_3 = get_anuncio_valido('HOME_MEIO_3')
 
     context = {
         'form_feedback': form_feedback,
         'destaque_principal': destaque_principal, 
         'destaques_secundarios': destaques_secundarios,
-        'feedbacks': feedbacks_recentes, 
+        'feedbacks': feedbacks_recentes,
+        'ad_home_meio_1': ad_home_meio_1,
+        'ad_home_meio_2': ad_home_meio_2,
+        'ad_home_meio_3': ad_home_meio_3,
     }
     
     return render(request, "jornal_commercio/home.html", context)
@@ -49,6 +57,11 @@ def detalhe_noticia(request, slug):
         if tentativa:
             respostas_ids = list(tentativa.respostas.values_list('opcao_escolhida_id', flat=True))
             quiz_concluido = tentativa.concluido
+        
+    ad_noticia_topo = get_anuncio_valido('NOTICIA_TOPO', categoria=noticia.categoria)
+    ad_noticia_meio_1 = get_anuncio_valido('NOTICIA_MEIO_1', categoria=noticia.categoria)
+    ad_noticia_meio_2 = get_anuncio_valido('NOTICIA_MEIO_2', categoria=noticia.categoria)
+    ad_noticia_rodape = get_anuncio_valido('NOTICIA_RODAPE', categoria=noticia.categoria)
             
     context = {
         'noticia': noticia,
@@ -56,6 +69,10 @@ def detalhe_noticia(request, slug):
         'respostas_ids': respostas_ids,
         'quiz_concluido': quiz_concluido,
         'comunidade_relacionada': comunidade_relacionada,
+        'ad_noticia_topo': ad_noticia_topo,
+        'ad_noticia_meio_1': ad_noticia_meio_1,
+        'ad_noticia_meio_2': ad_noticia_meio_2,
+        'ad_noticia_rodape': ad_noticia_rodape,
     }
     
     return render(request, 'jornal_commercio/detalhe_noticia.html', context)
@@ -418,3 +435,49 @@ def atualizar_historico_leitura(request):
         
     except Exception as e:
         return JsonResponse({'status': 'erro', 'message': str(e)}, status=500)
+
+def get_anuncio_valido(posicao, categoria=None):
+    """
+    Retorna um anúncio aleatório válido para a posição solicitada.
+    Se uma categoria for passada, tenta buscar anúncios específicos dela.
+    Se não achar (ou não tiver categoria), busca anúncios gerais (sem categoria).
+    """
+    agora = timezone.now()
+    
+    # Filtro base: Ativo + Posição + Data Início já passou + (Data Fim futura OU Data Fim vazia)
+    base_qs = Anuncio.objects.filter(
+        ativo=True,
+        posicao=posicao,
+        data_inicio__lte=agora
+    ).filter(Q(data_fim__gte=agora) | Q(data_fim__isnull=True))
+
+    anuncio = None
+
+    # 1. Tenta buscar anúncio específico da categoria (se fornecida)
+    if categoria:
+        anuncio = base_qs.filter(categoria_alvo=categoria).order_by('?').first()
+
+    # 2. Se não achou específico, busca um Geral (categoria_alvo=None)
+    if not anuncio:
+        anuncio = base_qs.filter(categoria_alvo__isnull=True).order_by('?').first()
+        
+    # Incrementa visualização se encontrou
+    if anuncio:
+        anuncio.visualizacoes += 1
+        anuncio.save()
+        
+    return anuncio
+
+def computar_clique_anuncio(request, anuncio_id):
+    """
+    Registra o clique no anúncio e redireciona para o link final.
+    """
+    anuncio = get_object_or_404(Anuncio, id=anuncio_id)
+
+    anuncio.cliques += 1
+    anuncio.save()
+
+    if not anuncio.link_destino:
+        return redirect('/')
+        
+    return redirect(anuncio.link_destino)

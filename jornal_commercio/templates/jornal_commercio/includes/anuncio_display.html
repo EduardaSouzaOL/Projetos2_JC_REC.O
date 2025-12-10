@@ -1,0 +1,8 @@
+{% if anuncio %}
+<div class="anuncio-container my-4">
+    <a href="{% url 'clique_anuncio' anuncio.id %}" target="_blank" title="{{ anuncio.titulo }}">
+        <img src="{{ anuncio.imagem.url }}" alt="{{ anuncio.titulo }}" class="img-fluid w-100">
+    </a>
+    <small class="text-muted d-block text-center" style="font-size: 10px;">Publicidade</small>
+</div>
+{% endif %}

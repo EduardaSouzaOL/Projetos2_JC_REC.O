@@ -19,4 +19,5 @@ urlpatterns = [
     path('jc-quest/jogar/<int:quiz_id>/', views.quiz_play, name='quiz_play'),
     path('edicao-do-dia/', views.pagina_edicao_do_dia, name='pagina_edicao'),
     path('api/atualizar-leitura/', views.atualizar_historico_leitura, name='atualizar_historico_leitura'),
+    path('anuncio/clique/<int:anuncio_id>/', views.computar_clique_anuncio, name='clique_anuncio'),
 ]

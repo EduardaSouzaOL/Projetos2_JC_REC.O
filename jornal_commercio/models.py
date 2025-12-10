@@ -403,3 +403,74 @@ class Edicao(models.Model):
 
     def __str__(self):
         return f"Edição de {self.data_publicacao.strftime('%d/%m/%Y')}"
+    
+class Anuncio(models.Model):
+    POSICAO_CHOICES = [
+        ('TOPO', 'Topo (Header) - Global'),
+        ('RODAPE', 'Rodapé - Global'),
+        ('MODAL', 'Pop-up/Modal - Global'),
+        ('HOME_MEIO_1', 'Home - Meio 1 (Abaixo dos Destaques)'),
+        ('HOME_MEIO_2', 'Home - Meio 2 (Entre Comunidades e JC Quest)'),
+        ('HOME_MEIO_3', 'Home - Meio 3 (Acima do Rodapé de Produtos)'),
+        ('NOTICIA_TOPO', 'Notícia - Topo (Abaixo do Título)'),
+        ('NOTICIA_MEIO_1', 'Notícia - Meio 1 (Após a Imagem Principal)'),
+        ('NOTICIA_MEIO_2', 'Notícia - Meio 2 (Entre Parágrafos)'),
+        ('NOTICIA_RODAPE', 'Notícia - Rodapé (Fim da Matéria)'),
+    ]
+
+    titulo = models.CharField(
+        max_length=150, 
+        verbose_name="Título Interno",
+        help_text="Nome para identificação interna no admin."
+    )
+    
+    imagem = models.ImageField(
+        upload_to='anuncios/', 
+        verbose_name="Banner/Imagem"
+    )
+    
+    link_destino = models.URLField(
+        verbose_name="Link de Destino",
+        help_text="Para onde o usuário será levado ao clicar. Se não houver, coloque '#' ou deixe em branco."
+    )
+
+    posicao = models.CharField(
+        max_length=30,
+        choices=POSICAO_CHOICES,
+        verbose_name="Posição no Site"
+    )
+
+    categoria_alvo = models.CharField(
+        max_length=50,
+        choices=CATEGORIA_CHOICES,
+        blank=True,
+        null=True,
+        verbose_name="Categoria Alvo (Opcional)",
+        help_text="Se selecionado, o anúncio aparecerá apenas em páginas dessa categoria. Deixe em branco para aparecer em todo o site."
+    )
+
+    data_inicio = models.DateTimeField(
+        default=timezone.now, 
+        verbose_name="Início da Veiculação"
+    )
+    
+    data_fim = models.DateTimeField(
+        blank=True, 
+        null=True, 
+        verbose_name="Fim da Veiculação",
+        help_text="Deixe em branco para veicular indeterminadamente."
+    )
+    
+    ativo = models.BooleanField(default=True, verbose_name="Ativo?")
+
+    visualizacoes = models.PositiveIntegerField(default=0, editable=False, verbose_name="Visualizações")
+    cliques = models.PositiveIntegerField(default=0, editable=False, verbose_name="Cliques")
+
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name = "Anúncio"
+        verbose_name_plural = "Anúncios"
+        ordering = ['-ativo', '-data_inicio']
+
+    def __str__(self):
+        return f"{self.titulo} ({self.get_posicao_display()})"

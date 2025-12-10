@@ -554,3 +554,20 @@ ul {
     border-style: solid;
     border-color: transparent transparent #d9d9d9 transparent;
 }
+
+/* Estilos para Anúncios */
+.anuncio-container {
+    display: block;
+    width: 100%;
+    margin: 30px 0; /* Espaço em cima e embaixo */
+    text-align: center;
+    background-color: #f4f4f4; /* Fundo cinza caso a imagem demore a carregar */
+}
+
+.anuncio-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+}
