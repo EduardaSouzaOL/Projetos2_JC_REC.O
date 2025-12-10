@@ -32,6 +32,72 @@
             padding: 10px 0; /* Área de clique */
             cursor: pointer;
         }
+
+        /* --- Dropdown do Usuário com Seta --- */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-dropdown-btn {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 8px; /* Espaço entre a imagem e a seta */
+            color: #ffffff; /* Cor da seta */
+            padding: 5px 0; /* Aumenta levemente a área de clique */
+        }
+
+        .user-dropdown-btn:hover {
+            opacity: 0.9;
+        }
+
+        .user-dropdown-btn i {
+            font-size: 12px; /* Tamanho discreto da seta */
+            transition: transform 0.2s;
+        }
+
+        /* Gira a seta quando passar o mouse (opcional, dá um efeito legal) */
+        .user-dropdown:hover .user-dropdown-btn i {
+            transform: rotate(180deg);
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0; /* Alinhado à direita do ícone */
+            top: 100%;
+            background-color: #ffffff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 10000;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0px; /* DISTÂNCIA DO ÍCONE: Pequeno espaço para ficar próximo */
+        }
+
+        .user-dropdown:hover .user-dropdown-content {
+            display: block;
+        }
+
+        .user-dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #f1f1f1; /* Divisória sutil entre itens */
+        }
+
+        .user-dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .user-dropdown-content a:hover {
+            background-color: #f5f5f5;
+            color: #D9232D;
+        }
         
         .main-nav ul {
             justify-content: space-between;
@@ -193,6 +259,34 @@
             </a>
 
             {% if user.is_authenticated %}
+                <div class="user-dropdown">
+                    <div class="user-dropdown-btn">
+                        <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+
+                    <div class="user-dropdown-content">
+                        <a href="#">Atividades</a>
+
+                        <a href="{% url 'usuario:perfil' %}">Editar perfil</a>
+                        
+                        <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+                            Sair da conta
+                        </a>
+                    </div>
+                </div>
+
+                <form id="logout-form" method="POST" action="{% url 'usuario:logout' %}" style="display: none;">
+                    {% csrf_token %}
+                </form>
+
+            {% else %}
+                <a href="{% url 'usuario:login' %}" aria-label="Login">
+                    <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
+                </a>
+            {% endif %}
+
+            {% comment %} {% if user.is_authenticated %}
                 <a href="{% url 'usuario:perfil' %}" aria-label="Perfil de Usuário">
                     <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
                 </a>
@@ -205,7 +299,7 @@
                 <a href="{% url 'usuario:login' %}" aria-label="Login">
                     <img src="{% static 'jornal_commercio/images/user.png' %}" alt="Usuário">
                 </a>
-            {% endif %}
+            {% endif %} {% endcomment %}
         </div>
     </div>
     </header>
