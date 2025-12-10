@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/anuncio_style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'jornal_commercio/css/RD_compartilhar.css' %}">
-    
+
     <style>
+        /* --- ESTILOS DO QUIZ (MANTIDOS) --- */
         .quiz-banner-trigger {
             background: white;
             border: 1px solid #ddd;
@@ -85,222 +86,10 @@
             font-size: 1rem; cursor: pointer;
             transition: background 0.3s;
         }
-        .btn-jc:hover {
-            background: #c01b1b;
-        }
-
-        /* --- NOVOS ESTILOS: JC BÔNUS E HEADER --- */
-        
-        /* Container do Título + Botão Bônus */
-        .title-bonus-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-            position: relative;
-        }
-
-        .detalhe-titulo {
-            flex: 1; /* Ocupa o espaço restante */
-            margin-top: 0;
-        }
-
-        /* Wrapper para o botão e o 'x' de fechar */
-        .bonus-badge-wrapper {
-            position: relative;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-
-        /* Botão de fechar o badge ('x') */
-        .close-bonus-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: #fff;
-            color: #333;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 14px;
-            line-height: 18px;
-            text-align: center;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .close-bonus-badge:hover {
-            background-color: #eee;
-        }
-
-        /* Botão Hexagonal Dourado */
-        .bonus-badge {
-            background: linear-gradient(135deg, #d48e04 0%, #b87b00 100%);
-            width: 80px;
-            height: 90px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            /* Forma de Hexágono via CSS */
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            transition: transform 0.2s;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .bonus-badge:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, #eebb22 0%, #d48e04 100%);
-        }
-
-        .bonus-badge i {
-            font-size: 24px;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 2px rgba(0,0,0,0.2);
-        }
-
-        .bonus-badge span {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            line-height: 1.2;
-        }
-
-        /* --- MODAL DE BÔNUS (ESTILO ESPECÍFICO) --- */
-        .bonus-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 10000; /* Acima de tudo */
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            backdrop-filter: blur(3px);
-        }
-
-        .bonus-modal-card {
-            background: #e0e0e0; /* Fundo cinza claro */
-            width: 100%; max-width: 450px;
-            border-radius: 20px;
-            padding: 40px 30px;
-            position: relative;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            animation: slideUp 0.3s ease-out;
-            margin-top: 30px; /* Adicionado para dar espaço ao ícone que salta para fora */
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Header do Modal (Hexagono Vermelho) */
-        .modal-header-icon {
-            background: #D9232D;
-            width: 100px;
-            height: 110px;
-            margin: -70px auto 20px; /* Ajustado para não sair da tela */
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px rgba(217, 35, 45, 0.4);
-        }
-        
-        .modal-header-icon i {
-            font-size: 45px;
-            color: #FFD700; /* Dourado */
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
-        }
-
-        .bonus-modal-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-            color: #000;
-        }
-        
-        .bonus-modal-subtitle {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 25px;
-        }
-
-        /* Grid de Estatísticas */
-        .stats-grid {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 25px;
-        }
-
-        .stat-box {
-            background: #bcbcbc; /* Cinza mais escuro que o fundo */
-            padding: 15px 10px;
-            border-radius: 10px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 90px;
-        }
-
-        .stat-box i { font-size: 1.2rem; margin-bottom: 5px; color: #333; }
-        .stat-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #444; margin-bottom: 3px; }
-        .stat-value { font-size: 0.9rem; font-weight: 400; color: #333; }
-
-        .how-it-works-title {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            color: #000;
-        }
-
-        .how-it-works-list {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            font-size: 0.85rem;
-            color: #444;
-            margin-bottom: 25px;
-        }
-        .how-it-works-list li { margin-bottom: 8px; }
-
-        .btn-play-bonus {
-            background: #D9232D;
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
-        }
-        .btn-play-bonus:hover { background: #b01b23; }
-
-        .close-bonus-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: #333;
-            background: none;
-            border: none;
-        }
-
+        .btn-jc:hover { background: #c01b1b; }
 
         .comunidade-card-trigger {
-            background: #f0f8ff; /* Azul suave */
+            background: #f0f8ff;
             border: 1px solid #cce5ff;
             border-left: 5px solid #004aad;
             padding: 20px;
@@ -317,49 +106,206 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .comunidade-info {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
+        .comunidade-info { display: flex; align-items: center; flex: 1; }
+        
         .btn-comunidade {
-            background: #004aad;
-            color: white;
-            text-decoration: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: background 0.3s;
-            display: inline-block;
-            white-space: nowrap;
+            background: #004aad; color: white; text-decoration: none;
+            padding: 10px 25px; border-radius: 50px; font-weight: bold;
+            font-size: 1rem; transition: background 0.3s;
+            display: inline-block; white-space: nowrap;
         }
-        .btn-comunidade:hover {
-            background: #003380;
-            color: #fff;
-        }
+        .btn-comunidade:hover { background: #003380; color: #fff; }
+
         @media (max-width: 600px) {
-            .comunidade-card-trigger {
-                flex-direction: column;
-                text-align: center;
-            }
-            .comunidade-info {
-                flex-direction: column;
-                margin-bottom: 10px;
-            }
-            .comunidade-info i {
-                margin-right: 0 !important;
-                margin-bottom: 10px;
-            }
+            .comunidade-card-trigger { flex-direction: column; text-align: center; }
+            .comunidade-info { flex-direction: column; margin-bottom: 10px; }
+            .comunidade-info i { margin-right: 0 !important; margin-bottom: 10px; }
+        }
+        
+        /* Layout do Título com o Botão */
+        .title-bonus-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+        }
+        
+        /* Ajuste para o título ocupar espaço sem quebrar o botão */
+        .detalhe-titulo {
+            flex: 1;
+            margin-top: 0;
         }
 
+        /* Wrapper do Botão para posicionar o 'X' */
+        .bonus-badge-wrapper {
+            position: relative;
+            display: inline-block;
+            flex-shrink: 0; /* Impede que encolha */
+        }
+
+        /* Botão X para fechar o badge */
+        .close-bonus-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 16px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .close-bonus-badge:hover { background-color: #f0f0f0; }
+
+        /* Hexágono Dourado */
+        .bonus-badge {
+            background: linear-gradient(135deg, #d48e04 0%, #b87b00 100%);
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            transition: transform 0.2s;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .bonus-badge:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #eebb22 0%, #d48e04 100%);
+        }
+        .bonus-badge i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 2px rgba(0,0,0,0.2);
+        }
+        .bonus-badge span {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        /* --- MODAL DO BÔNUS --- */
+        .bonus-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .bonus-modal-card {
+            background: #e0e0e0;
+            width: 100%; max-width: 450px;
+            border-radius: 20px;
+            padding: 40px 30px;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease-out;
+            margin-top: 40px; /* Espaço para o ícone flutuante */
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Ícone Hexagonal Vermelho no Topo do Modal */
+        .modal-header-icon {
+            background: #D9232D;
+            width: 100px;
+            height: 110px;
+            margin: -75px auto 20px; /* Margem negativa para sair do card */
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(217, 35, 45, 0.4);
+        }
+        .modal-header-icon i {
+            font-size: 45px;
+            color: #FFD700;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+        }
+
+        .bonus-modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: #000;
+        }
+        .bonus-modal-subtitle {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .stat-box {
+            background: #bcbcbc;
+            padding: 15px 10px;
+            border-radius: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90px;
+        }
+        .stat-box i { font-size: 1.2rem; margin-bottom: 5px; color: #333; }
+        .stat-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #444; margin-bottom: 3px; }
+        .stat-value { font-size: 0.9rem; font-weight: 400; color: #333; }
+
+        .how-it-works-title {
+            font-weight: 700; font-size: 1rem; margin-bottom: 10px; color: #000;
+        }
+        .how-it-works-list {
+            list-style: none; padding: 0; text-align: left;
+            font-size: 0.85rem; color: #444; margin-bottom: 25px;
+        }
+        .how-it-works-list li { margin-bottom: 8px; }
+
+        .btn-play-bonus {
+            background: #D9232D; color: white; border: none;
+            padding: 12px 40px; border-radius: 50px; font-weight: bold;
+            font-size: 1rem; cursor: pointer; width: 100%;
+            transition: background 0.3s;
+        }
+        .btn-play-bonus:hover { background: #b01b23; }
+
+        .close-bonus-modal {
+            position: absolute; top: 15px; right: 20px;
+            font-size: 1.8rem; cursor: pointer; color: #333;
+            background: none; border: none;
+        }
     </style>
 {% endblock %}
 
-
 {% block content %}
 <div class="detalhe-container">
-    
+
     <span class="detalhe-categoria">{{ noticia.get_categoria_display }}</span>
 
     <div class="title-bonus-wrapper">
@@ -377,7 +323,7 @@
     {% if noticia.resumo %}
     <h2 class="detalhe-resumo">{{ noticia.resumo }}</h2>
     {% endif %}
-    
+
     <div class="detalhe-meta">
         <span class="detalhe-autor">
             Por <strong>{% if noticia.autor %}{{ noticia.autor.get_full_name|default:noticia.autor.username }}{% else %}Redação JC{% endif %}</strong>
@@ -388,7 +334,7 @@
     {% if noticia.imagem_principal %}
         <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}" class="detalhe-imagem-principal">
     {% endif %}
-    
+
     <div class="detalhe-conteudo">
         {{ noticia.conteudo|linebreaksbr }}
     </div>
@@ -398,9 +344,8 @@
     {% if noticia.imagem_secundaria_1 %}
         <img src="{{ noticia.imagem_secundaria_1.url }}" alt="Imagem secundária" class="detalhe-imagem-secundaria">
     {% endif %}
-    
-    <div class="ad-placeholder" role="img" aria-label="Espaço para anúncio">Espaço para Anúncio (700x250)</div>
 
+    <div class="ad-placeholder" role="img" aria-label="Espaço para anúncio">Espaço para Anúncio (700x250)</div>
 
     {% if noticia.quiz %}
     <div class="quiz-banner-trigger" onclick="abrirQuiz()">
@@ -429,20 +374,16 @@
                     
                     <div class="quiz-opcoes-list" id="pergunta-{{ pergunta.id }}">
                         {% for opcao in pergunta.opcoes.all %}
-                        
-                        <label class="quiz-option-label 
+                        <label class="quiz-option-label
                                {% if opcao.id in respostas_ids %}
                                    {% if opcao.correta %}correct{% else %}incorrect{% endif %} disabled
                                {% endif %}"
                                data-correct="{{ opcao.correta|lower }}"
                                onclick="verificarResposta(this, '{{ opcao.id }}', '{{ opcao.correta|lower }}', {{ pergunta.id }})">
-                            
                             <span>{{ opcao.texto }}</span>
-                            
                             <i class="fas fa-check feedback-icon" style="color: white;"></i>
                             <i class="fas fa-times feedback-icon" style="color: white;"></i>
                         </label>
-
                         {% endfor %}
                     </div>
                 </div>
@@ -457,6 +398,46 @@
                 {% endif %}
             </button>
         </div>
+    </div>
+    {% endif %}
+    <div class="content-sharing-tags">
+        <div class="compartilhe-section">
+            <h3 class="title-section">COMPARTILHE</h3>
+            <div class="social-icons">
+                <a href="whatsapp://send?text={{ noticia.titulo }} - {{ request.build_absolute_uri }}" target="_blank" class="icon-whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="icon-facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="icon-share">
+                    <i class="fas fa-share-alt"></i>
+                </a>
+            </div>
+        </div>
+        <div class="tags-section">
+            <h3 class="title-section">TAGS</h3>
+            <div class="tag-buttons">
+                <a href="#" class="tag-button">Notícia</a>
+                <a href="#" class="tag-button">JC</a>
+            </div>
+        </div>
+    </div>
+
+    {% if comunidade_relacionada %}
+    <div class="comunidade-card-trigger" style="margin-top:30px;">
+        <div class="comunidade-info" style="display:flex; align-items:center; gap:15px;">
+            <i class="fas fa-users" style="font-size: 2rem; color: #004aad;"></i>
+            <div>
+                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Comunidade de {{ noticia.get_categoria_display }}</h3>
+                <p style="margin: 5px 0 0; color: #666; font-size: 0.9rem;">
+                    Participe da discussão.
+                </p>
+            </div>
+        </div>
+        <a href="{% url 'comunidade_detalhe' pk=comunidade_relacionada.pk %}?noticia_id={{ noticia.id }}" class="btn-jc" style="background:#004aad; text-decoration:none; display:inline-block; margin-top:10px;">
+            Participar
+        </a>
     </div>
     {% endif %}
 
@@ -501,7 +482,6 @@
         <button class="btn-play-bonus" onclick="fecharBonusModal()">Jogar agora</button>
     </div>
 </div>
-
 <section class="nossos-produtos-section">
     <h2 class="section-title">Nossos Produtos</h2>
     <div class="produtos-list">
@@ -522,7 +502,7 @@
         <div class="listagem_relacionadas">
             {% for noticia in noticias_relacionadas %}
             <article class="news-card">
-                <a href="{% url 'detalhe_noticia' slug=noticia.slug %}"> 
+                <a href="{% url 'detalhe_noticia' slug=noticia.slug %}">
                     {% if noticia.imagem_principal %}
                         <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
                     {% else %}
@@ -541,8 +521,6 @@
 {% if user.is_authenticated %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        
-        /* --- Lógica de Scroll e Histórico de Leitura --- */
         let maxScroll = 0;
         let timeout;
         const noticiaId = "{{ noticia.id }}";
@@ -552,20 +530,16 @@
             const marker = document.getElementById('fim-da-leitura');
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const windowHeight = document.documentElement.clientHeight;
-
             if (!marker) {
                 const docHeight = document.documentElement.scrollHeight - windowHeight;
                 return Math.round((scrollTop / docHeight) * 100);
             }
-
             const rect = marker.getBoundingClientRect();
             const markerPosition = rect.top + scrollTop;
             const currentBottom = scrollTop + windowHeight;
-
             let percent = (currentBottom / markerPosition) * 100;
             if (percent > 100) percent = 100;
             if (percent < 0) percent = 0;
-
             return Math.round(percent);
         }
 
@@ -592,14 +566,17 @@
                     if (maxScroll >= 100 || maxScroll % 5 === 0) {
                         enviarProgresso(maxScroll);
                     }
-                }, 1000); 
+                }, 1000);
             }
         });
-        
+
         window.addEventListener('beforeunload', function() {
             if (maxScroll > 0) {
+                const data = new FormData();
+                data.append('noticia_id', noticiaId);
+                data.append('porcentagem', maxScroll);
                 fetch("{% url 'atualizar_historico_leitura' %}", {
-                    method: "POST", 
+                    method: "POST",
                     headers: {"Content-Type": "application/json", "X-CSRFToken": csrfToken},
                     body: JSON.stringify({noticia_id: noticiaId, porcentagem: maxScroll}),
                     keepalive: true
@@ -607,13 +584,12 @@
             }
         });
 
-        /* --- Lógica do Quiz (Se existir) --- */
         {% if not quiz_concluido and noticia.quiz %}
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     abrirQuiz();
-                    observer.disconnect(); 
+                    observer.disconnect();
                 }
             });
         });
@@ -622,94 +598,53 @@
         {% endif %}
     });
 
-    /* --- Funções Globais do Quiz --- */
     function abrirQuiz() {
-        const modal = document.getElementById('quizModal');
-        if(modal) {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
+        const el = document.getElementById('quizModal');
+        if(el) { el.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
     }
-
     function fecharQuiz() {
-        const modal = document.getElementById('quizModal');
-        if(modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        const el = document.getElementById('quizModal');
+        if(el) { el.style.display = 'none'; document.body.style.overflow = 'auto'; }
     }
-
     function acaoFinalizarQuiz() {
         const btn = document.getElementById('btn-finalizar');
-        if (btn.innerText.includes("Continuar Lendo")) {
-            fecharQuiz();
-            return;
-        }
+        if (btn.innerText.includes("Continuar Lendo")) { fecharQuiz(); return; }
         fetch("{% url 'finalizar_quiz' quiz_id=noticia.quiz.id %}", {
-            method: "POST",
-            headers: { "X-CSRFToken": "{{ csrf_token }}" }
-        })
-        .then(response => {
-            if(response.ok) {
-                btn.innerText = "Continuar Lendo";
-                fecharQuiz();
-            }
-        })
-        .catch(error => console.error("Erro de rede:", error));
+            method: "POST", headers: { "X-CSRFToken": "{{ csrf_token }}" }
+        }).then(response => {
+            if(response.ok) { btn.innerText = "Continuar Lendo"; fecharQuiz(); }
+        }).catch(error => console.error("Erro de rede:", error));
     }
-
     function verificarResposta(element, opcaoId, isCorrect, perguntaId) {
         if (element.classList.contains('disabled')) return;
-
         const parent = document.getElementById('pergunta-' + perguntaId);
         const siblings = parent.querySelectorAll('.quiz-option-label');
         siblings.forEach(el => el.classList.add('disabled'));
-
-        if (isCorrect === 'true') {
-            element.classList.add('correct');
-        } else {
+        if (isCorrect === 'true') { element.classList.add('correct'); } 
+        else {
             element.classList.add('incorrect');
-            siblings.forEach(el => {
-                if (el.getAttribute('data-correct') === 'true') {
-                    el.classList.add('correct');
-                }
-            });
+            siblings.forEach(el => { if (el.getAttribute('data-correct') === 'true') el.classList.add('correct'); });
         }
-
         fetch("{% url 'salvar_resposta_quiz' %}", {
             method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/json"
-            },
+            headers: { "X-CSRFToken": "{{ csrf_token }}", "Content-Type": "application/json" },
             body: JSON.stringify({ opcao_id: opcaoId })
         }).catch(error => console.error("Erro ao salvar:", error));
     }
 
-    /* --- NOVAS FUNÇÕES: JC BÔNUS --- */
     function abrirBonusModal() {
-        const modal = document.getElementById('bonusModal');
-        if(modal) {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
+        const el = document.getElementById('bonusModal');
+        if(el) { el.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
     }
-
     function fecharBonusModal() {
-        const modal = document.getElementById('bonusModal');
-        if(modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        const el = document.getElementById('bonusModal');
+        if(el) { el.style.display = 'none'; document.body.style.overflow = 'auto'; }
     }
-
-    // Função para fechar o botão do bônus na página
     function fecharBonusBadge() {
-        const badgeContainer = document.getElementById('bonus-badge-container');
-        if(badgeContainer) {
-            badgeContainer.style.display = 'none';
-        }
+        const el = document.getElementById('bonus-badge-container');
+        if(el) { el.style.display = 'none'; }
     }
 </script>
 {% endif %}
+
 {% endblock %}
