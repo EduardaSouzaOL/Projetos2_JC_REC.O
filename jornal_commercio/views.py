@@ -358,12 +358,20 @@ def quiz_play(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id)
     
     respostas_ids = []
+    quiz_concluido = False
+    pontuacao = 0
+    
+    respostas_ids = []
     if request.user.is_authenticated:
         tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz=quiz).first()
         if tentativa:
             respostas_ids = list(tentativa.respostas.values_list('opcao_escolhida_id', flat=True))
+            quiz_concluido = tentativa.concluido
+            pontuacao = tentativa.pontuacao
 
     return render(request, 'jornal_commercio/quiz_play.html', {
         'quiz': quiz,
-        'respostas_ids': respostas_ids
+        'respostas_ids': respostas_ids,
+        'quiz_concluido': quiz_concluido,
+        'pontuacao_atual': pontuacao
     })

@@ -5,105 +5,207 @@
 
 {% block styles %}
 <style>
-    body { background-color: #f4f4f4; }
+    body { background-color: #f0f0f0; }
 
     .play-container {
-        max-width: 800px;
+        max-width: 1200px;
         margin: 40px auto;
         padding: 0 20px;
+        min-height: 85vh;
+        display: flex;
+        flex-direction: column;
     }
 
     .play-header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-    .jc-quest-logo {
-        font-size: 1.5rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        border-bottom: 3px solid #e62323;
-        display: inline-block;
-        margin-bottom: 20px;
-    }
-
-    /* BLOCO DA PERGUNTA */
-    .question-block {
-        margin-bottom: 60px; /* Espaço entre perguntas */
-    }
-
-    .question-title {
-        font-size: 1.4rem;
-        font-weight: 800;
-        color: #1a1a1a;
-        margin-bottom: 25px;
-    }
-    .question-number { margin-right: 10px; }
-
-    /* CARD BRANCO DA PERGUNTA */
-    .question-card {
-        background: white;
-        border-radius: 30px;
-        padding: 40px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    }
-
-    .question-image {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        border-radius: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 30px;
     }
 
-    /* OPÇÕES */
-    .options-list {
+    .jc-quest-logo {
+        font-size: 1.8rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        border-bottom: 4px solid #e62323;
+        display: inline-block;
+        color: #1a1a1a;
+    }
+
+    .score-badge {
+        background: white;
+        border: 2px solid #ccc;
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 700;
+        color: #333;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* ÁREA DO CARD DO JOGO */
+    .game-card-area {
+        background-color: #c4c4c4;
+        border-radius: 30px;
+        padding: 60px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        position: relative;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* CADA PASSO (PERGUNTA) */
+    .question-step {
+        display: none;
+        width: 100%;
+        animation: fadeIn 0.4s ease;
+    }
+    
+    /* Quando ativo, vira GRID (Imagem | Opções) */
+    .question-step.active {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 50px;
+        align-items: center;
+    }
+
+    /* --- CORREÇÃO: TELA FINAL CENTRALIZADA --- */
+    /* Sobrescreve o grid acima apenas para o passo final */
+    #step-final.active {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* Coluna da Imagem */
+    .q-image-col {
+        position: relative;
+    }
+    .q-image-col img {
+        width: 100%;
+        height: 450px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .placeholder-quiz {
+        width: 100%; height: 450px; background: #999; border-radius: 20px;
+        display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 2rem;
+    }
+
+    .question-header-text {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    /* Coluna das Opções */
+    .q-options-col {
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 20px;
     }
 
     .option-btn {
-        background: white;
-        border: 1px solid #ddd;
+        background: #f9f9f9;
+        border: none;
         border-radius: 15px;
-        padding: 20px;
+        padding: 20px 30px;
         text-align: left;
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 600;
         color: #333;
         cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s, background 0.2s;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
+        position: relative;
     }
 
     .option-btn:hover {
-        border-color: #999;
-        transform: translateY(-2px);
+        transform: scale(1.02);
+        background: white;
     }
 
     /* ESTADOS DE RESPOSTA */
     .option-btn.correct {
-        background-color: #2ecc71 !important;
+        background-color: #198754 !important;
         color: white !important;
-        border-color: #27ae60 !important;
     }
     .option-btn.incorrect {
-        background-color: #e74c3c !important;
+        background-color: #dc3545 !important;
         color: white !important;
-        border-color: #c0392b !important;
     }
     .option-btn.disabled {
         pointer-events: none;
-        opacity: 0.7;
+    }
+    .option-btn.faded {
+        opacity: 0.5;
     }
 
-    .feedback-icon { display: none; font-size: 1.2rem; }
+    .feedback-icon { display: none; font-size: 1.4rem; }
     .correct .fa-check { display: block; }
     .incorrect .fa-times { display: block; }
 
+    /* BOTÃO PRÓXIMO */
+    .next-btn-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 30px;
+    }
+    .btn-proximo {
+        background: #e62323;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        box-shadow: 0 4px 15px rgba(230, 35, 35, 0.4);
+        display: none;
+    }
+    .btn-proximo:hover { background: #c01b1b; transform: translateY(-2px); }
+
+    /* TELA FINAL */
+    .final-screen {
+        text-align: center;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        max-width: 500px; /* Limita a largura para ficar bonito no centro */
+    }
+    .final-score { font-size: 4rem; font-weight: 800; color: #004aad; }
+
+    /* Responsividade */
+    @media (max-width: 900px) {
+        .question-step.active { grid-template-columns: 1fr; gap: 30px; }
+        .q-image-col img { height: 250px; }
+        .game-card-area { padding: 30px; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
 {% endblock %}
 
@@ -111,82 +213,185 @@
 <div class="play-container">
     
     <div class="play-header">
-        <span class="jc-quest-logo">JC QUEST</span>
-        <h2>{{ quiz.titulo|default:quiz.noticia.titulo }}</h2>
-    </div>
-
-    {% for pergunta in quiz.perguntas.all %}
-    <div class="question-block" id="pergunta-block-{{ pergunta.id }}">
-        
-        <h3 class="question-title">
-            <span class="question-number">{{ forloop.counter }}.</span>
-            {{ pergunta.texto }}
-        </h3>
-
-        <div class="question-card">
-            {% if quiz.noticia.imagem_principal %}
-                <img src="{{ quiz.noticia.imagem_principal.url }}" class="question-image" alt="Imagem ilustrativa">
-            {% endif %}
-
-            <div class="options-list" id="pergunta-{{ pergunta.id }}">
-                {% for opcao in pergunta.opcoes.all %}
-                <div class="option-btn 
-                        {% if opcao.id in respostas_ids %}
-                            {% if opcao.correta %}correct{% else %}incorrect{% endif %} disabled
-                        {% endif %}"
-                     onclick="verificarResposta(this, '{{ opcao.id }}', '{{ opcao.correta|lower }}', {{ pergunta.id }})">
-                    
-                    <span>
-                        <strong style="margin-right: 8px;">{{ forloop.counter|slugify }})</strong> 
-                        {{ opcao.texto }}
-                    </span>
-
-                    <i class="fas fa-check feedback-icon"></i>
-                    <i class="fas fa-times feedback-icon"></i>
-                </div>
-                {% endfor %}
-            </div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <span class="jc-quest-logo">JC QUEST</span>
+            <img src="{% static 'jornal_commercio/images/logo_jc.png' %}" height="25" style="opacity:0.6; filter: grayscale(100%);"> 
         </div>
+        
+        <div class="score-badge">
+            <i class="fas fa-coins" style="color: #f1c40f;"></i> 
+            <span id="score-display">0</span>
+        </div>
+    </div>
+
+    <div class="game-card-area">
+        
+        {% if quiz_concluido %}
+            <div class="question-step active" id="step-final">
+                <div class="final-screen">
+                    <h2>Você já completou este quiz!</h2>
+                    <div class="final-score">{{ pontuacao_atual }} pts</div>
+                    <p>Obrigado por participar.</p>
+                    <a href="{% url 'quiz_hub' %}" class="btn-proximo" style="display:inline-block; text-decoration:none;">Voltar ao Hub</a>
+                </div>
+            </div>
+        {% else %}
+            {% for pergunta in quiz.perguntas.all %}
+            <div class="question-step" id="step-{{ forloop.counter }}">
+                
+                <div class="q-image-col">
+                    <h2 style="font-size:1.4rem; font-weight:700; margin-bottom:20px; color:#111;">
+                        {{ forloop.counter }}. {{ pergunta.texto }}
+                    </h2>
+
+                    {% if quiz.noticia.imagem_principal %}
+                        <img src="{{ quiz.noticia.imagem_principal.url }}" alt="Imagem do quiz">
+                    {% else %}
+                        <div class="placeholder-quiz">JC QUEST</div>
+                    {% endif %}
+                </div>
+
+                <div class="q-options-col" id="options-{{ pergunta.id }}">
+                    {% for opcao in pergunta.opcoes.all %}
+                    <button class="option-btn 
+                            {% if opcao.id in respostas_ids %}
+                                {% if opcao.correta %}correct{% else %}incorrect faded{% endif %} disabled
+                            {% endif %}"
+                            
+                            data-id="{{ opcao.id }}"
+                            data-correct="{{ opcao.correta|lower }}"
+                            
+                            {% if opcao.correta and pergunta.id in perguntas_respondidas_ids %} 
+                                class="option-btn correct disabled" 
+                            {% endif %}
+
+                            onclick="handleAnswer(this, {{ pergunta.id }})">
+                        
+                        <span>
+                            {% if forloop.counter == 1 %}a) {% elif forloop.counter == 2 %}b) {% elif forloop.counter == 3 %}c) {% else %}d) {% endif %}
+                            {{ opcao.texto }}
+                        </span>
+
+                        <i class="fas fa-check feedback-icon"></i>
+                        <i class="fas fa-times feedback-icon"></i>
+                    </button>
+                    {% endfor %}
+
+                    <div class="next-btn-container">
+                        <button class="btn-proximo" id="btn-next-{{ pergunta.id }}" onclick="nextQuestion()">
+                            {% if forloop.last %}Finalizar{% else %}Próximo{% endif %}
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+            <div class="question-step" id="step-final">
+                <div class="final-screen">
+                    <h2 style="font-size: 2rem; margin-bottom: 10px;">Quiz Finalizado!</h2>
+                    <p style="color:#555; margin-bottom: 30px;">Sua pontuação foi salva com sucesso.</p>
+                    
+                    <a href="{% url 'quiz_hub' %}" class="btn-proximo" style="display:inline-block; text-decoration:none;">
+                        IR PARA O HUB
+                    </a>
+                </div>
+            </div>
+        {% endif %}
 
     </div>
-    {% endfor %}
 
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    function verificarResposta(element, opcaoId, isCorrect, perguntaId) {
-        if (element.classList.contains('disabled')) return;
+    {% if not quiz_concluido %}
+        let currentStep = 1;
+        const totalQuestions = {{ quiz.perguntas.count }};
         
-        // Bloqueia outras opções da mesma pergunta
-        const parent = document.getElementById('pergunta-' + perguntaId);
-        const siblings = parent.querySelectorAll('.option-btn');
-        siblings.forEach(el => el.classList.add('disabled'));
+        document.addEventListener("DOMContentLoaded", function() {
+            const firstStep = document.getElementById('step-1');
+            if(firstStep) firstStep.classList.add('active');
 
-        // Feedback Visual
-        if (isCorrect === 'true') {
-            element.classList.add('correct');
-        } else {
-            element.classList.add('incorrect');
+            {% for pergunta in quiz.perguntas.all %}
+                const opts{{ pergunta.id }} = document.getElementById('options-{{ pergunta.id }}');
+                if (opts{{ pergunta.id }} && opts{{ pergunta.id }}.querySelector('.option-btn.disabled')) {
+                    document.getElementById('btn-next-{{ pergunta.id }}').style.display = 'inline-block';
+                    
+                    const allBtns = opts{{ pergunta.id }}.querySelectorAll('.option-btn');
+                    allBtns.forEach(b => {
+                        if(b.getAttribute('data-correct') === 'true') b.classList.add('correct');
+                        else if(!b.classList.contains('incorrect')) b.classList.add('faded');
+                    });
+                }
+            {% endfor %}
+        });
+
+        function handleAnswer(btnElement, perguntaId) {
+            if (btnElement.classList.contains('disabled')) return;
+
+            const parent = document.getElementById('options-' + perguntaId);
+            const allOptions = parent.querySelectorAll('.option-btn');
+            const isCorrect = btnElement.getAttribute('data-correct') === 'true';
+            const nextBtn = document.getElementById('btn-next-' + perguntaId);
+
+            allOptions.forEach(btn => {
+                btn.classList.add('disabled');
+                if(btn !== btnElement) btn.classList.add('faded');
+            });
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                btnElement.classList.remove('faded');
+            } else {
+                btnElement.classList.add('incorrect');
+                btnElement.classList.remove('faded');
+                allOptions.forEach(btn => {
+                    if (btn.getAttribute('data-correct') === 'true') {
+                        btn.classList.add('correct');
+                        btn.classList.remove('faded');
+                    }
+                });
+            }
+
+            nextBtn.style.display = 'inline-block';
+
+            {% if user.is_authenticated %}
+            const opcaoId = btnElement.getAttribute('data-id');
+            fetch("{% url 'salvar_resposta_quiz' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ opcao_id: opcaoId })
+            });
+            {% endif %}
         }
 
-        // Salva no banco via AJAX
-        {% if user.is_authenticated %}
-        fetch("{% url 'salvar_resposta_quiz' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ opcao_id: opcaoId })
-        })
-        .then(response => response.json())
-        .then(data => console.log("Resposta salva"))
-        .catch(error => console.error("Erro ao salvar:", error));
-        {% else %}
-        alert("Faça login para salvar seus pontos!");
-        {% endif %}
-    }
+        function nextQuestion() {
+            const currentDiv = document.getElementById('step-' + currentStep);
+            currentDiv.classList.remove('active');
+            
+            currentStep++;
+
+            const nextDiv = document.getElementById('step-' + currentStep);
+            
+            if (nextDiv) {
+                nextDiv.classList.add('active');
+            } else {
+                // TELA FINAL CENTRALIZADA
+                document.getElementById('step-final').classList.add('active');
+                
+                {% if user.is_authenticated %}
+                fetch("{% url 'finalizar_quiz' quiz_id=quiz.id %}", {
+                    method: "POST",
+                    headers: { "X-CSRFToken": "{{ csrf_token }}" }
+                });
+                {% endif %}
+            }
+        }
+    {% endif %}
 </script>
 {% endblock %}
