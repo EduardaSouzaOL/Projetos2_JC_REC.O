@@ -20,4 +20,5 @@ urlpatterns = [
     path('edicao-do-dia/', views.pagina_edicao_do_dia, name='pagina_edicao'),
     path('api/atualizar-leitura/', views.atualizar_historico_leitura, name='atualizar_historico_leitura'),
     path('anuncio/clique/<int:anuncio_id>/', views.computar_clique_anuncio, name='clique_anuncio'),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]

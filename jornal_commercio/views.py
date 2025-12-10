@@ -481,3 +481,7 @@ def computar_clique_anuncio(request, anuncio_id):
         return redirect('/')
         
     return redirect(anuncio.link_destino)
+
+def dashboard(request):
+
+    return render(request, 'jornal_commercio/dashboard.html')

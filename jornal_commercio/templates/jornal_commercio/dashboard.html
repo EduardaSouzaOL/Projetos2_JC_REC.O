@@ -1,0 +1,529 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}JC - O essencial para o seu dia{% endblock %}
+
+{% block styles %}
+    <style>
+        :root {
+            --bg-color: #E0E0E0;
+            --card-bg: #CDCDCD; /* Um tom um pouco mais escuro/sólido para os cards */
+            --text-primary: #1a1a1a;
+            --text-secondary: #555;
+            --accent-red: #D92525;
+            --border-radius: 16px;
+            --btn-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 500; /* Regular/Medium */
+            letter-spacing: -1px;
+        }
+
+        .info-btn {
+            background-color: var(--accent-red);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Layout Grid Principal */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr; /* Esquerda, Meio, Direita */
+            gap: 25px;
+            margin: 12rem;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo Geral dos Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .card-footer-link {
+            margin-top: auto;
+            text-align: right;
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+            padding-top: 15px;
+        }
+
+        /* --- Coluna Esquerda --- */
+        .col-left {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Notificações */
+        .notification-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #bbb;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notif-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+        }
+        .notif-text {
+            font-size: 0.95rem;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        /* Minha Área */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            background: transparent;
+            border: 1px solid var(--btn-border);
+            border-radius: 50px; /* Borda bem redonda */
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .action-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* --- Coluna Central (Quizzes) --- */
+        .quiz-card {
+            background-color: #e6e6e6; /* Ligeiramente mais claro dentro do card */
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .quiz-img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            background-color: #888;
+        }
+        .quiz-content {
+            padding: 15px;
+            padding-top: 10px;
+        }
+        .quiz-question {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            min-height: 40px;
+            margin-right: 10px;
+            width: 220px;
+        }
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-play {
+            background-color: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .quiz-meta {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .coins-reward {
+            color: var(--accent-red);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* --- Coluna Direita (Leia Mais Tarde) --- */
+        .read-later-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .news-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .news-thumb {
+            width: 80px;
+            height: 60px;
+            background-color: #888;
+            border-radius: 6px;
+            flex-shrink: 0;
+            object-fit: cover;
+        }
+        .news-title {
+            font-size: 0.85rem;
+            line-height: 1.3;
+            font-weight: 500;
+        }
+
+        /* --- Bottom Section (Histórico) --- */
+        .history-section {
+            margin: 12rem;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .history-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-img {
+            width: 100%;
+            height: 100px;
+            background-color: #aaa;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .history-cat {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .history-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            height: 40px; /* Limit height */
+            overflow: hidden;
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #555;
+        }
+        .progress-bar-bg {
+            flex-grow: 1;
+            height: 6px;
+            background-color: #bbb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-red);
+            border-radius: 3px;
+        }
+
+        /* Responsividade básica */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .col-right {
+                grid-column: span 2;
+            }
+            .history-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .col-right {
+                grid-column: span 1;
+            }
+            .history-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="main-grid">
+        
+        <div class="col-left">
+            <section class="card">
+                <div class="card-title">
+                    <i class="ph ph-bell"></i> NOTIFICAÇÕES
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notif-header">
+                        <span class="dot"></span> Comunidades • 5 minutos atrás
+                    </div>
+                    <div class="notif-text">Bianca Melo respondeu ao seu comentário</div>
+                </div>
+
+                <div class="notification-item">
+                    <div class="notif-header">
+                        <span class="dot"></span> Comunidades • 5 minutos atrás
+                    </div>
+                    <div class="notif-text">Bianca Melo respondeu ao seu comentário</div>
+                </div>
+
+                <div class="notification-item" style="border:none">
+                    <div class="notif-header">
+                        <span class="dot"></span> Comunidades • 5 minutos atrás
+                    </div>
+                    <div class="notif-text">Bianca Melo respondeu ao seu comentário</div>
+                </div>
+
+                <div class="card-footer-link">Ver todas</div>
+            </section>
+
+            <section class="card">
+                <div class="card-title">
+                    <i class="ph ph-folder-open"></i> MINHA ÁREA
+                </div>
+                
+                <button class="action-btn">
+                    <i class="ph ph-gear"></i> Editar perfil e interesses
+                </button>
+                <button class="action-btn">
+                    <i class="ph ph-pencil-simple"></i> Configurações
+                </button>
+                <button class="action-btn">
+                    <i class="ph ph-sign-out"></i> Sair
+                </button>
+            </section>
+        </div>
+
+        <div class="col-center">
+            <section class="card">
+                <div class="card-title">
+                    <i class="ph ph-question"></i> SEUS QUIZZES RECENTES
+                </div>
+
+                <div class="quiz-card">
+                    <img src="https://placehold.co/400x150/555/FFF?text=Gaza+Conflict" class="quiz-img" alt="Quiz">
+                    <div class="quiz-content">
+                        <div class="quiz-actions">
+                            <p class="quiz-question">O que você sabe sobre o conflito entre Israel e Hamas?</p>
+                            <button class="btn-play">Jogar de novo</button>
+                        </div>
+                        <div class="quiz-meta">
+                            <span>Pontuação: 2/4 acertos</span>
+                            <span class="coins-reward"><i class="ph-fill ph-coins"></i> + 5 moedas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-card">
+                    <img src="https://placehold.co/400x150/555/FFF?text=Novela" class="quiz-img" alt="Quiz">
+                    <div class="quiz-content">
+                        <div class="quiz-actions">
+                            <p class="quiz-question">Você sabe quem matou Odete Roitman?</p>
+                            <button class="btn-play">Jogar de novo</button>
+                        </div>
+                        <div class="quiz-meta">
+                            <span>Pontuação: 4/4 acertos</span>
+                            <span class="coins-reward"><i class="ph-fill ph-coins"></i> + 5 moedas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-card">
+                    <img src="https://placehold.co/400x150/555/FFF?text=Vacinas" class="quiz-img" alt="Quiz">
+                    <div class="quiz-content">
+                        <div class="quiz-actions">
+                            <p class="quiz-question">Você sabe quais vacinas você precisa tomar?</p>
+                            <button class="btn-play">Jogar de novo</button>
+                        </div>
+                        <div class="quiz-meta">
+                            <span>Pontuação: 3/4 acertos</span>
+                            <span class="coins-reward"><i class="ph-fill ph-coins"></i> + 5 moedas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer-link">Ver todos</div>
+            </section>
+        </div>
+
+        <div class="col-right">
+            <section class="card">
+                <div class="card-title">
+                    <i class="ph ph-bookmark-simple"></i> LEIA MAIS TARDE
+                </div>
+
+                <div class="read-later-list">
+                    <div class="news-item">
+                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
+                        <p class="news-title">Novas regras para obter CNH no Brasil são lançadas pelo presidente Lula</p>
+                    </div>
+                    <div class="news-item">
+                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
+                        <p class="news-title">HospitalMed impulsiona o mercado da saúde e bem-estar</p>
+                    </div>
+                    <div class="news-item">
+                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
+                        <p class="news-title">LAFEPE acelera inovação e expande produção para fortalecer autonomia...</p>
+                    </div>
+                    <div class="news-item">
+                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
+                        <p class="news-title">Viana e Moura entrega primeira etapa do Jardim Monjope e beneficia...</p>
+                    </div>
+                    <div class="news-item">
+                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
+                        <p class="news-title">Gestão e tecnologia: CESAR School lança graduação em ADM Tech</p>
+                    </div>
+                    <div class="news-item">
+                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
+                        <p class="news-title">Prêmio GPTW chega a 15ª edição e destaca as Melhores Empresas...</p>
+                    </div>
+                    <div class="news-item">
+                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
+                        <p class="news-title">Viva a Vida 60+: atividade física para a melhor idade no centro do Recife</p>
+                    </div>
+                </div>
+
+                <div class="card-footer-link">Ver mais</div>
+            </section>
+        </div>
+
+    </div> <section class="card history-section">
+        <div class="card-title">
+            <i class="ph ph-eye"></i> SEU HISTÓRICO
+        </div>
+
+        <div class="history-grid">
+            <div class="history-item">
+                <img src="https://placehold.co/200x120" class="history-img" alt="History">
+                <span class="history-cat">GAZA</span>
+                <p class="history-title">Jogo Responsável, Tributação Justa e Combate à Clandestinidade...</p>
+                <div class="progress-container">
+                    <span>50%</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-item">
+                <img src="https://placehold.co/200x120" class="history-img" alt="History">
+                <span class="history-cat">GAZA</span>
+                <p class="history-title">Vestibulares da Fits e Unit-PE movimentam o domingo e reforçam...</p>
+                <div class="progress-container">
+                    <span>50%</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-item">
+                <img src="https://placehold.co/200x120" class="history-img" alt="History">
+                <span class="history-cat">GAZA</span>
+                <p class="history-title">Geração Solidária: projeto do Colégio Núcleo estimula protagonismo...</p>
+                <div class="progress-container">
+                    <span>50%</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-item">
+                <img src="https://placehold.co/200x120" class="history-img" alt="History">
+                <span class="history-cat">GAZA</span>
+                <p class="history-title">Mackenzie Agnes lança Campanha de Matrículas 2025 e reforça legado...</p>
+                <div class="progress-container">
+                    <span>50%</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-item">
+                <img src="https://placehold.co/200x120" class="history-img" alt="History">
+                <span class="history-cat">GAZA</span>
+                <p class="history-title">STEAM Fair: metodologia da Eleva Recife onde o aluno é protagonista</p>
+                <div class="progress-container">
+                    <span>50%</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer-link" style="text-align: left; margin-top: 20px;">Ver mais</div>
+    </section>
+
+{% endblock content %}
