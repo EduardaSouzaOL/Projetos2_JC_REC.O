@@ -353,4 +353,95 @@
         {% endif %}
     </div>
 </section>
+{% if user.is_authenticated %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let maxScroll = 0;
+        let timeout;
+        const noticiaId = "{{ noticia.id }}";
+        const csrfToken = "{{ csrf_token }}";
+
+        function getScrollPercentage() {
+            const marker = document.getElementById('fim-da-leitura');
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const windowHeight = document.documentElement.clientHeight;
+
+            // Se por algum motivo o marcador não existir, usa o fallback do cálculo antigo (página toda)
+            if (!marker) {
+                const docHeight = document.documentElement.scrollHeight - windowHeight;
+                return Math.round((scrollTop / docHeight) * 100);
+            }
+
+            // Pega a posição absoluta do marcador de fim de leitura
+            const rect = marker.getBoundingClientRect();
+            const markerPosition = rect.top + scrollTop;
+
+            // A posição atual da parte inferior da tela do usuário
+            const currentBottom = scrollTop + windowHeight;
+
+            // Calcula a porcentagem: (posição atual / posição do fim da notícia) * 100
+            let percent = (currentBottom / markerPosition) * 100;
+
+            // Ajustes finais
+            if (percent > 100) percent = 100;
+            if (percent < 0) percent = 0;
+
+            return Math.round(percent);
+        }
+
+        // Enviar dados para o servidor
+        function enviarProgresso(porcentagem) {
+            fetch("{% url 'atualizar_historico_leitura' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken
+                },
+                body: JSON.stringify({
+                    noticia_id: noticiaId,
+                    porcentagem: porcentagem
+                })
+            }).catch(err => console.log("Erro ao salvar leitura:", err));
+        }
+
+        // Monitorar o scroll (com throttle para não travar o navegador)
+        window.addEventListener('scroll', function() {
+            const currentPercent = getScrollPercentage();
+            
+            // Só processa se o usuário desceu mais do que antes
+            if (currentPercent > maxScroll) {
+                maxScroll = currentPercent;
+                
+                // Limpa o timer anterior e define um novo (envia a cada 2 segundos se parar de rolar)
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    // Só envia se for múltiplo de 10 ou chegou no final (otimização)
+                    if (maxScroll >= 100 || maxScroll % 5 === 0) {
+                        enviarProgresso(maxScroll);
+                    }
+                }, 1000); 
+            }
+        });
+        
+        // Garante envio ao sair da página (backup)
+        window.addEventListener('beforeunload', function() {
+            if (maxScroll > 0) {
+                // navigator.sendBeacon é melhor para dados ao fechar a página, 
+                // mas fetch síncrono ou keepalive funciona em navegadores modernos
+                const data = new FormData();
+                data.append('noticia_id', noticiaId);
+                data.append('porcentagem', maxScroll);
+                // Nota: para beforeunload o ideal é usar sendBeacon, 
+                // mas para manter consistência com sua view JSON, o fetch keepalive ajuda:
+                fetch("{% url 'atualizar_historico_leitura' %}", {
+                    method: "POST", 
+                    headers: {"Content-Type": "application/json", "X-CSRFToken": csrfToken},
+                    body: JSON.stringify({noticia_id: noticiaId, porcentagem: maxScroll}),
+                    keepalive: true
+                });
+            }
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

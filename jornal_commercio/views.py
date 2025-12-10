@@ -8,10 +8,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
 import json
-from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta
+from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta, HistoricoLeitura
 from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST
 
 def home(request):
     
@@ -385,3 +386,35 @@ def pagina_edicao_do_dia(request):
         'edicao': ultima_edicao
     }
     return render(request, 'edicao_do_dia.html', context)
+
+@login_required
+@require_POST
+def atualizar_historico_leitura(request):
+    try:
+        data = json.loads(request.body)
+        noticia_id = data.get('noticia_id')
+        porcentagem = data.get('porcentagem')
+        
+        # Validação básica
+        if not noticia_id or porcentagem is None:
+            return JsonResponse({'status': 'erro', 'message': 'Dados inválidos'}, status=400)
+            
+        porcentagem = int(porcentagem)
+        if porcentagem > 100: porcentagem = 100
+        
+        # Salva ou atualiza
+        historico, created = HistoricoLeitura.objects.get_or_create(
+            usuario=request.user,
+            noticia_id=noticia_id
+        )
+        
+        # Só atualizamos se a nova porcentagem for maior que a anterior
+        # (para evitar que, ao subir a página, diminua o progresso)
+        if porcentagem > historico.porcentagem_lida:
+            historico.porcentagem_lida = porcentagem
+            historico.save()
+            
+        return JsonResponse({'status': 'sucesso', 'lido': historico.lido_completo})
+        
+    except Exception as e:
+        return JsonResponse({'status': 'erro', 'message': str(e)}, status=500)
