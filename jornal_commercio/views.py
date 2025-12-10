@@ -367,3 +367,13 @@ def quiz_play(request, quiz_id):
         'quiz': quiz,
         'respostas_ids': respostas_ids
     })
+
+def pagina_edicao_do_dia(request):
+    from .models import Edicao
+    
+    ultima_edicao = Edicao.objects.first()
+    
+    context = {
+        'edicao': ultima_edicao
+    }
+    return render(request, 'edicao_do_dia.html', context)

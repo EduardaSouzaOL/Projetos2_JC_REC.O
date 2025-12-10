@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from jornal_commercio import views
 
 urlpatterns = [
     path('', views.home, name="home"),
@@ -16,4 +17,5 @@ urlpatterns = [
     path('api/finalizar-quiz/<int:quiz_id>/', views.finalizar_quiz, name='finalizar_quiz'),
     path('jc-quest/', views.quiz_hub, name='quiz_hub'),
     path('jc-quest/jogar/<int:quiz_id>/', views.quiz_play, name='quiz_play'),
+    path('edicao-do-dia/', views.pagina_edicao_do_dia, name='pagina_edicao'),
 ]

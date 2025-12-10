@@ -54,14 +54,13 @@ TEMPLATES = [
 'django.contrib.messages.context_processors.messages',
 'jornal_commercio.context_processors.global_feedback_form',
 'jornal_commercio.context_processors.newsletter_form_context',
+'jornal_commercio.context_processors.edicao_do_dia',
 ],
 },
 },
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'
-
-# --- Database --- (Esta seção está correta para Azure)
 DB_HOST = os.environ.get('DB_HOST')
 
 if DB_HOST:
