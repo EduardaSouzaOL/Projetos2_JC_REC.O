@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Perfil, Interesse, AssinanteNewsletter
 
-# Register your models here.
 @admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'cidade', 'estado', 'data_nascimento')
@@ -12,16 +11,13 @@ class InteresseAdmin(admin.ModelAdmin):
     list_display = ('nome',)
     search_fields = ('nome',)
 
-
 @admin.register(AssinanteNewsletter)
 class AssinanteNewsletterAdmin(admin.ModelAdmin):
-    
     list_display = ('email', 'is_active', 'created_at')
     search_fields = ('email',)
     list_filter = ('is_active', 'created_at')
     readonly_fields = ('unsubscribe_token', 'created_at')
     list_per_page = 50
-
     actions = ['marcar_como_ativo', 'marcar_como_inativo']
 
     def marcar_como_ativo(self, request, queryset):
@@ -31,5 +27,3 @@ class AssinanteNewsletterAdmin(admin.ModelAdmin):
     def marcar_como_inativo(self, request, queryset):
         queryset.update(is_active=False)
     marcar_como_inativo.short_description = "Marcar selecionados como Inativos"
-    
-# admin.site.register(Interesse)

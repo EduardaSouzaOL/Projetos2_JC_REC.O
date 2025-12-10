@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Noticia, Feedback, Comunidade, Publicacao, Comentario, HistoricoLeitura,
-    Quiz, Pergunta, Opcao, TentativaQuiz, RespostaUsuario
+    Quiz, Pergunta, Opcao, TentativaQuiz, RespostaUsuario,Edicao
 )
 
 @admin.register(Noticia)
@@ -88,3 +88,8 @@ class TentativaQuizAdmin(admin.ModelAdmin):
     search_fields = ('usuario__username', 'quiz__noticia__titulo')
     inlines = [RespostaUsuarioInline]
     readonly_fields = ('data_inicio', 'data_conclusao', 'pontuacao')
+
+@admin.register(Edicao)
+class EdicaoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'data_publicacao')
+    ordering = ('-data_publicacao',)
