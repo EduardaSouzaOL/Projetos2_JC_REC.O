@@ -24,7 +24,7 @@
         .quiz-banner-trigger:hover { transform: scale(1.02); }
 
         .quiz-modal-overlay {
-            display: none; /* Escondido por padrão */
+            display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7);
@@ -89,59 +89,215 @@
             background: #c01b1b;
         }
 
-        .comunidade-card-trigger {
-            background: #f0f8ff; /* Azul suave */
-            border: 1px solid #cce5ff;
-            border-left: 5px solid #004aad;
-            padding: 20px;
-            margin: 30px 0;
+        /* --- NOVOS ESTILOS: JC BÔNUS E HEADER --- */
+        
+        /* Container do Título + Botão Bônus */
+        .title-bonus-wrapper {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            border-radius: 8px;
-            flex-wrap: wrap;
-            gap: 15px;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+        }
+
+        .detalhe-titulo {
+            flex: 1; /* Ocupa o espaço restante */
+            margin-top: 0;
+        }
+
+        /* Wrapper para o botão e o 'x' de fechar */
+        .bonus-badge-wrapper {
+            position: relative;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* Botão de fechar o badge ('x') */
+        .close-bonus-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 14px;
+            line-height: 18px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .close-bonus-badge:hover {
+            background-color: #eee;
+        }
+
+        /* Botão Hexagonal Dourado */
+        .bonus-badge {
+            background: linear-gradient(135deg, #d48e04 0%, #b87b00 100%);
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            /* Forma de Hexágono via CSS */
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             transition: transform 0.2s;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        .comunidade-card-trigger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+        .bonus-badge:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #eebb22 0%, #d48e04 100%);
         }
-        .comunidade-info {
+
+        .bonus-badge i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 2px rgba(0,0,0,0.2);
+        }
+
+        .bonus-badge span {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        /* --- MODAL DE BÔNUS (ESTILO ESPECÍFICO) --- */
+        .bonus-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000; /* Acima de tudo */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .bonus-modal-card {
+            background: #e0e0e0; /* Fundo cinza claro */
+            width: 100%; max-width: 450px;
+            border-radius: 20px;
+            padding: 40px 30px;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease-out;
+            margin-top: 30px; /* Adicionado para dar espaço ao ícone que salta para fora */
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Header do Modal (Hexagono Vermelho) */
+        .modal-header-icon {
+            background: #D9232D;
+            width: 100px;
+            height: 110px;
+            margin: -70px auto 20px; /* Ajustado para não sair da tela */
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             display: flex;
             align-items: center;
-            flex: 1;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(217, 35, 45, 0.4);
         }
-        .btn-comunidade {
-            background: #004aad;
+        
+        .modal-header-icon i {
+            font-size: 45px;
+            color: #FFD700; /* Dourado */
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+        }
+
+        .bonus-modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: #000;
+        }
+        
+        .bonus-modal-subtitle {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        /* Grid de Estatísticas */
+        .stats-grid {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: #bcbcbc; /* Cinza mais escuro que o fundo */
+            padding: 15px 10px;
+            border-radius: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90px;
+        }
+
+        .stat-box i { font-size: 1.2rem; margin-bottom: 5px; color: #333; }
+        .stat-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #444; margin-bottom: 3px; }
+        .stat-value { font-size: 0.9rem; font-weight: 400; color: #333; }
+
+        .how-it-works-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .how-it-works-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            font-size: 0.85rem;
+            color: #444;
+            margin-bottom: 25px;
+        }
+        .how-it-works-list li { margin-bottom: 8px; }
+
+        .btn-play-bonus {
+            background: #D9232D;
             color: white;
-            text-decoration: none;
-            padding: 10px 25px;
+            border: none;
+            padding: 12px 40px;
             border-radius: 50px;
             font-weight: bold;
             font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
             transition: background 0.3s;
-            display: inline-block;
-            white-space: nowrap;
         }
-        .btn-comunidade:hover {
-            background: #003380;
-            color: #fff;
+        .btn-play-bonus:hover { background: #b01b23; }
+
+        .close-bonus-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #333;
+            background: none;
+            border: none;
         }
-        @media (max-width: 600px) {
-            .comunidade-card-trigger {
-                flex-direction: column;
-                text-align: center;
-            }
-            .comunidade-info {
-                flex-direction: column;
-                margin-bottom: 10px;
-            }
-            .comunidade-info i {
-                margin-right: 0 !important;
-                margin-bottom: 10px;
-            }
-        }
+
     </style>
 {% endblock %}
 
@@ -150,7 +306,18 @@
 <div class="detalhe-container">
     
     <span class="detalhe-categoria">{{ noticia.get_categoria_display }}</span>
-    <h1 class="detalhe-titulo">{{ noticia.titulo }}</h1>
+
+    <div class="title-bonus-wrapper">
+        <h1 class="detalhe-titulo">{{ noticia.titulo }}</h1>
+        
+        <div id="bonus-badge-container" class="bonus-badge-wrapper">
+            <button class="close-bonus-badge" onclick="fecharBonusBadge()" aria-label="Fechar Bônus">×</button>
+            <div class="bonus-badge" onclick="abrirBonusModal()">
+                <i class="fas fa-trophy"></i>
+                <span>JC Bônus</span>
+            </div>
+        </div>
+    </div>
 
     {% if noticia.resumo %}
     <h2 class="detalhe-resumo">{{ noticia.resumo }}</h2>
@@ -181,7 +348,6 @@
 
 
     {% if noticia.quiz %}
-    
     <div class="quiz-banner-trigger" onclick="abrirQuiz()">
         <div>
             <h3 style="margin:0; font-size: 1.2rem;">JC <span style="color:#e62323">QUEST</span> 🧠</h3>
@@ -237,139 +403,48 @@
             </button>
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            {% if not quiz_concluido %}
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        abrirQuiz();
-                        observer.disconnect(); 
-                    }
-                });
-            });
-            const trigger = document.querySelector("#fim-da-leitura");
-            if(trigger) observer.observe(trigger);
-            {% endif %}
-        });
-
-        function abrirQuiz() {
-            document.getElementById('quizModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function fecharQuiz() {
-            document.getElementById('quizModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        function acaoFinalizarQuiz() {
-            const btn = document.getElementById('btn-finalizar');
- 
-            if (btn.innerText.includes("Continuar Lendo")) {
-                fecharQuiz();
-                return;
-            }
-
-            fetch("{% url 'finalizar_quiz' quiz_id=noticia.quiz.id %}", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                }
-            })
-            .then(response => {
-                if(response.ok) {
-                    btn.innerText = "Continuar Lendo";
-                    fecharQuiz();
-                } else {
-                    console.error("Erro ao finalizar quiz");
-                }
-            })
-            .catch(error => console.error("Erro de rede:", error));
-        }
-
-        function verificarResposta(element, opcaoId, isCorrect, perguntaId) {
-            if (element.classList.contains('disabled')) return;
-
-            const parent = document.getElementById('pergunta-' + perguntaId);
-            const siblings = parent.querySelectorAll('.quiz-option-label');
-            siblings.forEach(el => el.classList.add('disabled'));
-
-            if (isCorrect === 'true') {
-                element.classList.add('correct');
-            } else {
-                element.classList.add('incorrect');
-
-                siblings.forEach(el => {
-                    if (el.getAttribute('data-correct') === 'true') {
-                        el.classList.add('correct');
-                    }
-                });
-            }
-
-            {% if user.is_authenticated %}
-            fetch("{% url 'salvar_resposta_quiz' %}", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ opcao_id: opcaoId })
-            })
-            .then(response => response.json())
-            .then(data => console.log("Resposta salva"))
-            .catch(error => console.error("Erro ao salvar:", error));
-            {% else %}
-            alert("Faça login para salvar seu progresso!");
-            {% endif %}
-        }
-    </script>
     {% endif %}
 
-    <div class="content-sharing-tags">
-        <div class="compartilhe-section">
-            <h3 class="title-section">COMPARTILHE</h3>
-            <div class="social-icons">
-                <a href="whatsapp://send?text={{ noticia.titulo }} - {{ request.build_absolute_uri }}" target="_blank" class="icon-whatsapp">
-                    <i class="fab fa-whatsapp"></i> 
-                </a>
-                
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="icon-facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                
-                <a href="#" class="icon-share">
-                    <i class="fas fa-share-alt"></i>
-                </a>
-            </div>
-        </div>
-        <div class="tags-section">
-            <h3 class="title-section">TAGS</h3>
-            <div class="tag-buttons">
-                <a href="#" class="tag-button">Notícia</a>
-                <a href="#" class="tag-button">JC</a>
-            </div>
-        </div>
-    </div>
-    
-    {% if comunidade_relacionada %}
-    <div class="comunidade-card-trigger" style="margin-top:30px;">
-        <div class="comunidade-info" style="display:flex; align-items:center; gap:15px;">
-            <i class="fas fa-users" style="font-size: 2rem; color: #004aad;"></i>
-            <div>
-                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Comunidade de {{ noticia.get_categoria_display }}</h3>
-                <p style="margin: 5px 0 0; color: #666; font-size: 0.9rem;">
-                    Participe da discussão.
-                </p>
-            </div>
-        </div>
-        <a href="{% url 'comunidade_detalhe' pk=comunidade_relacionada.pk %}?noticia_id={{ noticia.id }}" class="btn-jc" style="background:#004aad; text-decoration:none; display:inline-block; margin-top:10px;">
-            Participar
-        </a>
-    </div>
-    {% endif %}
+</div>
 
+<div id="bonusModal" class="bonus-modal-overlay">
+    <div class="bonus-modal-card">
+        <button class="close-bonus-modal" onclick="fecharBonusModal()">&times;</button>
+        
+        <div class="modal-header-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+
+        <h2 class="bonus-modal-title">Comece a ganhar pontos lendo notícias</h2>
+        <p class="bonus-modal-subtitle">Leia, engaje e desbloqueie recompensas.</p>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <i class="fas fa-coins"></i>
+                <span class="stat-label">Seus Pontos</span>
+                <span class="stat-value">0 pontos</span>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-fire"></i>
+                <span class="stat-label">Streak de Leitura</span>
+                <span class="stat-value">0 dias</span>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-book-open"></i>
+                <span class="stat-label">Notícias Lidas Hoje</span>
+                <span class="stat-value">0</span>
+            </div>
+        </div>
+
+        <h3 class="how-it-works-title">Como funciona?</h3>
+        <ul class="how-it-works-list">
+            <li>1. Leia matérias todos os dias.</li>
+            <li>2. Compartilhe ou salve para ganhar pontos extras.</li>
+            <li>3. Acumule pontos e desbloqueie recompensas.</li>
+        </ul>
+
+        <button class="btn-play-bonus" onclick="fecharBonusModal()">Jogar agora</button>
+    </div>
 </div>
 
 <section class="nossos-produtos-section">
@@ -407,9 +482,12 @@
         {% endif %}
     </div>
 </section>
+
 {% if user.is_authenticated %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        
+        /* --- Lógica de Scroll e Histórico de Leitura --- */
         let maxScroll = 0;
         let timeout;
         const noticiaId = "{{ noticia.id }}";
@@ -420,30 +498,22 @@
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const windowHeight = document.documentElement.clientHeight;
 
-            // Se por algum motivo o marcador não existir, usa o fallback do cálculo antigo (página toda)
             if (!marker) {
                 const docHeight = document.documentElement.scrollHeight - windowHeight;
                 return Math.round((scrollTop / docHeight) * 100);
             }
 
-            // Pega a posição absoluta do marcador de fim de leitura
             const rect = marker.getBoundingClientRect();
             const markerPosition = rect.top + scrollTop;
-
-            // A posição atual da parte inferior da tela do usuário
             const currentBottom = scrollTop + windowHeight;
 
-            // Calcula a porcentagem: (posição atual / posição do fim da notícia) * 100
             let percent = (currentBottom / markerPosition) * 100;
-
-            // Ajustes finais
             if (percent > 100) percent = 100;
             if (percent < 0) percent = 0;
 
             return Math.round(percent);
         }
 
-        // Enviar dados para o servidor
         function enviarProgresso(porcentagem) {
             fetch("{% url 'atualizar_historico_leitura' %}", {
                 method: "POST",
@@ -458,18 +528,12 @@
             }).catch(err => console.log("Erro ao salvar leitura:", err));
         }
 
-        // Monitorar o scroll (com throttle para não travar o navegador)
         window.addEventListener('scroll', function() {
             const currentPercent = getScrollPercentage();
-            
-            // Só processa se o usuário desceu mais do que antes
             if (currentPercent > maxScroll) {
                 maxScroll = currentPercent;
-                
-                // Limpa o timer anterior e define um novo (envia a cada 2 segundos se parar de rolar)
                 clearTimeout(timeout);
                 timeout = setTimeout(function() {
-                    // Só envia se for múltiplo de 10 ou chegou no final (otimização)
                     if (maxScroll >= 100 || maxScroll % 5 === 0) {
                         enviarProgresso(maxScroll);
                     }
@@ -477,16 +541,8 @@
             }
         });
         
-        // Garante envio ao sair da página (backup)
         window.addEventListener('beforeunload', function() {
             if (maxScroll > 0) {
-                // navigator.sendBeacon é melhor para dados ao fechar a página, 
-                // mas fetch síncrono ou keepalive funciona em navegadores modernos
-                const data = new FormData();
-                data.append('noticia_id', noticiaId);
-                data.append('porcentagem', maxScroll);
-                // Nota: para beforeunload o ideal é usar sendBeacon, 
-                // mas para manter consistência com sua view JSON, o fetch keepalive ajuda:
                 fetch("{% url 'atualizar_historico_leitura' %}", {
                     method: "POST", 
                     headers: {"Content-Type": "application/json", "X-CSRFToken": csrfToken},
@@ -495,7 +551,110 @@
                 });
             }
         });
+
+        /* --- Lógica do Quiz (Se existir) --- */
+        {% if not quiz_concluido and noticia.quiz %}
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    abrirQuiz();
+                    observer.disconnect(); 
+                }
+            });
+        });
+        const trigger = document.querySelector("#fim-da-leitura");
+        if(trigger) observer.observe(trigger);
+        {% endif %}
     });
+
+    /* --- Funções Globais do Quiz --- */
+    function abrirQuiz() {
+        const modal = document.getElementById('quizModal');
+        if(modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function fecharQuiz() {
+        const modal = document.getElementById('quizModal');
+        if(modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    function acaoFinalizarQuiz() {
+        const btn = document.getElementById('btn-finalizar');
+        if (btn.innerText.includes("Continuar Lendo")) {
+            fecharQuiz();
+            return;
+        }
+        fetch("{% url 'finalizar_quiz' quiz_id=noticia.quiz.id %}", {
+            method: "POST",
+            headers: { "X-CSRFToken": "{{ csrf_token }}" }
+        })
+        .then(response => {
+            if(response.ok) {
+                btn.innerText = "Continuar Lendo";
+                fecharQuiz();
+            }
+        })
+        .catch(error => console.error("Erro de rede:", error));
+    }
+
+    function verificarResposta(element, opcaoId, isCorrect, perguntaId) {
+        if (element.classList.contains('disabled')) return;
+
+        const parent = document.getElementById('pergunta-' + perguntaId);
+        const siblings = parent.querySelectorAll('.quiz-option-label');
+        siblings.forEach(el => el.classList.add('disabled'));
+
+        if (isCorrect === 'true') {
+            element.classList.add('correct');
+        } else {
+            element.classList.add('incorrect');
+            siblings.forEach(el => {
+                if (el.getAttribute('data-correct') === 'true') {
+                    el.classList.add('correct');
+                }
+            });
+        }
+
+        fetch("{% url 'salvar_resposta_quiz' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ opcao_id: opcaoId })
+        }).catch(error => console.error("Erro ao salvar:", error));
+    }
+
+    /* --- NOVAS FUNÇÕES: JC BÔNUS --- */
+    function abrirBonusModal() {
+        const modal = document.getElementById('bonusModal');
+        if(modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function fecharBonusModal() {
+        const modal = document.getElementById('bonusModal');
+        if(modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Função para fechar o botão do bônus na página
+    function fecharBonusBadge() {
+        const badgeContainer = document.getElementById('bonus-badge-container');
+        if(badgeContainer) {
+            badgeContainer.style.display = 'none';
+        }
+    }
 </script>
 {% endif %}
 {% endblock %}
