@@ -497,9 +497,12 @@ def dashboard(request):
         concluido=True
     ).select_related('quiz', 'quiz__noticia').order_by('-data_conclusao')[:3]
 
+    noticias_leia_mais_tarde = Noticia.objects.all().order_by('-data_publicacao')[:7]
+
     context = {
         'historico_recente': historico_recente,
         'quizzes_realizados': quizzes_realizados,
+        'noticias_leia_mais_tarde': noticias_leia_mais_tarde,
     }
 
     return render(request, 'jornal_commercio/dashboard.html', context)

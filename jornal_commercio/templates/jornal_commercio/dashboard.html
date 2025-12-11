@@ -357,9 +357,11 @@
                     <i class="ph ph-folder-open"></i> MINHA ÁREA
                 </div>
                 
-                <button class="action-btn">
-                    <img src="{% static 'jornal_commercio/images/editar.png' %}" class="dashboard-icons" alt="Edição de perfil">Editar perfil e interesses
-                </button>
+                <a href="{% url 'usuario:perfil' %}">
+                    <button class="action-btn">
+                        <img src="{% static 'jornal_commercio/images/editar.png' %}" class="dashboard-icons" alt="Edição de perfil">Editar perfil e interesses
+                    </button>
+                </a>
                 <button class="action-btn">
                     <img src="{% static 'jornal_commercio/images/engrenagem.png' %}" class="dashboard-icons" alt="Configurações">Configurações
                 </button>
@@ -413,41 +415,30 @@
 
         <div class="col-right">
             <section class="card">
+
                 <div class="card-title">
                     <img src="{% static 'jornal_commercio/images/ler_mais_tarde.png' %}" class="dashboard-icons" alt="Ler mais tarde">
                     <i class="ph ph-bookmark-simple"></i> LEIA MAIS TARDE
                 </div>
-
+                
                 <div class="read-later-list">
+                    {% for noticia in noticias_leia_mais_tarde %}
                     <div class="news-item">
-                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
-                        <p class="news-title">Novas regras para obter CNH no Brasil são lançadas pelo presidente Lula</p>
+                        {% if noticia.imagem_principal %}
+                            <img src="{{ noticia.imagem_principal.url }}" class="news-thumb" alt="{{ noticia.titulo }}" style="object-fit: cover;">
+                        {% else %}
+                            <img src="https://placehold.co/80x60?text=JC" class="news-thumb" alt="Sem imagem">
+                        {% endif %}
+                        
+                        <a href="{% url 'detalhe_noticia' noticia.slug %}" style="text-decoration: none; color: inherit; width: 100%;">
+                            <p class="news-title">{{ noticia.titulo|truncatechars:65 }}</p>
+                        </a>
                     </div>
-                    <div class="news-item">
-                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
-                        <p class="news-title">HospitalMed impulsiona o mercado da saúde e bem-estar</p>
+                    {% empty %}
+                    <div style="padding: 10px; color: #666; font-size: 0.9rem;">
+                        Nenhuma notícia disponível no momento.
                     </div>
-                    <div class="news-item">
-                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
-                        <p class="news-title">LAFEPE acelera inovação e expande produção para fortalecer autonomia...</p>
-                    </div>
-                    <div class="news-item">
-                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
-                        <p class="news-title">Viana e Moura entrega primeira etapa do Jardim Monjope e beneficia...</p>
-                    </div>
-                    <div class="news-item">
-                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
-                        <p class="news-title">Gestão e tecnologia: CESAR School lança graduação em ADM Tech</p>
-                    </div>
-                    <div class="news-item">
-                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
-                        <p class="news-title">Prêmio GPTW chega a 15ª edição e destaca as Melhores Empresas...</p>
-                    </div>
-                    <div class="news-item">
-                        <img src="https://placehold.co/80x60" class="news-thumb" alt="news">
-                        <p class="news-title">Viva a Vida 60+: atividade física para a melhor idade no centro do Recife</p>
-                    </div>
-                </div>
+                    {% endfor %}
 
                 <div class="card-footer-link">Ver mais</div>
             </section>
