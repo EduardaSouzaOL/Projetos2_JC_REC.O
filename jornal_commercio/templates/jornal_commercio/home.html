@@ -124,8 +124,8 @@
             {% for quiz in quizzes_preview %}
             <a href="{% url 'quiz_play' quiz_id=quiz.pk %}" class="community-card-home">
                 <div class="comm-img-wrapper">
-                    {% if quiz.imagem_capa %}
-                        <img src="{{ quiz.imagem_capa.url }}" alt="{{ quiz.titulo }}">
+                    {% if quiz.noticia.imagem_principal %}
+                        <img src="{{ quiz.noticia.imagem_principal.url }}" alt="{{ quiz.titulo }}">
                     {% else %}
                          <div style="width: 100%; height: 100%; background: #444; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">?</div>
                     {% endif %}
