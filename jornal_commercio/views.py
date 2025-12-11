@@ -499,10 +499,18 @@ def dashboard(request):
 
     noticias_leia_mais_tarde = Noticia.objects.all().order_by('-data_publicacao')[:7]
 
+    total = TentativaQuiz.objects.filter(
+        usuario=request.user, 
+        concluido=True
+    ).aggregate(Sum('pontuacao'))
+    
+    pontos_usuario = total['pontuacao__sum'] or 0
+
     context = {
         'historico_recente': historico_recente,
         'quizzes_realizados': quizzes_realizados,
         'noticias_leia_mais_tarde': noticias_leia_mais_tarde,
+        'pontos_usuario': pontos_usuario,
     }
 
     return render(request, 'jornal_commercio/dashboard.html', context)
