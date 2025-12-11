@@ -342,9 +342,13 @@ def finalizar_quiz(request, quiz_id):
         tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz_id=quiz_id).first()
         
         if tentativa:
-            tentativa.concluido = True
-            tentativa.save()
-            return JsonResponse({'status': 'ok', 'message': 'Quiz concluído!'})
+            pontuacao_final = tentativa.calcular_e_salvar_pontuacao()
+            
+            return JsonResponse({
+                'status': 'ok', 
+                'message': 'Quiz concluído!',
+                'acertos': pontuacao_final 
+            })
             
     return JsonResponse({'status': 'erro'}, status=400)
 
@@ -482,41 +486,7 @@ def computar_clique_anuncio(request, anuncio_id):
         
     return redirect(anuncio.link_destino)
 
+@login_required
 def dashboard(request):
 
     return render(request, 'jornal_commercio/dashboard.html')
-
-def home(request):
-    form_feedback = FeedbackForm()
-
-    # Notícias
-    todas_noticias = Noticia.objects.all() 
-    destaque_principal = todas_noticias.first()
-    destaques_secundarios = todas_noticias[1:5]
-    
-    # Feedbacks
-    feedbacks_recentes = Feedback.objects.all().order_by('-id')[:5] 
-    
-    # Anúncios (se estiver usando a função de anúncios)
-    ad_home_meio_1 = get_anuncio_valido('HOME_MEIO_1')
-    ad_home_meio_2 = get_anuncio_valido('HOME_MEIO_2')
-    ad_home_meio_3 = get_anuncio_valido('HOME_MEIO_3')
-
-    # --- O QUE ESTAVA FALTANDO: Buscar as Comunidades ---
-    # Pega as 3 primeiras comunidades cadastradas no banco
-    comunidades_preview = Comunidade.objects.all()[:3]
-
-    context = {
-        'form_feedback': form_feedback,
-        'destaque_principal': destaque_principal, 
-        'destaques_secundarios': destaques_secundarios,
-        'feedbacks': feedbacks_recentes,
-        'ad_home_meio_1': ad_home_meio_1,
-        'ad_home_meio_2': ad_home_meio_2,
-        'ad_home_meio_3': ad_home_meio_3,
-        
-        # Enviando para o HTML
-        'comunidades_preview': comunidades_preview, 
-    }
-    
-    return render(request, "jornal_commercio/home.html", context)

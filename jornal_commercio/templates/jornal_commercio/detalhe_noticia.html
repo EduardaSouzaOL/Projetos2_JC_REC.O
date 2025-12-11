@@ -584,20 +584,23 @@
             }
         });
 
-        {% if not quiz_concluido and noticia.quiz %}
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    abrirQuiz();
-                    observer.disconnect();
-                }
+        {% if noticia.quiz %}
+            {% if not quiz_concluido %}
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        abrirQuiz();
+                        observer.disconnect();
+                    }
+                });
             });
-        });
-        const trigger = document.querySelector("#fim-da-leitura");
-        if(trigger) observer.observe(trigger);
+            const trigger = document.querySelector("#fim-da-leitura");
+            if(trigger) observer.observe(trigger);
+            {% endif %}
         {% endif %}
     });
 
+    {% if noticia.quiz %}
     function abrirQuiz() {
         const el = document.getElementById('quizModal');
         if(el) { el.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
@@ -609,6 +612,7 @@
     function acaoFinalizarQuiz() {
         const btn = document.getElementById('btn-finalizar');
         if (btn.innerText.includes("Continuar Lendo")) { fecharQuiz(); return; }
+        
         fetch("{% url 'finalizar_quiz' quiz_id=noticia.quiz.id %}", {
             method: "POST", headers: { "X-CSRFToken": "{{ csrf_token }}" }
         }).then(response => {
@@ -631,6 +635,7 @@
             body: JSON.stringify({ opcao_id: opcaoId })
         }).catch(error => console.error("Erro ao salvar:", error));
     }
+    {% endif %}
 
     function abrirBonusModal() {
         const el = document.getElementById('bonusModal');
