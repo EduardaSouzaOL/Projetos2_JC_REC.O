@@ -260,7 +260,7 @@
             font-weight: 500;
             margin-bottom: 10px;
             line-height: 1.3;
-            height: 40px; /* Limit height */
+            height: 60px; /* Limit height */
             overflow: hidden;
         }
         
@@ -308,6 +308,11 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .dashboard-icons {
+            max-height: 24px;
+            max-width: 24px;
+        }
     </style>
 {% endblock %}
 
@@ -318,6 +323,7 @@
         <div class="col-left">
             <section class="card">
                 <div class="card-title">
+                    <img src="{% static 'jornal_commercio/images/notificacoes_dashboard.png' %}" class="dashboard-icons" alt="Notificações">
                     <i class="ph ph-bell"></i> NOTIFICAÇÕES
                 </div>
                 
@@ -347,16 +353,20 @@
 
             <section class="card">
                 <div class="card-title">
+                    <img src="{% static 'jornal_commercio/images/minha_area.png' %}" class="dashboard-icons" alt="Minha área">
                     <i class="ph ph-folder-open"></i> MINHA ÁREA
                 </div>
                 
                 <button class="action-btn">
+                    <img src="{% static 'jornal_commercio/images/editar.png' %}" class="dashboard-icons" alt="Edição de perfil">
                     <i class="ph ph-gear"></i> Editar perfil e interesses
                 </button>
                 <button class="action-btn">
+                    <img src="{% static 'jornal_commercio/images/engrenagem.png' %}" class="dashboard-icons" alt="Configurações">
                     <i class="ph ph-pencil-simple"></i> Configurações
                 </button>
                 <button class="action-btn">
+                    <img src="{% static 'jornal_commercio/images/sair.png' %}" class="dashboard-icons" alt="Sair">
                     <i class="ph ph-sign-out"></i> Sair
                 </button>
             </section>
@@ -365,6 +375,7 @@
         <div class="col-center">
             <section class="card">
                 <div class="card-title">
+                    <img src="{% static 'jornal_commercio/images/quizzes.png' %}" class="dashboard-icons" alt="Quizzes">
                     <i class="ph ph-question"></i> SEUS QUIZZES RECENTES
                 </div>
 
@@ -417,6 +428,7 @@
         <div class="col-right">
             <section class="card">
                 <div class="card-title">
+                    <img src="{% static 'jornal_commercio/images/ler_mais_tarde.png' %}" class="dashboard-icons" alt="Ler mais tarde">
                     <i class="ph ph-bookmark-simple"></i> LEIA MAIS TARDE
                 </div>
 
@@ -457,6 +469,7 @@
 
     </div> <section class="card history-section">
         <div class="card-title">
+            <img src="{% static 'jornal_commercio/images/historico.png' %}" class="dashboard-icons" alt="Histórico">
             <i class="ph ph-eye"></i> SEU HISTÓRICO
         </div>
 
