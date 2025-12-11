@@ -166,7 +166,7 @@
             margin-bottom: 15px;
             min-height: 40px;
             margin-right: 10px;
-            width: 220px;
+            width: 200px;
         }
         .quiz-actions {
             display: flex;
@@ -376,49 +376,38 @@
                     <i class="ph ph-question"></i> SEUS QUIZZES RECENTES
                 </div>
 
+                {% for tentativa in quizzes_realizados %}
                 <div class="quiz-card">
-                    <img src="https://placehold.co/400x150/555/FFF?text=Gaza+Conflict" class="quiz-img" alt="Quiz">
+                    {% if tentativa.quiz.noticia.imagem_principal %}
+                        <img src="{{ tentativa.quiz.noticia.imagem_principal.url }}" class="quiz-img" alt="{{ tentativa.quiz.titulo }}">
+                    {% else %}
+                        <img src="{% static 'jornal_commercio/images/logo_jc.png' %}" class="quiz-img" style="object-fit: contain; background: #fff;" alt="JC Quiz">
+                    {% endif %}
+                    
                     <div class="quiz-content">
                         <div class="quiz-actions">
-                            <p class="quiz-question">O que você sabe sobre o conflito entre Israel e Hamas?</p>
-                            <button class="btn-play">Jogar de novo</button>
+                            <p class="quiz-question">
+                                {{ tentativa.quiz.titulo|default:tentativa.quiz.noticia.titulo|truncatechars:60 }}
+                            </p>
+                            
+                            <a href="{% url 'quiz_play' tentativa.quiz.id %}" class="btn-play" style="text-decoration: none;">
+                                Jogar de novo
+                            </a>
                         </div>
                         <div class="quiz-meta">
-                            <span>Pontuação: 2/4 acertos</span>
+                            <span>Pontuação: {{ tentativa.pontuacao }}/{{ tentativa.quiz.perguntas.count }} acertos</span>
                             <span class="coins-reward"><i class="ph-fill ph-coins"></i> + 5 moedas</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="quiz-card">
-                    <img src="https://placehold.co/400x150/555/FFF?text=Novela" class="quiz-img" alt="Quiz">
-                    <div class="quiz-content">
-                        <div class="quiz-actions">
-                            <p class="quiz-question">Você sabe quem matou Odete Roitman?</p>
-                            <button class="btn-play">Jogar de novo</button>
-                        </div>
-                        <div class="quiz-meta">
-                            <span>Pontuação: 4/4 acertos</span>
-                            <span class="coins-reward"><i class="ph-fill ph-coins"></i> + 5 moedas</span>
-                        </div>
-                    </div>
+                {% empty %}
+                <div style="text-align: center; padding: 20px; color: #666;">
+                    <p>Você ainda não respondeu a nenhum quiz.</p>
                 </div>
-
-                <div class="quiz-card">
-                    <img src="https://placehold.co/400x150/555/FFF?text=Vacinas" class="quiz-img" alt="Quiz">
-                    <div class="quiz-content">
-                        <div class="quiz-actions">
-                            <p class="quiz-question">Você sabe quais vacinas você precisa tomar?</p>
-                            <button class="btn-play">Jogar de novo</button>
-                        </div>
-                        <div class="quiz-meta">
-                            <span>Pontuação: 3/4 acertos</span>
-                            <span class="coins-reward"><i class="ph-fill ph-coins"></i> + 5 moedas</span>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
 
                 <div class="card-footer-link">Ver todos</div>
+
             </section>
         </div>
 
@@ -503,77 +492,5 @@
 
         <div class="card-footer-link" style="text-align: left; margin-top: 20px;">Ver mais</div>
     </section>
-
-    {% comment %} <section class="card history-section">
-        <div class="card-title">
-            <img src="{% static 'jornal_commercio/images/historico.png' %}" class="dashboard-icons" alt="Histórico">
-            <i class="ph ph-eye"></i> SEU HISTÓRICO
-        </div>
-
-        <div class="history-grid">
-            <div class="history-item">
-                <img src="https://placehold.co/200x120" class="history-img" alt="History">
-                <span class="history-cat">GAZA</span>
-                <p class="history-title">Jogo Responsável, Tributação Justa e Combate à Clandestinidade...</p>
-                <div class="progress-container">
-                    <span>50%</span>
-                    <div class="progress-bar-bg">
-                        <div class="progress-fill" style="width: 50%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="history-item">
-                <img src="https://placehold.co/200x120" class="history-img" alt="History">
-                <span class="history-cat">GAZA</span>
-                <p class="history-title">Vestibulares da Fits e Unit-PE movimentam o domingo e reforçam...</p>
-                <div class="progress-container">
-                    <span>50%</span>
-                    <div class="progress-bar-bg">
-                        <div class="progress-fill" style="width: 50%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="history-item">
-                <img src="https://placehold.co/200x120" class="history-img" alt="History">
-                <span class="history-cat">GAZA</span>
-                <p class="history-title">Geração Solidária: projeto do Colégio Núcleo estimula protagonismo...</p>
-                <div class="progress-container">
-                    <span>50%</span>
-                    <div class="progress-bar-bg">
-                        <div class="progress-fill" style="width: 50%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="history-item">
-                <img src="https://placehold.co/200x120" class="history-img" alt="History">
-                <span class="history-cat">GAZA</span>
-                <p class="history-title">Mackenzie Agnes lança Campanha de Matrículas 2025 e reforça legado...</p>
-                <div class="progress-container">
-                    <span>50%</span>
-                    <div class="progress-bar-bg">
-                        <div class="progress-fill" style="width: 50%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="history-item">
-                <img src="https://placehold.co/200x120" class="history-img" alt="History">
-                <span class="history-cat">GAZA</span>
-                <p class="history-title">STEAM Fair: metodologia da Eleva Recife onde o aluno é protagonista</p>
-                <div class="progress-container">
-                    <span>50%</span>
-                    <div class="progress-bar-bg">
-                        <div class="progress-fill" style="width: 50%;"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="card-footer-link" style="text-align: left; margin-top: 20px;">Ver mais</div>
-    </section> {% endcomment %}
 
 {% endblock content %}

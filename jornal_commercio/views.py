@@ -484,13 +484,18 @@ def computar_clique_anuncio(request, anuncio_id):
 
 @login_required
 def dashboard(request):
-    # Busca o histórico do usuário logado, ordena pela última interação e pega os 5 primeiros
     historico_recente = HistoricoLeitura.objects.filter(
         usuario=request.user
     ).select_related('noticia').order_by('-ultima_interacao')[:5]
 
+    quizzes_realizados = TentativaQuiz.objects.filter(
+        usuario=request.user,
+        concluido=True
+    ).select_related('quiz', 'quiz__noticia').order_by('-data_conclusao')[:3]
+
     context = {
-        'historico_recente': historico_recente
+        'historico_recente': historico_recente,
+        'quizzes_realizados': quizzes_realizados,
     }
 
     return render(request, 'jornal_commercio/dashboard.html', context)
