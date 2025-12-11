@@ -342,9 +342,13 @@ def finalizar_quiz(request, quiz_id):
         tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz_id=quiz_id).first()
         
         if tentativa:
-            tentativa.concluido = True
-            tentativa.save()
-            return JsonResponse({'status': 'ok', 'message': 'Quiz concluído!'})
+            pontuacao_final = tentativa.calcular_e_salvar_pontuacao()
+            
+            return JsonResponse({
+                'status': 'ok', 
+                'message': 'Quiz concluído!',
+                'acertos': pontuacao_final 
+            })
             
     return JsonResponse({'status': 'erro'}, status=400)
 

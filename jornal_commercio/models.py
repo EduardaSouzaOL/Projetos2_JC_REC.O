@@ -346,6 +346,24 @@ class TentativaQuiz(models.Model):
     
     concluido = models.BooleanField(default=False)
 
+    def calcular_e_salvar_pontuacao(self):
+        """
+        Calcula o total de acertos baseados nas respostas do usuário
+        e finaliza a tentativa.
+        """
+        # Filtra as respostas desta tentativa onde a opção escolhida é a correta
+        total_acertos = self.respostas.filter(opcao_escolhida__correta=True).count()
+        
+        self.pontuacao = total_acertos
+        self.concluido = True
+        
+        # Garante que a data de conclusão seja preenchida se estiver vazia
+        if not self.data_conclusao:
+            self.data_conclusao = timezone.now()
+            
+        self.save()
+        return self.pontuacao
+
     class Meta:
         unique_together = ('usuario', 'quiz')
         verbose_name = "Tentativa de Quiz"
