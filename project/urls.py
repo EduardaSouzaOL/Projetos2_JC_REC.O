@@ -18,13 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from jornal_commercio.views import criar_admin_temporario
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('usuario/', include('usuario.urls')),
     path('', include('jornal_commercio.urls')),
-    path('criar-admin-secreto/', criar_admin_temporario),
 ]
 
 if settings.DEBUG:

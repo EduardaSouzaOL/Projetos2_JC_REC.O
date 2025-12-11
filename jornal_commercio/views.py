@@ -1,45 +1,63 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timesince import timesince
-from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.urls import reverse
-from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
-import json
-from .models import Noticia, Feedback, Comunidade, Publicacao, Comentario, Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta, HistoricoLeitura, Anuncio
 from django.db.models import Q, Count, Sum
 from django.utils import timezone
-from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.views.decorators.http import require_POST
+import json
 
-def home(request):
+from .forms import FeedbackForm, PublicacaoForm, ComentarioForm
+from .models import (
+    Noticia, Feedback, Comunidade, Publicacao, Comentario, 
+    Quiz, TentativaQuiz, RespostaUsuario, Opcao, Pergunta, 
+    HistoricoLeitura, Anuncio
+)
+
+# --- FUNÇÕES AUXILIARES ---
+
+def get_anuncio_valido(posicao, categoria=None):
+    """
+    Retorna um anúncio aleatório válido para a posição solicitada.
+    """
+    agora = timezone.now()
     
-    form_feedback = FeedbackForm()
+    base_qs = Anuncio.objects.filter(
+        ativo=True,
+        posicao=posicao,
+        data_inicio__lte=agora
+    ).filter(Q(data_fim__gte=agora) | Q(data_fim__isnull=True))
 
-    todas_noticias = Noticia.objects.all() 
-    destaque_principal = todas_noticias.first()
-    destaques_secundarios = todas_noticias[1:5]
+    anuncio = None
 
-    feedbacks_recentes = Feedback.objects.all().order_by('-id')[:5] 
-    
-    ad_home_meio_1 = get_anuncio_valido('HOME_MEIO_1')
-    ad_home_meio_2 = get_anuncio_valido('HOME_MEIO_2')
-    ad_home_meio_3 = get_anuncio_valido('HOME_MEIO_3')
+    if categoria:
+        anuncio = base_qs.filter(categoria_alvo=categoria).order_by('?').first()
 
-    context = {
-        'form_feedback': form_feedback,
-        'destaque_principal': destaque_principal, 
-        'destaques_secundarios': destaques_secundarios,
-        'feedbacks': feedbacks_recentes,
-        'ad_home_meio_1': ad_home_meio_1,
-        'ad_home_meio_2': ad_home_meio_2,
-        'ad_home_meio_3': ad_home_meio_3,
-    }
-    
-    return render(request, "jornal_commercio/home.html", context)
+    if not anuncio:
+        anuncio = base_qs.filter(categoria_alvo__isnull=True).order_by('?').first()
+        
+    if anuncio:
+        anuncio.visualizacoes += 1
+        anuncio.save()
+        
+    return anuncio
+
+def computar_clique_anuncio(request, anuncio_id):
+    anuncio = get_object_or_404(Anuncio, id=anuncio_id)
+    anuncio.cliques += 1
+    anuncio.save()
+    if not anuncio.link_destino:
+        return redirect('/')
+    return redirect(anuncio.link_destino)
+
+
+# --- VIEWS PRINCIPAIS ---
+
+
 
 def detalhe_noticia(request, slug):
     noticia = get_object_or_404(Noticia, slug=slug)
@@ -89,6 +107,12 @@ def salvar_feedback(request):
             return JsonResponse({'success': False, 'errors': errors})
     
     return JsonResponse({'success': False, 'message': 'Método inválido.'}, status=405)
+
+def newsletter(request):
+    return render(request, "jornal_commercio/newsletter.html")
+
+
+# --- COMUNIDADES ---
 
 class ComunidadeListView(ListView):
     model = Comunidade
@@ -175,7 +199,6 @@ class ComunidadeDetailView(DetailView):
             
             noticia_id = request.POST.get('noticia_id_hidden')
             if noticia_id:
-                from .models import Noticia
                 try:
                     noticia = Noticia.objects.get(id=noticia_id)
                     nova_publicacao.noticia_relacionada = noticia
@@ -263,7 +286,6 @@ def salvar_publicacao(request, pk):
             'success': True,
             'is_saved': is_saved
         })
-    
     else:
         return HttpResponseForbidden("Ação não permitida.")
 
@@ -286,9 +308,7 @@ def adicionar_comentario(request, pk):
                 'data': timesince(novo_comentario.data_publicacao),
                 'comments_count': publicacao.comentarios.count()
             })
-        
         return JsonResponse({'success': False, 'error': 'Formulário inválido'})
-
     return HttpResponseForbidden("Ação não permitida.") 
 
 @login_required
@@ -312,9 +332,10 @@ def toggle_membro(request, pk):
         })
     else:
         return HttpResponseForbidden("Ação não permitida.")
-    
-def salvar_resposta_quiz(request):
 
+# --- QUIZ ---
+
+def salvar_resposta_quiz(request):
     if request.method == "POST" and request.user.is_authenticated:
         data = json.loads(request.body)
         opcao_id = data.get('opcao_id')
@@ -342,30 +363,20 @@ def finalizar_quiz(request, quiz_id):
         tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz_id=quiz_id).first()
         
         if tentativa:
-            pontuacao_final = tentativa.calcular_e_salvar_pontuacao()
-            
-            return JsonResponse({
-                'status': 'ok', 
-                'message': 'Quiz concluído!',
-                'acertos': pontuacao_final 
-            })
+            tentativa.concluido = True
+            # Recalcula a pontuação
+            pontos = 0
+            for resp in tentativa.respostas.all():
+                if resp.opcao_escolhida.correta:
+                    pontos += 10
+            tentativa.pontuacao = pontos
+            tentativa.save()
+            return JsonResponse({'status': 'ok', 'message': 'Quiz concluído!', 'pontuacao': pontos})
             
     return JsonResponse({'status': 'erro'}, status=400)
 
-def criar_admin_temporario(request):
-    try:
-        if User.objects.filter(username='admin').exists():
-            return HttpResponse("O usuário 'admin' já existe! Tente logar.")
-        
-        User.objects.create_superuser('admin', 'admin@example.com', 'Admin12345!')
-        
-        return HttpResponse("<h1>SUCESSO!</h1><p>Usuário: <b>admin</b></p><p>Senha: <b>Admin12345!</b></p>")
-    except Exception as e:
-        return HttpResponse(f"<h1>ERRO:</h1> <p>{str(e)}</p>")
-
 def quiz_hub(request):
     quizzes = Quiz.objects.all().order_by('-data_criacao')
-    
     pontos_usuario = 0
     if request.user.is_authenticated:
         total = TentativaQuiz.objects.filter(usuario=request.user, concluido=True).aggregate(Sum('pontuacao'))
@@ -378,12 +389,10 @@ def quiz_hub(request):
 
 def quiz_play(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id)
-    
     respostas_ids = []
     quiz_concluido = False
     pontuacao = 0
     
-    respostas_ids = []
     if request.user.is_authenticated:
         tentativa = TentativaQuiz.objects.filter(usuario=request.user, quiz=quiz).first()
         if tentativa:
@@ -398,14 +407,12 @@ def quiz_play(request, quiz_id):
         'pontuacao_atual': pontuacao
     })
 
+# --- OUTROS ---
+
 def pagina_edicao_do_dia(request):
     from .models import Edicao
-    
     ultima_edicao = Edicao.objects.first()
-    
-    context = {
-        'edicao': ultima_edicao
-    }
+    context = {'edicao': ultima_edicao}
     return render(request, 'edicao_do_dia.html', context)
 
 @login_required
@@ -415,78 +422,107 @@ def atualizar_historico_leitura(request):
         data = json.loads(request.body)
         noticia_id = data.get('noticia_id')
         porcentagem = data.get('porcentagem')
+        tempo_sessao = data.get('tempo_sessao', 0)
         
-        # Validação básica
-        if not noticia_id or porcentagem is None:
-            return JsonResponse({'status': 'erro', 'message': 'Dados inválidos'}, status=400)
+        if not noticia_id:
+            return JsonResponse({'status': 'erro', 'message': 'ID inválido'}, status=400)
             
-        porcentagem = int(porcentagem)
+        porcentagem = int(porcentagem or 0)
         if porcentagem > 100: porcentagem = 100
         
-        # Salva ou atualiza
         historico, created = HistoricoLeitura.objects.get_or_create(
             usuario=request.user,
             noticia_id=noticia_id
         )
         
-        # Só atualizamos se a nova porcentagem for maior que a anterior
-        # (para evitar que, ao subir a página, diminua o progresso)
         if porcentagem > historico.porcentagem_lida:
             historico.porcentagem_lida = porcentagem
-            historico.save()
+            
+        if porcentagem >= 90:
+            historico.lido_completo = True
+            
+        if tempo_sessao > 0:
+            historico.tempo_gasto += int(tempo_sessao)
+            
+        historico.save()
             
         return JsonResponse({'status': 'sucesso', 'lido': historico.lido_completo})
         
     except Exception as e:
         return JsonResponse({'status': 'erro', 'message': str(e)}, status=500)
 
-def get_anuncio_valido(posicao, categoria=None):
-    """
-    Retorna um anúncio aleatório válido para a posição solicitada.
-    Se uma categoria for passada, tenta buscar anúncios específicos dela.
-    Se não achar (ou não tiver categoria), busca anúncios gerais (sem categoria).
-    """
-    agora = timezone.now()
-    
-    # Filtro base: Ativo + Posição + Data Início já passou + (Data Fim futura OU Data Fim vazia)
-    base_qs = Anuncio.objects.filter(
-        ativo=True,
-        posicao=posicao,
-        data_inicio__lte=agora
-    ).filter(Q(data_fim__gte=agora) | Q(data_fim__isnull=True))
-
-    anuncio = None
-
-    # 1. Tenta buscar anúncio específico da categoria (se fornecida)
-    if categoria:
-        anuncio = base_qs.filter(categoria_alvo=categoria).order_by('?').first()
-
-    # 2. Se não achou específico, busca um Geral (categoria_alvo=None)
-    if not anuncio:
-        anuncio = base_qs.filter(categoria_alvo__isnull=True).order_by('?').first()
-        
-    # Incrementa visualização se encontrou
-    if anuncio:
-        anuncio.visualizacoes += 1
-        anuncio.save()
-        
-    return anuncio
-
-def computar_clique_anuncio(request, anuncio_id):
-    """
-    Registra o clique no anúncio e redireciona para o link final.
-    """
-    anuncio = get_object_or_404(Anuncio, id=anuncio_id)
-
-    anuncio.cliques += 1
-    anuncio.save()
-
-    if not anuncio.link_destino:
-        return redirect('/')
-        
-    return redirect(anuncio.link_destino)
-
 @login_required
 def dashboard(request):
+    user = request.user
+    
+    total_pontos = TentativaQuiz.objects.filter(usuario=user, concluido=True).aggregate(Sum('pontuacao'))['pontuacao__sum'] or 0
+    quizzes_completados = TentativaQuiz.objects.filter(usuario=user, concluido=True).count()
+    
+    historico = HistoricoLeitura.objects.filter(usuario=user)
+    noticias_lidas_count = historico.filter(lido_completo=True).count()
+    total_segundos = historico.aggregate(Sum('tempo_gasto'))['tempo_gasto__sum'] or 0
+    minutos_lidos = int(total_segundos / 60)
+    
+    total_comentarios = Comentario.objects.filter(autor=user).count()
+    
+    conquistas = []
+    if noticias_lidas_count >= 1:
+        conquistas.append({'titulo': 'Leitor Iniciante', 'descricao': 'Leu sua primeira notícia completa.', 'icone': 'fas fa-book-open', 'cor': 'bg-info'})
+    if noticias_lidas_count >= 5:
+        conquistas.append({'titulo': 'Leitor Ávido', 'descricao': 'Leu mais de 5 notícias.', 'icone': 'fas fa-glasses', 'cor': 'bg-primary'})
+    if noticias_lidas_count >= 20:
+        conquistas.append({'titulo': 'Super Leitor', 'descricao': 'Leu mais de 20 notícias.', 'icone': 'fas fa-medal', 'cor': 'bg-warning'})
+    if total_comentarios >= 1:
+        conquistas.append({'titulo': 'Voz da Comunidade', 'descricao': 'Fez seu primeiro comentário.', 'icone': 'fas fa-comment', 'cor': 'bg-success'})
+    if total_pontos >= 50:
+        conquistas.append({'titulo': 'Mestre dos Quizzes', 'descricao': 'Acumulou mais de 50 pontos nos jogos.', 'icone': 'fas fa-brain', 'cor': 'bg-danger'})
+    if minutos_lidos >= 60:
+         conquistas.append({'titulo': 'Dedicação Total', 'descricao': 'Passou mais de 1 hora lendo notícias.', 'icone': 'fas fa-clock', 'cor': 'bg-secondary'})
 
-    return render(request, 'jornal_commercio/dashboard.html')
+    context = {
+        'pontos': total_pontos,
+        'quizzes_completados': quizzes_completados,
+        'noticias_lidas': noticias_lidas_count,
+        'minutos_lidos': minutos_lidos,
+        'total_comentarios': total_comentarios,
+        'conquistas': conquistas,
+    }
+
+    return render(request, 'jornal_commercio/dashboard.html', context)
+
+def home(request):
+    form_feedback = FeedbackForm()
+
+    # --- Notícias ---
+    todas_noticias = Noticia.objects.all() 
+    destaque_principal = todas_noticias.first()
+    destaques_secundarios = todas_noticias[1:5]
+
+    feedbacks_recentes = Feedback.objects.all().order_by('-id')[:5] 
+    
+    # --- Anúncios ---
+    ad_home_meio_1 = get_anuncio_valido('HOME_MEIO_1')
+    ad_home_meio_2 = get_anuncio_valido('HOME_MEIO_2')
+    ad_home_meio_3 = get_anuncio_valido('HOME_MEIO_3')
+
+    # --- O QUE FALTAVA: Buscar Comunidades e Quizzes ---
+    comunidades_preview = Comunidade.objects.all()[:3]
+    quizzes_preview = Quiz.objects.all().order_by('-data_criacao')[:3]
+
+    context = {
+        'form_feedback': form_feedback,
+        'destaque_principal': destaque_principal, 
+        'destaques_secundarios': destaques_secundarios,
+        'feedbacks': feedbacks_recentes,
+        
+        # Anúncios
+        'ad_home_meio_1': ad_home_meio_1,
+        'ad_home_meio_2': ad_home_meio_2,
+        'ad_home_meio_3': ad_home_meio_3,
+        
+        # Enviando para o HTML (Isso fará aparecer!)
+        'comunidades_preview': comunidades_preview,
+        'quizzes_preview': quizzes_preview,
+    }
+    
+    return render(request, "jornal_commercio/home.html", context)
