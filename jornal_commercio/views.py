@@ -453,39 +453,29 @@ def atualizar_historico_leitura(request):
 
 @login_required
 def dashboard(request):
-    user = request.user
+    historico_recente = HistoricoLeitura.objects.filter(
+        usuario=request.user
+    ).select_related('noticia').order_by('-ultima_interacao')[:5]
+
+    quizzes_realizados = TentativaQuiz.objects.filter(
+        usuario=request.user,
+        concluido=True
+    ).select_related('quiz', 'quiz__noticia').order_by('-data_conclusao')[:3]
+
+    noticias_leia_mais_tarde = Noticia.objects.all().order_by('-data_publicacao')[:7]
+
+    total = TentativaQuiz.objects.filter(
+        usuario=request.user, 
+        concluido=True
+    ).aggregate(Sum('pontuacao'))
     
-    total_pontos = TentativaQuiz.objects.filter(usuario=user, concluido=True).aggregate(Sum('pontuacao'))['pontuacao__sum'] or 0
-    quizzes_completados = TentativaQuiz.objects.filter(usuario=user, concluido=True).count()
-    
-    historico = HistoricoLeitura.objects.filter(usuario=user)
-    noticias_lidas_count = historico.filter(lido_completo=True).count()
-    total_segundos = historico.aggregate(Sum('tempo_gasto'))['tempo_gasto__sum'] or 0
-    minutos_lidos = int(total_segundos / 60)
-    
-    total_comentarios = Comentario.objects.filter(autor=user).count()
-    
-    conquistas = []
-    if noticias_lidas_count >= 1:
-        conquistas.append({'titulo': 'Leitor Iniciante', 'descricao': 'Leu sua primeira notícia completa.', 'icone': 'fas fa-book-open', 'cor': 'bg-info'})
-    if noticias_lidas_count >= 5:
-        conquistas.append({'titulo': 'Leitor Ávido', 'descricao': 'Leu mais de 5 notícias.', 'icone': 'fas fa-glasses', 'cor': 'bg-primary'})
-    if noticias_lidas_count >= 20:
-        conquistas.append({'titulo': 'Super Leitor', 'descricao': 'Leu mais de 20 notícias.', 'icone': 'fas fa-medal', 'cor': 'bg-warning'})
-    if total_comentarios >= 1:
-        conquistas.append({'titulo': 'Voz da Comunidade', 'descricao': 'Fez seu primeiro comentário.', 'icone': 'fas fa-comment', 'cor': 'bg-success'})
-    if total_pontos >= 50:
-        conquistas.append({'titulo': 'Mestre dos Quizzes', 'descricao': 'Acumulou mais de 50 pontos nos jogos.', 'icone': 'fas fa-brain', 'cor': 'bg-danger'})
-    if minutos_lidos >= 60:
-         conquistas.append({'titulo': 'Dedicação Total', 'descricao': 'Passou mais de 1 hora lendo notícias.', 'icone': 'fas fa-clock', 'cor': 'bg-secondary'})
+    pontos_usuario = total['pontuacao__sum'] or 0
 
     context = {
-        'pontos': total_pontos,
-        'quizzes_completados': quizzes_completados,
-        'noticias_lidas': noticias_lidas_count,
-        'minutos_lidos': minutos_lidos,
-        'total_comentarios': total_comentarios,
-        'conquistas': conquistas,
+        'historico_recente': historico_recente,
+        'quizzes_realizados': quizzes_realizados,
+        'noticias_leia_mais_tarde': noticias_leia_mais_tarde,
+        'pontos_usuario': pontos_usuario,
     }
 
     return render(request, 'jornal_commercio/dashboard.html', context)
