@@ -358,16 +358,13 @@
                 </div>
                 
                 <button class="action-btn">
-                    <img src="{% static 'jornal_commercio/images/editar.png' %}" class="dashboard-icons" alt="Edição de perfil">
-                    <i class="ph ph-gear"></i> Editar perfil e interesses
+                    <img src="{% static 'jornal_commercio/images/editar.png' %}" class="dashboard-icons" alt="Edição de perfil">Editar perfil e interesses
                 </button>
                 <button class="action-btn">
-                    <img src="{% static 'jornal_commercio/images/engrenagem.png' %}" class="dashboard-icons" alt="Configurações">
-                    <i class="ph ph-pencil-simple"></i> Configurações
+                    <img src="{% static 'jornal_commercio/images/engrenagem.png' %}" class="dashboard-icons" alt="Configurações">Configurações
                 </button>
                 <button class="action-btn">
-                    <img src="{% static 'jornal_commercio/images/sair.png' %}" class="dashboard-icons" alt="Sair">
-                    <i class="ph ph-sign-out"></i> Sair
+                    <img src="{% static 'jornal_commercio/images/sair.png' %}" class="dashboard-icons" alt="Sair">Sair
                 </button>
             </section>
         </div>
@@ -467,7 +464,47 @@
             </section>
         </div>
 
-    </div> <section class="card history-section">
+    </div>
+
+    <section class="card history-section">
+        <div class="card-title">
+            <img src="{% static 'jornal_commercio/images/historico.png' %}" class="dashboard-icons" alt="Histórico">
+            <i class="ph ph-eye"></i> SEU HISTÓRICO
+        </div>
+
+        <div class="history-grid">
+            {% for item in historico_recente %}
+            <div class="history-item">
+                {% if item.noticia.imagem_principal %}
+                    <img src="{{ item.noticia.imagem_principal.url }}" class="history-img" alt="{{ item.noticia.titulo }}">
+                {% else %}
+                    <img src="https://placehold.co/200x120?text=Sem+Imagem" class="history-img" alt="Sem imagem">
+                {% endif %}
+
+                <span class="history-cat">{{ item.noticia.get_categoria_display }}</span>
+                
+                <a href="{% url 'detalhe_noticia' item.noticia.slug %}" style="text-decoration: none; color: inherit;">
+                    <p class="history-title">{{ item.noticia.titulo|truncatechars:60 }}</p>
+                </a>
+                
+                <div class="progress-container">
+                    <span>{{ item.porcentagem_lida }}%</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: {{ item.porcentagem_lida }}%;"></div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #666;">
+                <p>Você ainda não iniciou nenhuma leitura.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="card-footer-link" style="text-align: left; margin-top: 20px;">Ver mais</div>
+    </section>
+
+    {% comment %} <section class="card history-section">
         <div class="card-title">
             <img src="{% static 'jornal_commercio/images/historico.png' %}" class="dashboard-icons" alt="Histórico">
             <i class="ph ph-eye"></i> SEU HISTÓRICO
@@ -537,6 +574,6 @@
         </div>
 
         <div class="card-footer-link" style="text-align: left; margin-top: 20px;">Ver mais</div>
-    </section>
+    </section> {% endcomment %}
 
 {% endblock content %}

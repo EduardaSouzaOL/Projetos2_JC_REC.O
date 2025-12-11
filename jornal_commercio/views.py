@@ -482,6 +482,15 @@ def computar_clique_anuncio(request, anuncio_id):
         
     return redirect(anuncio.link_destino)
 
+@login_required
 def dashboard(request):
+    # Busca o histórico do usuário logado, ordena pela última interação e pega os 5 primeiros
+    historico_recente = HistoricoLeitura.objects.filter(
+        usuario=request.user
+    ).select_related('noticia').order_by('-ultima_interacao')[:5]
 
-    return render(request, 'jornal_commercio/dashboard.html')
+    context = {
+        'historico_recente': historico_recente
+    }
+
+    return render(request, 'jornal_commercio/dashboard.html', context)
