@@ -1,77 +1,216 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}JC - O essencial para o seu dia{% endblock %}
-
 {% block content %}
 
 <section class="hero-section">
     <div class="container">
-        <div class="hero-text">
-            <h1>O essencial para o seu dia, em poucos minutos.</h1>
-            <p>Receba as principais notícias de Pernambuco, do Brasil e do mundo para você se informar de forma rápida e precisa.</p>
-            <p>É gratuito, todo dia.</p>
-        </div>
-        <div class="hero-image">
-        <img src="{% static 'jornal_commercio/images/hero-image.png' %}" alt="Pessoa lendo notícias em dispositivos">
+        <div class="hero-content">
+            <h1>O essencial para o seu dia,<br>em poucos minutos.</h1>
+            <p class="hero-subtitle">Receba as principais notícias de Pernambuco, do Brasil e do mundo para você se informar de forma rápida e precisa.</p>
+            <p class="hero-disclaimer">É gratuito, todo dia.</p>
+            
+            <div class="newsletter-form-container">
+                <i class="far fa-envelope newsletter-icon"></i>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Cadastre seu e-mail" required>
+                    <button type="submit">Leia já!</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>
 
-<div class="page-wrapper">
-    <section class="highlights-section">
-        <div class="container">
-            <h2>DESTAQUES</h2>
-
+<section class="highlights-section">
+    <div class="container" style="display: block;">
+        <h2 class="section-title" style="border-left: none; padding-left: 0; margin-bottom: 20px;">DESTAQUES</h2>
+        
+        <div class="main-highlight">
             {% if destaque_principal %}
-            <div class="main-highlight">
                 <div class="main-highlight-image">
-                    
                     <a href="{% url 'detalhe_noticia' slug=destaque_principal.slug %}"> 
                         {% if destaque_principal.imagem_principal %}
-                        <img src="{{ destaque_principal.imagem_principal.url }}" alt="{{ destaque_principal.titulo }}">
+                            <img src="{{ destaque_principal.imagem_principal.url }}" alt="{{ destaque_principal.titulo }}">
                         {% else %}
-                        <img src="{% static 'jornal_commercio/images/gaza-main.png' %}" alt="Imagem padrão">
+                            <div style="width: 100%; height: 300px; background: #ccc;"></div>
                         {% endif %}
                     </a>
-
                 </div>
                 <div class="main-highlight-text">
-                    <span class="category-tag">{{ destaque_principal.get_categoria_display }}</span>
-                    
+                    <span class="highlight-tag">{{ destaque_principal.get_categoria_display }}</span>
                     <h3><a href="{% url 'detalhe_noticia' slug=destaque_principal.slug %}">{{ destaque_principal.titulo }}</a></h3>
                     <p>{{ destaque_principal.resumo }}</p>
-                    </div>
-            </div>
+                </div>
             {% else %}
-                <p>Nenhuma notícia de destaque encontrada.</p>
-            {% endif %}
-
-            {% if destaques_secundarios %}
-            <div class="secondary-highlights">
-
-                {% for noticia in destaques_secundarios %}
-                <article class="news-card">
-
-                    <a href="{% url 'detalhe_noticia' slug=noticia.slug %}"> 
-                        {% if noticia.imagem_principal %}
-                            <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
-                        {% else %}
-                            <img src="{% static 'jornal_commercio/images/cnh.png' %}" alt="Imagem padrão">
-                        {% endif %}
-                    </a>
-
-                    <span class="category-tag">{{ noticia.get_categoria_display }}</span>
-                    
-                    <h4><a href="{% url 'detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
-
-                </article>
-                {% endfor %}
-
-            </div>
+                <p>Nenhum destaque principal.</p>
             {% endif %}
         </div>
-    </section>
-</div>
 
-{% endblock content %}
+        {% if destaques_secundarios %}
+        <div class="secondary-highlights-grid">
+            {% for noticia in destaques_secundarios %}
+            <div class="highlight-card">
+                <a href="{% url 'detalhe_noticia' slug=noticia.slug %}">
+                    {% if noticia.imagem_principal %}
+                        <img src="{{ noticia.imagem_principal.url }}" alt="{{ noticia.titulo }}">
+                    {% else %}
+                        <div style="width: 100%; height: 150px; background: #ccc;"></div>
+                    {% endif %}
+                </a>
+                <div class="card-content">
+                    <span class="highlight-tag" style="color: #777;">{{ noticia.get_categoria_display }}</span>
+                    <h4><a href="{% url 'detalhe_noticia' slug=noticia.slug %}">{{ noticia.titulo }}</a></h4>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="middle-banner-section">
+    <div class="container">
+        <a href="#"> 
+            <img src="{% static 'jornal_commercio/images/banner-reco.png' %}" alt="Banner Publicitário">
+        </a>
+    </div>
+</section>
+
+<section class="home-communities-section">
+    <div class="container" style="display: block;">
+        <h2 class="communities-title">CONFIRA AS COMUNIDADES DO JC</h2>
+        <div class="communities-grid-home">
+            {% for comunidade in comunidades_preview %}
+            <a href="{% url 'comunidade_detalhe' pk=comunidade.pk %}" class="community-card-home">
+                <div class="comm-img-wrapper">
+                    {% if comunidade.imagem_card %}
+                        <img src="{{ comunidade.imagem_card.url }}" alt="{{ comunidade.nome }}">
+                    {% else %}
+                         <div style="width: 100%; height: 100%; background: #999;"></div>
+                    {% endif %}
+                </div>
+                <div class="comm-content">
+                    <div class="comm-header">
+                        <h3>{{ comunidade.nome }}</h3>
+                        <span class="comm-members"><i class="fas fa-users"></i> {{ comunidade.membros.count }}</span>
+                    </div>
+                    <div class="comm-footer">
+                        <div class="comm-author-logo">
+                            <i class="fas fa-newspaper" style="color: white; font-size: 10px;"></i>
+                        </div>
+                        <span>Jornal do Commercio</span>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+                <p>Nenhuma comunidade cadastrada.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="middle-banner-section">
+    <div class="container">
+        <a href="#"> 
+            <img src="{% static 'jornal_commercio/images/banner-reco.png' %}" alt="Banner Publicitário Inferior">
+        </a>
+    </div>
+</section>
+
+<section class="home-quizzes-section">
+    <div class="container" style="display: block;">
+        <h2 class="communities-title">JC QUEST: TESTE SEUS CONHECIMENTOS</h2>
+        <div class="communities-grid-home">
+            {% for quiz in quizzes_preview %}
+            <a href="{% url 'quiz_play' quiz_id=quiz.pk %}" class="community-card-home">
+                <div class="comm-img-wrapper">
+                    {% if quiz.imagem_capa %}
+                        <img src="{{ quiz.imagem_capa.url }}" alt="{{ quiz.titulo }}">
+                    {% else %}
+                         <div style="width: 100%; height: 100%; background: #444; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">?</div>
+                    {% endif %}
+                </div>
+                <div class="comm-content">
+                    <div class="comm-header">
+                        <h3>{{ quiz.titulo }}</h3>
+                    </div>
+                    <div class="comm-footer">
+                        <span>Jogar Agora</span>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+                <p>Nenhum quiz no momento.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="middle-banner-section">
+    <div class="container">
+        <a href="#"> 
+            <img src="{% static 'jornal_commercio/images/banner-reco.png' %}" alt="Banner Publicitário Inferior">
+        </a>
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+        <h2 class="products-title">NOSSOS PRODUTOS</h2>
+        
+        <div class="products-top-row">
+            <div class="product-group">
+                <span class="prod-label">Rádio Jornal</span>
+                <div class="prod-buttons">
+                    <a href="https://jc.uol.com.br/radio-jornal" class="pill-btn">Recife <i class="fas fa-caret-right"></i></a>
+                    <a href="https://jc.uol.com.br/radio-jornal/ao-vivo/caruaru" class="pill-btn">Caruaru <i class="fas fa-caret-right"></i></a>
+                    <a href="https://jc.uol.com.br/radio-jornal/ao-vivo/garanhuns" class="pill-btn">Garanhuns <i class="fas fa-caret-right"></i></a>
+                    <a href="https://jc.uol.com.br/radio-jornal/ao-vivo/petrolina" class="pill-btn">Petrolina <i class="fas fa-caret-right"></i></a>
+                </div>
+            </div>
+
+            <div class="product-group">
+                <span class="prod-label">Tv Jornal</span>
+                <div class="prod-buttons">
+                    <a href="https://jc.uol.com.br/tv-jornal" class="pill-btn light">Recife <i class="fas fa-caret-right"></i></a>
+                    <a href="https://www.youtube.com/c/TVJornalInterior" class="pill-btn light">Interior <i class="fas fa-caret-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <hr class="products-divider">
+
+        <div class="products-logos-row">
+            <a href="https://jc.uol.com.br/interior" class="brand-item">
+                <div class="brand-icon orange"><i class="fas fa-rss"></i></div>
+                <span>NE10 Interior</span>
+            </a>
+            <a href="https://jc.uol.com.br/radio-jornal" class="brand-item">
+                <div class="brand-icon red"><i class="fas fa-microphone-alt"></i></div>
+                <span>Rádio Jornal</span>
+            </a>
+            <a href="https://jc.uol.com.br/tv-jornal" class="brand-item">
+                <div class="brand-icon blue"><i class="fas fa-tv"></i></div>
+                <span>TV Jornal</span>
+            </a>
+            <a href="https://jc.uol.com.br/" class="brand-item">
+                <div class="brand-icon red"><strong>JC</strong></div>
+                <span>Jornal do Commercio</span>
+            </a>
+            <a href="https://jc.uol.com.br/blog-do-torcedor" class="brand-item">
+                <div class="brand-icon green"><i class="fas fa-futbol"></i></div>
+                <span>Blog do Torcedor</span>
+            </a>
+            <a href="https://jc.uol.com.br/social1" class="brand-item">
+                <div class="brand-icon pink"><i class="fas fa-comments"></i></div>
+                <span>Social1</span>
+            </a>
+            <a href="https://jc.uol.com.br/gastronomia" class="brand-item">
+                <div class="brand-icon orange"><i class="fas fa-utensils"></i></div>
+                <span>Receita da Boa</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
